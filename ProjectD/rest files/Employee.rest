@@ -1,0 +1,28 @@
+### Get all employees
+GET http://localhost:5000/api/employee
+Accept: application/json
+
+### Get employee by ID
+GET http://localhost:5000/api/employee/1
+Accept: application/json
+
+### Create a new employee
+POST http://localhost:5000/api/employee
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "role": "Warehouse Manager"
+}
+
+### Update an existing employee
+PUT http://localhost:5000/api/employee/3
+Content-Type: application/json
+
+{
+  "name": "John Doe Updated",
+  "role": "Senior Warehouse Manager"
+}
+
+### Soft delete an employee
+DELETE http://localhost:5000/api/employee/3

@@ -1,0 +1,30 @@
+### Get all inventories
+GET http://localhost:5000/api/inventory
+Accept: application/json
+
+### Get inventory by ID
+GET http://localhost:5000/api/inventory/1
+Accept: application/json
+
+### Create a new inventory item
+POST http://localhost:5000/api/inventory
+Content-Type: application/json
+
+{
+  "warehouseId": 1,
+  "productId": 2,
+  "quantityOnHand": 100
+}
+
+### Update an existing inventory item
+PUT http://localhost:5000/api/inventory/1
+Content-Type: application/json
+
+{
+  "warehouseId": 1,
+  "productId": 2,
+  "quantityOnHand": 150
+}
+
+### Soft delete an inventory item
+DELETE http://localhost:5000/api/inventory/1

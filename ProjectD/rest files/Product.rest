@@ -1,0 +1,34 @@
+### Get all products
+GET http://localhost:5000/api/product
+
+### Get product by ID
+GET http://localhost:5000/api/products/1
+
+### Create a new product
+POST http://localhost:5000/api/products
+Content-Type: application/json
+
+{
+  "productName": "Widget",
+  "weightKg": 2.5,
+  "material": "Steel",
+  "batchNumber": "B123",
+  "price": 99.99,
+  "category": "Gadgets"
+}
+
+### Update a product
+PUT http://localhost:5000/api/products/1
+Content-Type: application/json
+
+{
+  "productName": "Updated Widget",
+  "weightKg": 2.8,
+  "material": "Aluminum",
+  "batchNumber": "B124",
+  "price": 109.99,
+  "category": "Tools"
+}
+
+### Soft delete a product
+DELETE http://localhost:5000/api/products/1

@@ -1,0 +1,34 @@
+### Get all inventory transactions
+GET http://localhost:5000/api/inventorytransaction
+Accept: application/json
+
+### Get inventory transaction by ID
+GET http://localhost:5000/api/inventorytransaction/1
+Accept: application/json
+
+### Create a new inventory transaction
+POST http://localhost:5000/api/inventorytransaction
+Content-Type: application/json
+
+{
+  "quantity": 50,
+  "type": "Stock In",
+  "timestamp": "2025-04-28T10:00:00",
+  "sourceOrDestination": "Supplier X",
+  "employeeId": 1
+}
+
+### Update an existing inventory transaction
+PUT http://localhost:5000/api/inventorytransaction/1
+Content-Type: application/json
+
+{
+  "quantity": 70,
+  "type": "Stock Out",
+  "timestamp": "2025-04-28T15:30:00",
+  "sourceOrDestination": "Warehouse B",
+  "employeeId": 2
+}
+
+### Soft delete an inventory transaction
+DELETE http://localhost:5000/api/inventorytransaction/1

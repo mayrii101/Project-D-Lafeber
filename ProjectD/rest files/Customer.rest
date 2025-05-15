@@ -1,0 +1,34 @@
+### Get all customers
+GET http://localhost:5000/api/customer
+Accept: application/json
+
+### Get customer by ID
+GET http://localhost:5000/api/customer/1
+Accept: application/json
+
+### Create a new customer
+POST http://localhost:5000/api/customer
+Content-Type: application/json
+
+{
+  "bedrijfsNaam": "New Company",
+  "contactPersoon": "John Doe",
+  "email": "john@example.com",
+  "telefoonNummer": "123456789",
+  "adres": "123 Main Street"
+}
+
+### Update an existing customer
+PUT http://localhost:5000/api/customer/3
+Content-Type: application/json
+
+{
+  "bedrijfsNaam": "Updated Company",
+  "contactPersoon": "Jane Doe",
+  "email": "jane@example.com",
+  "telefoonNummer": "987654321",
+  "adres": "456 Another Street"
+}
+
+### Soft delete a customer
+DELETE http://localhost:5000/api/customer/3

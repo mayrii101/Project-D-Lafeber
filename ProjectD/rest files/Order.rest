@@ -1,0 +1,44 @@
+### Get all orders
+GET http://localhost:5000/api/order
+
+### Get an order by ID
+GET http://localhost:5000/api/order/1
+
+### Create a new order
+POST http://localhost:5000/api/order
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "orderDate": "2025-04-28T00:00:00",
+  "deliveryAddress": "1234 Main St",
+  "expectedDeliveryDate": "2025-05-01T00:00:00",
+  "status": "Pending",
+  "productLines": [
+    {
+      "productId": 1,
+      "quantity": 10
+    }
+  ]
+}
+
+### Update an existing order
+PUT http://localhost:5000/api/order/1
+Content-Type: application/json
+
+{
+  "customerId": 2,
+  "orderDate": "2025-04-29T00:00:00",
+  "deliveryAddress": "5678 Elm St",
+  "expectedDeliveryDate": "2025-05-03T00:00:00",
+  "status": "Processing",
+  "productLines": [
+    {
+      "productId": 2,
+      "quantity": 5
+    }
+  ]
+}
+
+### Soft delete an order
+DELETE http://localhost:5000/api/orders/1
