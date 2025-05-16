@@ -23,7 +23,6 @@ namespace AzureSqlConnectionDemo.Tests.Services
             _context = new ApplicationDbContext(options);
             _service = new CustomerService(_context);
 
-            // Seed data
             _context.Customers.AddRange(
                 new Customer { Id = 1, BedrijfsNaam = "Test A", IsDeleted = false },
                 new Customer { Id = 2, BedrijfsNaam = "Test B", IsDeleted = true }
@@ -72,7 +71,7 @@ namespace AzureSqlConnectionDemo.Tests.Services
             var result = await _service.CreateCustomerAsync(newCustomer);
             var customers = await _context.Customers.ToListAsync();
 
-            Assert.Equal(3, customers.Count); // Already 2 seeded
+            Assert.Equal(3, customers.Count);
             Assert.Equal("New Co", result.BedrijfsNaam);
         }
 
