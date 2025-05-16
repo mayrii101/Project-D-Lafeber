@@ -23,7 +23,6 @@ namespace AzureSqlConnectionDemo.Tests.Services
             _context = new ApplicationDbContext(options);
             _service = new ProductService(_context);
 
-            // Seed data
             _context.Products.AddRange(
                 new Product
                 {

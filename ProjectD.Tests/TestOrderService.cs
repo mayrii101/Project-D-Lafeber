@@ -23,7 +23,6 @@ namespace AzureSqlConnectionDemo.Tests.Services
             _context = new ApplicationDbContext(options);
             _service = new OrderService(_context);
 
-            // Seed required data
             var customer = new Customer { Id = 1, BedrijfsNaam = "Test Customer", IsDeleted = false };
             var product = new Product { Id = 1, ProductName = "Test Product", WeightKg = 10 };
             var orderLine = new OrderLine { ProductId = 1, Product = product, Quantity = 2 };
