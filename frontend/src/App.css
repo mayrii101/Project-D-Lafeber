@@ -1,0 +1,86 @@
+container {
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #000000;
+  padding: 1rem;
+  color: #ffffff;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoIcon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.main {
+  padding: 2rem;
+}
+
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cardUpdates {
+  background-color: #f3f4f6; /* light grey default to stand out */
+  color: #1f2937;
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+
+.cardAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addIcon {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+.linkPrimary {
+  color: #ffffff;
+  text-decoration: underline;
+  font-size: 1.125rem;
+}
+
+/* Hover effect on cards */
+.cardUpdates:hover,
+.cardDefault:hover {
+  background-color: #1E90FF;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* Ensure default card background */
+.cardDefault {
+  background-color: #f3f4f6; /* light grey default to stand out */
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+}
