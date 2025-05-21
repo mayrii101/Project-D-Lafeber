@@ -44,7 +44,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                          "Encrypt=False;" +
                          "Connection Timeout=30;"));
 
-
+builder.Services.AddScoped<XmlToSqlImporter>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

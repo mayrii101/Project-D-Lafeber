@@ -17,44 +17,41 @@ public class XmlToSqlImporter
         _logger = logger;
     }
 
-    public async Task ImportAllAsync(string xmlPath)
+    public async Task ImportFromTwoXmlStringsAsync(string xmlContent1, string xmlContent2)
     {
+        var xml1 = XDocument.Parse(xmlContent1);
+        var xml2 = XDocument.Parse(xmlContent2);
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
         try
         {
-            var xml = XDocument.Load(xmlPath);
-            
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            
-            try
-            {
-                await ImportCustomersAsync(xml);
-                await ImportEmployeesAsync(xml);
-                await ImportWarehousesAsync(xml);
-                await ImportProductsAsync(xml);
-                await ImportVehiclesAsync(xml);
-                await ImportOrdersAsync(xml);
-                await ImportOrderLinesAsync(xml);
-                await ImportShipmentsAsync(xml);
-                await ImportShipmentOrdersAsync(xml);
-                await ImportInventoryAsync(xml);
-                await ImportInventoryTransactionsAsync(xml);
+            // Import data from the first XML string (xml1)
+            await ImportCustomersAsync(xml1);
+            await ImportEmployeesAsync(xml1);
+            await ImportWarehousesAsync(xml1);
+            await ImportProductsAsync(xml1);
+            await ImportVehiclesAsync(xml1);
 
-                await transaction.CommitAsync();
-                _logger.LogInformation("All data imported successfully");
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(ex, "Transaction rolled back");
-                throw;
-            }
+            // Import data from the second XML string (xml2)
+            await ImportOrdersAsync(xml2);
+            await ImportOrderLinesAsync(xml2);
+            await ImportShipmentsAsync(xml2);
+            await ImportShipmentOrdersAsync(xml2);
+            await ImportInventoryAsync(xml2);
+            await ImportInventoryTransactionsAsync(xml2);
+
+            await transaction.CommitAsync();
+            _logger.LogInformation("Data imported successfully from both XML strings");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "XML import failed");
+            await transaction.RollbackAsync();
+            _logger.LogError(ex, "Transaction rolled back");
             throw;
         }
     }
+
 
     // ===== INDIVIDUAL IMPORT METHODS =====
     private async Task ImportCustomersAsync(XDocument xml)
@@ -272,7 +269,7 @@ public class XmlToSqlImporter
     }
 
     // ===== HELPER METHODS =====
-    private string SafeGetString(XElement el, string name, string def = "") 
+    private string SafeGetString(XElement el, string name, string def = "")
         => el.Element(name)?.Value ?? def;
 
     private int SafeGetInt(XElement el, string name, int def = 0)
@@ -285,13 +282,13 @@ public class XmlToSqlImporter
         => bool.TryParse(el.Element(name)?.Value, out bool val) ? val : def;
 
     private DateTime SafeGetDateTime(XElement el, string name, DateTime? def = null)
-        => DateTime.TryParse(el.Element(name)?.Value, out DateTime val) 
+        => DateTime.TryParse(el.Element(name)?.Value, out DateTime val)
             ? val : def ?? DateTime.MinValue;
 
     private DateTime? SafeGetNullableDateTime(XElement el, string name)
         => DateTime.TryParse(el.Element(name)?.Value, out DateTime val) ? val : null;
 
     private TEnum SafeGetEnum<TEnum>(XElement el, string name) where TEnum : struct
-        => Enum.TryParse<TEnum>(el.Element(name)?.Value, out TEnum val) 
+        => Enum.TryParse<TEnum>(el.Element(name)?.Value, out TEnum val)
             ? val : default;
 }
