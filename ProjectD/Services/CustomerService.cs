@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using AzureSqlConnectionDemo.Models;
+using ProjectD.Models;
 
-namespace AzureSqlConnectionDemo.Services
+namespace ProjectD.Services
 {
     public interface ICustomerService
     {

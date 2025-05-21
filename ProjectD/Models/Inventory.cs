@@ -1,25 +1,27 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-public class Inventory
+namespace ProjectD.Models
 {
-    [Key]
-    public int Id { get; set; }
+    public class Inventory
+    {
+        [Key]
+        public int Id { get; set; }
 
-    [Required]
-    public int ProductId { get; set; }
+        [Required]
+        public int ProductId { get; set; }
 
-    [ForeignKey("ProductId")]
-    public Product Product { get; set; } = default!;
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; } = default!;
 
-    [Required]
-    public int WarehouseId { get; set; }
+        [Required]
+        public int WarehouseId { get; set; }
 
-    [ForeignKey("WarehouseId")]
-    public Warehouse Warehouse { get; set; } = default!;
+        [ForeignKey("WarehouseId")]
+        public Warehouse Warehouse { get; set; } = default!;
 
-    public int QuantityOnHand { get; set; }
+        public int QuantityOnHand { get; set; }
 
-    public DateTime LastUpdated { get; set; }
-    public bool IsDeleted { get; set; }
+        public DateTime LastUpdated { get; set; }
+        public bool IsDeleted { get; set; }
+    }
 }

@@ -1,9 +1,9 @@
-using AzureSqlConnectionDemo.Models;
+using ProjectD.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AzureSqlConnectionDemo.Services
+namespace ProjectD.Services
 {
     public interface IInventoryTransactionService
     {

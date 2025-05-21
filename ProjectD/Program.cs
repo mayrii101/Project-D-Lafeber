@@ -5,8 +5,8 @@
 ///dotnet add package Microsoft.EntityFrameworkCore.Design
 
 using Microsoft.EntityFrameworkCore;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

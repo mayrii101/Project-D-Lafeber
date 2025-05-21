@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectD.Models;
 
-namespace AzureSqlConnectionDemo.Models
+namespace ProjectD.Models
 {
     public class ApplicationDbContext : DbContext
     {
