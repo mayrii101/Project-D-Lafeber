@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

@@ -1,14 +1,16 @@
 using System.ComponentModel.DataAnnotations;
-
-public class Employee
+namespace ProjectD.Models
 {
-    [Key]
-    public int Id { get; set; }
+    public class Employee
+    {
+        [Key]
+        public int Id { get; set; }
 
-    public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-    public string Role { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
 
-    public string Email { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public bool IsDeleted { get; set; }
+    }
 }

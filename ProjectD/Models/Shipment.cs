@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq; // Make sure to include this for LINQ
 
-namespace AzureSqlConnectionDemo.Models
+namespace ProjectD.Models
 {
     // Shipment Model
     public class Shipment

@@ -1,29 +1,31 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-public class InventoryTransaction
+namespace ProjectD.Models
 {
-    [Key]
-    public int Id { get; set; }
+    public class InventoryTransaction
+    {
+        [Key]
+        public int Id { get; set; }
 
-    [Required]
-    public int ProductId { get; set; }
+        [Required]
+        public int ProductId { get; set; }
 
-    [ForeignKey("ProductId")]
-    public Product Product { get; set; } = default!;
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; } = default!;
 
-    public int Quantity { get; set; }
+        public int Quantity { get; set; }
 
-    public InventoryTransactionType Type { get; set; }
+        public InventoryTransactionType Type { get; set; }
 
-    public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
 
-    [Required]
-    public int EmployeeId { get; set; }
+        [Required]
+        public int EmployeeId { get; set; }
 
-    [ForeignKey("EmployeeId")]
-    public Employee Employee { get; set; } = default!;
+        [ForeignKey("EmployeeId")]
+        public Employee Employee { get; set; } = default!;
 
-    public string SourceOrDestination { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; }
+        public string SourceOrDestination { get; set; } = string.Empty;
+        public bool IsDeleted { get; set; }
+    }
 }

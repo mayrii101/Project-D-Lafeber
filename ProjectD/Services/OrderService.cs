@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Models;
-namespace AzureSqlConnectionDemo.Services
+using ProjectD.Models;
+namespace ProjectD.Services
 {
     public interface IOrderService
     {

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

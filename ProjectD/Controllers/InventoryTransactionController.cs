@@ -1,5 +1,5 @@
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

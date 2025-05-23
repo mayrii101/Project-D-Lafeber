@@ -5,8 +5,8 @@
 ///dotnet add package Microsoft.EntityFrameworkCore.Design
 
 using Microsoft.EntityFrameworkCore;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,7 +44,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                          "Encrypt=False;" +
                          "Connection Timeout=30;"));
 
-
+builder.Services.AddScoped<XmlToSqlImporter>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

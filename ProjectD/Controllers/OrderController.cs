@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 
 
 
