@@ -40,7 +40,7 @@ container {
 }
 
 .cardUpdates {
-  background-color: #f3f4f6; /* light grey default to stand out */
+  background-color: #f3f4f6; 
   color: #1f2937;
   height: 12rem;
   display: flex;
@@ -67,7 +67,7 @@ container {
   font-size: 1.125rem;
 }
 
-/* Hover effect on cards */
+
 .cardUpdates:hover,
 .cardDefault:hover {
   background-color: #1E90FF;
@@ -75,9 +75,9 @@ container {
   cursor: pointer;
 }
 
-/* Ensure default card background */
+
 .cardDefault {
-  background-color: #f3f4f6; /* light grey default to stand out */
+  background-color: #f3f4f6; 
   height: 12rem;
   display: flex;
   flex-direction: column;

@@ -1,4 +1,4 @@
-// File: src/components/Dashboard/Dashboard.tsx
+
 import React from "react";
 import { Card, CardContent } from "./card";
 import "./App.css";
