@@ -5,13 +5,16 @@ import { Card, CardContent } from "./card";
 import "./Dashboard.css";
 
 const Dashboard: React.FC = () => (
-  <div className="container">
-    <header className="header">
-      <div className="logoArea">
+    <div className="container">
+      <header className="header">
+    <div className="logoArea">
+      <Link to="/" className="logoLink">
         <div className="logoIcon">⬇</div>
         <h1 className="logoText">Lafeber</h1>
-      </div>
-    </header>
+      </Link>
+    </div>
+  </header>
+
 
     <main className="main">
       <div className="navGrid">

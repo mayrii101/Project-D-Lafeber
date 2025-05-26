@@ -1,14 +1,17 @@
 // src/Bestellingen.tsx
 import React from "react";
-import "./Dashboard";           // gebruikt nogsteeds de header 
-import "./Bestellingen.css";  // custom styles voor deze page
+import { Link } from "react-router-dom";
+import "./Dashboard.css";            // shared styles like header, logo, etc.
+import "./Bestellingen.css";  // custom styles for this page
 
 const Bestellingen: React.FC = () => (
   <div className="container">
     <header className="header">
       <div className="logoArea">
-        <div className="logoIcon">⬇</div>
-        <h1 className="logoText">Lafeber</h1>
+        <Link to="/" className="logoLink">
+          <div className="logoIcon">⬇</div>
+          <h1 className="logoText">Lafeber</h1>
+        </Link>
       </div>
     </header>
 
