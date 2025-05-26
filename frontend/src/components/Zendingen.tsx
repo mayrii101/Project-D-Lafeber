@@ -1,8 +1,8 @@
 // src/Zendingen.tsx
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Dashboard.css";            // shared styles like header, logo, etc.
-import "./Producten.css";  // custom styles for this page
+import '../styles/Dashboard.css';          // shared styles like header, logo, etc.
+import "../styles/Zendingen.css";  // custom styles for this page
 
 const Zendingen: React.FC = () => (
   <div className="container">
@@ -16,11 +16,11 @@ const Zendingen: React.FC = () => (
     </header>
 
     <main className="main">
-      <h2 className="pageTitle">Producten</h2>
-      <div className="ProductenList">
-        <div className="ProductenItem">#1001 – 23 mei 2025</div>
-        <div className="ProductenItem">#1002 – 24 mei 2025</div>
-        <div className="ProductenItem">#1003 – 25 mei 2025</div>
+      <h2 className="pageTitle">Zendingen</h2>
+      <div className="ZendingList">
+        <div className="ZendingItem">#1001 – 23 mei 2025</div>
+        <div className="ZendingItem">#1002 – 24 mei 2025</div>
+        <div className="ZendingItem">#1003 – 25 mei 2025</div>
       </div>
     </main>
   </div>

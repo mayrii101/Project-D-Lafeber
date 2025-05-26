@@ -1,10 +1,10 @@
 // src/App.tsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import Bestellingen from "./Bestellingen";
-import Producten from "./Producten";
-import Zendingen from "./Zendingen";
+import Dashboard from "./components/Dashboard";
+import Bestellingen from "./components/Bestellingen";
+import Producten from "./components/Producten";
+import Zendingen from "./components/Zendingen";
 
 const App: React.FC = () => {
   return (

@@ -1,8 +1,8 @@
 // src/Bestellingen.tsx
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Dashboard.css";            // shared styles like header, logo, etc.
-import "./Bestellingen.css";  // custom styles for this page
+import '../styles/Dashboard.css';            // shared styles like header, logo, etc.
+import '../styles/Bestellingen.css';  // custom styles for this page
 
 const Bestellingen: React.FC = () => (
   <div className="container">

@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "./card";
-import "./Dashboard.css";
+import "../styles/Dashboard.css";
 
 const Dashboard: React.FC = () => (
     <div className="container">
