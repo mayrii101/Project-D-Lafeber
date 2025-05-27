@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectD.Models;
 using System.Linq.Expressions;
+using EFCore.BulkExtensions;
 
 namespace ProjectD.Services
 {
@@ -99,25 +100,7 @@ namespace ProjectD.Services
                     IsDeleted = SafeGetBool(x, "IsDeleted")
                 }).ToList();
 
-            if (IsInMemoryProvider())
-            {
-                foreach (var entity in entities)
-                {
-                    var existing = await _context.Customers.FindAsync(entity.Id);
-                    if (existing == null)
-                        _context.Customers.Add(entity);
-                    else
-                        _context.Entry(existing).CurrentValues.SetValues(entity);
-                }
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                await _context.BulkInsertOrUpdateAsync(entities, new BulkConfig
-                {
-                    UpdateByProperties = new List<string> { nameof(Customer.Id) }
-                });
-            }
+            await UpsertEntitiesAsync(entities, c => c.Id);
         }
 
         private async Task ImportEmployeesAsync(XDocument xml)
@@ -247,7 +230,7 @@ namespace ProjectD.Services
                     OrderId = SafeGetInt(x, "OrderId")
                 }).ToList();
 
-            // Composite key: ShipmentId + OrderId
+            // Composite key shipmentid + orderid
             foreach (var entity in entities)
             {
                 var existing = await _context.ShipmentOrders
@@ -255,7 +238,6 @@ namespace ProjectD.Services
 
                 if (existing == null)
                     _context.ShipmentOrders.Add(entity);
-                // else no update fields to change, so skip
             }
             await _context.SaveChangesAsync();
         }
@@ -294,6 +276,8 @@ namespace ProjectD.Services
             await UpsertEntitiesAsync(entities, it => it.Id);
         }
 
+
+
         // Generic upsert method: tries to update if exists by key, otherwise add new
         private async Task UpsertEntitiesAsync<TEntity, TKey>(List<TEntity> entities, Func<TEntity, TKey> keySelector) where TEntity : class
         {
@@ -301,7 +285,7 @@ namespace ProjectD.Services
 
             var dbSet = _context.Set<TEntity>();
 
-            var allEntities = await dbSet.ToListAsync(); // Fetch all and filter in memory
+            var allEntities = await dbSet.ToListAsync(); //fetch all and filter in memory
             var existingEntities = allEntities
                 .Where(e => keys.Contains(keySelector(e)))
                 .ToList();

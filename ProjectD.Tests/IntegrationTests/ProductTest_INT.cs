@@ -1,7 +1,7 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using AzureSqlConnectionDemo.Models;
-using AzureSqlConnectionDemo.Services;
+using ProjectD.Models;
+using ProjectD.Services;
 using AzureSqlConnectionDemo.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
