@@ -1,38 +1,22 @@
-
+// src/App.tsx
 import React from "react";
-import { Card, CardContent } from "./card";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+import Bestellingen from "./components/Bestellingen";
+import Producten from "./components/Producten";
+import Zendingen from "./components/Zendingen";
 
-const Dashboard: React.FC = () => (
-  <div className="container">
-    <header className="header">
-      <div className="logoArea">
-        <div className="logoIcon">⬇</div>
-        <h1 className="logoText">Lafeber</h1>
-      </div>
-    </header>
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/bestellingen" element={<Bestellingen />} />
+        <Route path="/Producten" element={<Producten />} />
+        <Route path="/Zendingen" element={<Zendingen />} />
+      </Routes>
+    </Router>
+  );
+};
 
-    <main className="main">
-      <div className="navGrid">
-        <Card className="cardUpdates">
-          <div className="cardTitle">Updates</div>
-          <div className="cardAction">
-            <a href="#" className="linkPrimary">Bekijken</a>
-            <div className="addIcon">＋</div>
-          </div>
-        </Card>
-
-        {['Bestellingen', 'Producten', 'Zendingen'].map((title) => (
-          <Card key={title} className="cardDefault">
-            <div className="cardTitleDefault">{title}</div>
-            <a href="#" className="linkSecondary">→ Bekijken</a>
-          </Card>
-        ))}
-      </div>
-
-      {/* Chart area removed; will add later */}
-    </main>
-  </div>
-);
-
-export default Dashboard;
+export default App;
