@@ -4,12 +4,28 @@ container {
 }
 
 .header {
+  position: relative;
+  /* nodig voor absolute kinderen */
+  height: 6rem;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.logoWrapper {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: #000000;
-  padding: 1rem;
-  color: #ffffff;
+}
+
+.searchWrapper {
+  position: absolute;
+  right: 18rem;
+  /* pas aan hoeveel ruimte je rechts wilt */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .logoArea {
@@ -40,7 +56,7 @@ container {
 }
 
 .cardUpdates {
-  background-color: #f3f4f6; 
+  background-color: #f3f4f6;
   color: #1f2937;
   height: 12rem;
   display: flex;
@@ -77,7 +93,7 @@ container {
 
 
 .cardDefault {
-  background-color: #f3f4f6; 
+  background-color: #f3f4f6;
   height: 12rem;
   display: flex;
   flex-direction: column;
@@ -91,4 +107,12 @@ container {
   gap: 0.5rem;
   text-decoration: none;
   color: inherit;
+}
+
+.filter {
+  position: absolute;
+  top: 50%;
+  right: 7rem;
+  /* pas deze waarde aan zoals je wilt */
+  transform: translateY(-50%);
 }

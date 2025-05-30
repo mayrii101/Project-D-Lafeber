@@ -1,0 +1,19 @@
+/* Filter.css */
+.filter-wrapper {
+    position: relative;
+}
+
+.status-filter {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #bdc3c7;
+    background-color: white;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.status-filter:focus {
+    outline: none;
+    border-color: #3498db;
+}
