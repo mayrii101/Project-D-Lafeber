@@ -1,118 +1,148 @@
-container {
+.container {
   min-height: 100vh;
   background-color: #ffffff;
 }
 
-.header {
+/* HERO + OVERLAY + LOGO */
+.hero {
   position: relative;
-  /* nodig voor absolute kinderen */
-  height: 6rem;
-  background-color: #000000;
-  color: #ffffff;
+  height: 320px;
+  width: 100%;
+}
+
+.heroControls {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 3;
+}
+
+.heroControls input,
+.heroControls select {
+  background-color: rgb(226, 218, 218);
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  padding: 2rem;
+  z-index: 2;
+}
+
+.logoImage {
+  height: 100px;
+  object-fit: contain;
 }
 
 .logoWrapper {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   align-items: center;
 }
 
-.searchWrapper {
-  position: absolute;
-  right: 18rem;
-  /* pas aan hoeveel ruimte je rechts wilt */
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.logoArea {
+.logoLink {
+  text-decoration: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .logoIcon {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 2rem;
+  color: white;
 }
 
 .logoText {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  color: white;
+  font-weight: 700;
 }
 
+/* GRID + KAARTEN */
 .main {
   padding: 2rem;
+  z-index: 3;
+  position: relative;
+  background: white;
 }
 
 .navGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: -100px;
+  /* laat kaarten zweven */
+  padding: 0 2rem;
 }
 
+.cardDefault,
 .cardUpdates {
   background-color: #f3f4f6;
-  color: #1f2937;
-  height: 12rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  height: 160px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1rem;
+  transition: transform 0.2s ease, background-color 0.3s;
 }
 
-
-.cardAction {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.cardDefault:hover,
+.cardUpdates:hover {
+  transform: translateY(-5px);
+  background-color: #1E90FF;
+  color: #fff;
+  cursor: pointer;
 }
 
-.addIcon {
-  font-size: 1.75rem;
+.cardTitleDefault,
+.cardTitle {
+  font-size: 1.2rem;
   font-weight: bold;
+}
+
+.linkPrimary,
+.linkSecondary {
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .linkPrimary {
   color: #ffffff;
-  text-decoration: underline;
-  font-size: 1.125rem;
 }
 
-
-.cardUpdates:hover,
-.cardDefault:hover {
-  background-color: #1E90FF;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-
-.cardDefault {
-  background-color: #f3f4f6;
-  height: 12rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1rem;
-}
-
-.logoLink {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
+.linkSecondary {
   color: inherit;
 }
 
-.filter {
-  position: absolute;
-  top: 50%;
-  right: 7rem;
-  /* pas deze waarde aan zoals je wilt */
-  transform: translateY(-50%);
+.addIcon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background-color: white;
+  position: relative;
+  z-index: 3;
+  margin-top: -40px;
+  /* optioneel: laat het iets overlappen met header */
 }
