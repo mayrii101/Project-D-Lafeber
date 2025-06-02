@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #e8e1e1;
 }
 
 /* HERO + OVERLAY + LOGO */
@@ -12,8 +12,8 @@
 
 .heroControls {
   position: absolute;
-  top: 1.5rem;
-  right: 2rem;
+  bottom: 6rem;
+  right: 34rem;
   display: flex;
   gap: 1rem;
   z-index: 3;
@@ -76,7 +76,7 @@
   padding: 2rem;
   z-index: 3;
   position: relative;
-  background: white;
+  background-color: #e8e1e1;
 }
 
 .navGrid {
@@ -145,4 +145,110 @@
   z-index: 3;
   margin-top: -40px;
   /* optioneel: laat het iets overlappen met header */
+}
+
+/* Navigation cards */
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.cardDefault {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  min-height: 120px;
+  position: relative;
+}
+
+.cardUpdates {
+  background-color: #007bff;
+  color: white;
+}
+
+.cardUpdates .cardTitleDefault,
+.cardUpdates .linkSecondary {
+  color: white;
+}
+
+.cardTitleDefault {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.linkSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.addIcon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Recent orders */
+.recent-orders {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.recent-orders h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+/* Status badges */
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+}
+
+.status.delivered {
+  background-color: #2ecc71;
+}
+
+.status.shipped {
+  background-color: #3498db;
+}
+
+.status.cancelled {
+  background-color: #e74c3c;
+}
+
+.status.pending {
+  background-color: #f39c12;
 }
