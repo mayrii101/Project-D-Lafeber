@@ -10,12 +10,12 @@ namespace ProjectD.Models
         public int OrderId { get; set; }
 
         [ForeignKey("OrderId")]
-        public Order Order { get; set; } = default!;
+        public Order? Order { get; set; }
 
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; } = default!;
+        public Product? Product { get; set; }
 
         public int Quantity { get; set; }
 

@@ -13,7 +13,7 @@ namespace ProjectD.Models
         public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; } = default!;
+        public Customer? Customer { get; set; }
 
         public List<OrderLine> ProductLines { get; set; } = new();
 
