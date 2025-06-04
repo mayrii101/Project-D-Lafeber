@@ -20,41 +20,15 @@ namespace ProjectD.Services
             _context = context;
         }
 
-        public async Task<object> GetAllOrdersAsync()
+        public async Task<List<Order>> GetAllOrdersAsync()
         {
             return await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.ProductLines)
+                    .ThenInclude(pl => pl.Product)
+                .Include(o => o.ShipmentOrders)
+                    .ThenInclude(so => so.Shipment)
                 .Where(o => !o.IsDeleted)
-                .Select(o => new
-                {
-                    o.Id,
-                    Customer = new
-                    {
-                        o.Customer.Id,
-                        o.Customer.BedrijfsNaam,
-                        o.Customer.ContactPersoon,
-                        o.Customer.Email,
-                        o.Customer.TelefoonNummer,
-                        o.Customer.Adres
-                    },
-                    ProductLines = o.ProductLines
-                        .Where(pl => !pl.IsDeleted)
-                        .Select(pl => new
-                        {
-                            ProductName = pl.Product.ProductName,
-                            Quantity = pl.Quantity,
-                            LineTotal = pl.LineTotal,
-                            Material = pl.Product.Material
-                        }),
-                    o.TotalWeight,
-                    o.Status,
-                    o.OrderDate,
-                    o.DeliveryAddress,
-                    o.ExpectedDeliveryDate,
-                    ShipmentId = o.ShipmentOrders
-                        .Where(so => !so.Shipment.IsDeleted)
-                        .Select(so => so.ShipmentId)
-                        .FirstOrDefault()
-                })
                 .ToListAsync();
         }
 
