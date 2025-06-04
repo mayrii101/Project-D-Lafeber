@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq; // Make sure to include this for LINQ
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectD.Models
 {
@@ -19,10 +20,10 @@ namespace ProjectD.Models
         public bool IsDeleted { get; set; }
 
         // Navigation property for many-to-many relationship with Order
-        public ICollection<ShipmentOrder> ShipmentOrders { get; set; }  // Link to ShipmentOrder
+        public ICollection<ShipmentOrder> ShipmentOrders { get; set; } = new List<ShipmentOrder>();
 
-        // Explicit navigation property to Order (indirect through ShipmentOrder)
-        public ICollection<Order> Orders => ShipmentOrders?.Select(so => so.Order).ToList();
+        [NotMapped]
+        public ICollection<Order> Orders => ShipmentOrders.Select(so => so.Order).ToList();
     }
 
     // ShipmentOrder Model (many-to-many relationship between Shipment and Order)

@@ -15,7 +15,7 @@ namespace ProjectD.Models
 
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
-
+    
         public string TelefoonNummer { get; set; } = string.Empty;
 
         public string Adres { get; set; } = string.Empty;
