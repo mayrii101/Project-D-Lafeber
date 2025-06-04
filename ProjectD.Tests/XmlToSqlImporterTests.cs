@@ -31,7 +31,6 @@ namespace AzureSqlConnectionDemo.Tests.Services
         [Fact]
         public async Task ImportFromTwoXmlStringsAsync_ShouldImportCustomersAndOrders()
         {
-            // Arrange - provide minimal XML strings with Customers and Orders only
             var xml1 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <Root>
   <Customer>
