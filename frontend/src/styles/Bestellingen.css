@@ -12,6 +12,11 @@
   padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  width: 200px;
+  /* smaller width */
+  height: 400px;
+  /* larger height */
 }
 
 .orderItem {
