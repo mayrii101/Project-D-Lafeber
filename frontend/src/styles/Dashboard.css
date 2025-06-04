@@ -365,7 +365,7 @@
   display: flex;
   justify-content: flex-start;
   /* aligns to the left */
-  margin: -40px 0 0 0;
+  margin: -40px 0 0 40px;
   /* optional: adds space from left edge */
 }
 
