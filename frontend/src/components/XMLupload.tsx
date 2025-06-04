@@ -1,3 +1,4 @@
+
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
 function XmlUpload() {
@@ -26,7 +27,7 @@ function XmlUpload() {
         formData.append("xmlFile2", xmlFile2);
 
         try {
-            const response = await fetch("/api/XmlImport/upload", {
+            const response = await fetch("http://localhost:5000/api/XmlImport/upload", {
                 method: "POST",
                 body: formData,
             });

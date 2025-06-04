@@ -19,7 +19,6 @@ public class XmlImportController : ControllerBase
     }
 
     [HttpPost("upload")]
-    [RequestSizeLimit(50 * 1024 * 1024)] // optional: limit to 50MB max upload size
     public async Task<IActionResult> UploadXmlFiles([FromForm] XmlFilesUploadDto filesDto)
     {
         if (filesDto.XmlFile1 == null || filesDto.XmlFile2 == null)

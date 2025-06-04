@@ -7,14 +7,19 @@ interface XmlUploadModalProps {
 
 const XmlUploadModal: React.FC<XmlUploadModalProps> = ({ onClose }) => {
   return (
-    <div className="modal">
-      <button
-        onClick={onClose}
-        style={{ float: "right", margin: "10px", fontSize: "18px" }}
-      >
-        ✖ Close
-      </button>
-      <XmlUpload />
+    <div className="modal-overlay">
+      <div className="modal">
+        <div className="modal-header">
+          <h2>XML Upload</h2>
+          <div className="modal-header-buttons">
+            <button onClick={onClose}>&times;</button>
+          </div>
+        </div>
+
+        <div className="modal-content">
+          <XmlUpload />
+        </div>
+      </div>
     </div>
   );
 };
