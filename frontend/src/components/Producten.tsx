@@ -1,29 +1,109 @@
-// src/Zendingen.tsx
 import React from "react";
-import { Link } from "react-router-dom";
-import '../styles/Dashboard.css';            // shared styles like header, logo, etc.
-import "../styles/Producten.css";  // custom styles for this page
 
-const Zendingen: React.FC = () => (
-  <div className="container">
-    <header className="header">
-      <div className="logoArea">
-        <Link to="/" className="logoLink">
-          <div className="logoIcon">⬇</div>
-          <h1 className="logoText">Lafeber</h1>
-        </Link>
+interface Product {
+  id: number;
+  productName: string;
+  sku: string;
+  weightKg: number;
+  material: string;
+  batchNumber: number;
+  price: number;
+  category: string;
+  expirationDate?: string;
+  isDeleted: boolean;
+}
+
+interface ProductenProps {
+  products: Product[];
+  selectedProduct: Product | null;
+  onSelectProduct: (product: Product) => void;
+  onBack: () => void;
+  onClose: () => void;
+}
+
+const Producten: React.FC<ProductenProps> = ({
+  products,
+  selectedProduct,
+  onSelectProduct,
+  onBack,
+  onClose,
+}) => {
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <div className="modal-header">
+          <h2>
+            {selectedProduct
+              ? `Product #${selectedProduct.id} Details`
+              : `Producten (${products.length})`}
+          </h2>
+          <div className="modal-header-buttons">
+            {selectedProduct && (
+              <button className="back-button" onClick={onBack}>
+                ←
+              </button>
+            )}
+            <button className="close-button" onClick={onClose}>
+              &times;
+            </button>
+          </div>
+        </div>
+        <div className="modal-content">
+          {selectedProduct ? (
+            <div className="order-details">
+              <div className="detail-row">
+                <span className="detail-label">Naam:</span>
+                <span>{selectedProduct.productName}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">SKU:</span>
+                <span>{selectedProduct.sku}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Gewicht:</span>
+                <span>{selectedProduct.weightKg} kg</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Materiaal:</span>
+                <span>{selectedProduct.material}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Batch:</span>
+                <span>{selectedProduct.batchNumber}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Prijs:</span>
+                <span>€{selectedProduct.price.toFixed(2)}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Categorie:</span>
+                <span>{selectedProduct.category}</span>
+              </div>
+              {selectedProduct.expirationDate && (
+                <div className="detail-row">
+                  <span className="detail-label">Houdbaar tot:</span>
+                  <span>{new Date(selectedProduct.expirationDate).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="all-orders">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="order-summary clickable"
+                  onClick={() => onSelectProduct(product)}
+                >
+                  <span>{product.productName}</span>
+                  <span>€{product.price.toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </header>
+    </div>
+  );
+};
 
-    <main className="main">
-      <h2 className="pageTitle">Producten</h2>
-      <div className="ProductenList">
-        <div className="ProductenItem">#1001 – 23 mei 2025</div>
-        <div className="ProductenItem">#1002 – 24 mei 2025</div>
-        <div className="ProductenItem">#1003 – 25 mei 2025</div>
-      </div>
-    </main>
-  </div>
-);
-
-export default Zendingen;
+export default Producten;

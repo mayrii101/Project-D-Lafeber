@@ -3,6 +3,9 @@ import { Card } from "./card";
 import "../styles/Dashboard.css";
 import SearchBar from "./Searchbar";
 import Filter from "./Filter";
+import Bestellingen from "./Bestellingen";
+import Producten from "./Producten";
+import Klanten from "./Klanten";
 
 interface Order {
   id: number;
@@ -34,18 +37,52 @@ interface Order {
   isDeleted: boolean;
 }
 
+interface Product {
+  id: number;
+  productName: string;
+  sku: string;
+  weightKg: number;
+  material: string;
+  batchNumber: number;
+  price: number;
+  category: string;
+  expirationDate?: string;
+  isDeleted: boolean;
+}
+
+interface Customer {
+  id: number;
+  bedrijfsNaam: string;
+  contactPersoon: string;
+  email: string;
+  telefoonNummer: string;
+  adres: string;
+  isDeleted: boolean;
+}
+
+
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+
   const [showBestellingen, setShowBestellingen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
   const [showProducten, setShowProducten] = useState(false);
-  const [showZendingen, setShowZendingen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const [showklanten, setShowklanten] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+
 
   useEffect(() => {
+    // Orders
     fetch("http://localhost:5000/api/order")
       .then((res) => res.json())
       .then((data) => {
@@ -57,22 +94,32 @@ const Dashboard: React.FC = () => {
         console.error("Failed to fetch orders:", err);
         setLoading(false);
       });
+
+    // Producten
+    fetch("http://localhost:5000/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Failed to fetch products:", err));
+
+    // klanten
+    fetch("http://localhost:5000/api/customer")
+      .then((res) => res.json())
+      .then((data) => setCustomers(data))
+      .catch((err) => console.error("Failed to fetch customers:", err));
   }, []);
+
 
   useEffect(() => {
     const filtered = orders.filter((order) => {
       const lowerSearch = searchTerm.toLowerCase();
-
       const matchesSearch =
         order.id.toString().includes(searchTerm) ||
         order.status.toLowerCase().includes(lowerSearch) ||
         order.customer.bedrijfsNaam.toLowerCase().includes(lowerSearch) ||
         order.customer.email.toLowerCase().includes(lowerSearch);
-
       const matchesStatus =
         !selectedStatus ||
         order.status.toLowerCase() === selectedStatus.toLowerCase();
-
       return matchesSearch && matchesStatus;
     });
 
@@ -84,13 +131,6 @@ const Dashboard: React.FC = () => {
     setFilteredOrders(sorted);
   }, [searchTerm, orders, selectedStatus]);
 
-  const stats = {
-    total: filteredOrders.length,
-    delivered: filteredOrders.filter((o) => o.status.toLowerCase() === "delivered").length,
-    inTransit: filteredOrders.filter((o) => o.status.toLowerCase() === "shipped").length,
-    cancelled: filteredOrders.filter((o) => o.status.toLowerCase() === "cancelled").length,
-  };
-
   const handleOrderClick = (order: Order) => {
     setSelectedOrder(order);
     setShowBestellingen(true);
@@ -99,7 +139,7 @@ const Dashboard: React.FC = () => {
   const closeModal = () => {
     setShowBestellingen(false);
     setShowProducten(false);
-    setShowZendingen(false);
+    setShowklanten(false);
     setSelectedOrder(null);
   };
 
@@ -130,25 +170,24 @@ const Dashboard: React.FC = () => {
             onClick={() => setShowBestellingen(true)}
             style={{ cursor: "pointer" }}
           >
-            <div className="cardTitleDefault">Bestellingen</div>
+            <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
-
           <Card
             className="cardDefault"
             onClick={() => setShowProducten(true)}
             style={{ cursor: "pointer" }}
           >
-            <div className="cardTitleDefault">Producten</div>
+            <div className="cardTitleDefault">Producten ({products.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
 
           <Card
             className="cardDefault"
-            onClick={() => setShowZendingen(true)}
+            onClick={() => setShowklanten(true)}
             style={{ cursor: "pointer" }}
           >
-            <div className="cardTitleDefault">Zendingen</div>
+            <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
         </div>
@@ -164,9 +203,7 @@ const Dashboard: React.FC = () => {
                   onClick={() => handleOrderClick(order)}
                 >
                   <span>Order #{order.id}</span>
-                  <span className={`status ${order.status.toLowerCase()}`}>
-                    {order.status}
-                  </span>
+                  <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
                 </div>
               ))}
             </div>
@@ -174,125 +211,37 @@ const Dashboard: React.FC = () => {
         )}
       </main>
 
-      {/* Bestellingen Modal */}
       {showBestellingen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h2>
-                {selectedOrder
-                  ? `Order #${selectedOrder.id} Details`
-                  : `Bestellingen (${filteredOrders.length})`}
-              </h2>
-              <div className="modal-header-buttons">
-                {selectedOrder && (
-                  <button className="back-button" onClick={() => setSelectedOrder(null)}>
-                    ←
-                  </button>
-                )}
-                <button className="close-button" onClick={closeModal}>
-                  &times;
-                </button>
-              </div>
-            </div>
-            <div className="modal-content">
-              {selectedOrder ? (
-                <div className="order-details">
-                  <div className="detail-row">
-                    <span className="detail-label">Status:</span>
-                    <span className={`status ${selectedOrder.status.toLowerCase()}`}>
-                      {selectedOrder.status}
-                    </span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Bedrijfsnaam:</span>
-                    <span>{selectedOrder.customer.bedrijfsNaam}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Contactpersoon:</span>
-                    <span>{selectedOrder.customer.contactPersoon}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">E-mail:</span>
-                    <span>{selectedOrder.customer.email}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Telefoon:</span>
-                    <span>{selectedOrder.customer.telefoonNummer}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Order Date:</span>
-                    <span>{new Date(selectedOrder.orderDate).toLocaleDateString()}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Expected Delivery:</span>
-                    <span>{new Date(selectedOrder.expectedDeliveryDate).toLocaleDateString()}</span>
-                  </div>
-                  {selectedOrder.actualDeliveryDate && (
-                    <div className="detail-row">
-                      <span className="detail-label">Actual Delivery:</span>
-                      <span>{new Date(selectedOrder.actualDeliveryDate).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                  <div className="detail-row">
-                    <span className="detail-label">Delivery Address:</span>
-                    <span>{selectedOrder.deliveryAddress}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Total Weight:</span>
-                    <span>{selectedOrder.totalWeight} kg</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="all-orders">
-                  {filteredOrders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="order-summary clickable"
-                      onClick={() => setSelectedOrder(order)}
-                    >
-                      <span>Order #{order.id}</span>
-                      <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <Bestellingen
+          filteredOrders={filteredOrders}
+          selectedOrder={selectedOrder}
+          onSelectOrder={setSelectedOrder}
+          onBack={() => setSelectedOrder(null)}
+          onClose={closeModal}
+        />
       )}
 
-      {/* Producten Modal */}
+      {showklanten && (
+        <Klanten
+          customers={customers}
+          selectedCustomer={selectedCustomer}
+          onSelectCustomer={setSelectedCustomer}
+          onBack={() => setSelectedCustomer(null)}
+          onClose={closeModal}
+        />
+      )}
+
+
       {showProducten && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h2>Producten</h2>
-              <button className="close-button" onClick={closeModal}>
-                &times;
-              </button>
-            </div>
-            <div className="modal-content">
-            </div>
-          </div>
-        </div>
+        <Producten
+          products={products}
+          selectedProduct={selectedProduct}
+          onSelectProduct={setSelectedProduct}
+          onBack={() => setSelectedProduct(null)}
+          onClose={closeModal}
+        />
       )}
 
-      {/* Zendingen Modal */}
-      {showZendingen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h2>Zendingen</h2>
-              <button className="close-button" onClick={closeModal}>
-                &times;
-              </button>
-            </div>
-            <div className="modal-content">
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
