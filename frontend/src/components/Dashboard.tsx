@@ -6,6 +6,7 @@ import Filter from "./Filter";
 import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
+import OrderStatusChart from "./OrderStatusChart";
 
 interface Order {
   id: number;
@@ -59,6 +60,17 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
+const getOrderStatusCounts = (orders: Order[]) => {
+  const counts: Record<string, number> = {};
+  orders.forEach(order => {
+    const status = order.status;
+    counts[status] = (counts[status] || 0) + 1;
+  });
+  return Object.entries(counts).map(([status, count]) => ({
+    name: status,
+    value: count
+  }));
+};
 
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -134,25 +146,20 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="container">
-      <header className="hero" style={{ backgroundImage: `url("/Warehouse.jpg")` }}>
+      <header
+        className="hero"
+        style={{ backgroundImage: `url('/Warehouse.jpg')` }}
+      >
         <div className="overlay">
           <div className="logoWrapper">
-            <img src="/logo_witte_letters.png" alt="Lafeber logo" className="logoImage" />
-          </div>
-        </div>
-        <div className="heroControls">
-          <SearchBar
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            placeholder="Zoek bestellingen..."
-          />
-          <Filter selectedStatus={selectedStatus} onStatusChange={setSelectedStatus} />
+            <div className="logoText">Lafeber Insights</div>          </div>
         </div>
       </header>
 
       <main className="main">
         <div className="navGrid">
-          <Card className="cardDefault card-updates">
+
+          <Card className="cardDefault cardUpdates">
             <div className="cardTitleDefault">Updates</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon">＋</div>
@@ -172,6 +179,12 @@ const Dashboard: React.FC = () => {
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
+        </div>
+        {/* Chart section */}
+        <div className="chart-container">
+          <div>
+            <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
+          </div>
         </div>
       </main>
 
