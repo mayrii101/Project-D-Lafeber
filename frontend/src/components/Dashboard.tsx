@@ -87,7 +87,7 @@ const Dashboard: React.FC = () => {
       try {
         const [ordersRes, productsRes, customersRes] = await Promise.all([
           fetch("http://localhost:5000/api/order"),
-          fetch("http://localhost:5000/api/products"),
+          fetch("http://localhost:5000/api/product"),
           fetch("http://localhost:5000/api/customer"),
         ]);
 
@@ -113,7 +113,8 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const filtered = orders.filter((order) => {
-      const matchesSearch = order.id.toString().includes(searchTerm);
+      const matchesSearch =
+        !searchTerm || order.id.toString().includes(searchTerm);
       const matchesStatus =
         !selectedStatus || order.status.toLowerCase() === selectedStatus.toLowerCase();
       return matchesSearch && matchesStatus;

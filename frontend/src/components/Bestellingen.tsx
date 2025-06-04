@@ -135,16 +135,22 @@ const Bestellingen: React.FC<BestellingenProps> = ({
             </div>
           ) : (
             <div className="all-orders">
-              {filteredOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="order-summary clickable"
-                  onClick={() => onSelectOrder(order)}
-                >
-                  <span>Order #{order.id}</span>
-                  <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
+              {filteredOrders.length === 0 ? (
+                <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                  Geen bestellingen gevonden.
                 </div>
-              ))}
+              ) : (
+                filteredOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="order-summary clickable"
+                    onClick={() => onSelectOrder(order)}
+                  >
+                    <span>Order #{order.id}</span>
+                    <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
+                  </div>
+                ))
+              )}
             </div>
           )}
         </div>

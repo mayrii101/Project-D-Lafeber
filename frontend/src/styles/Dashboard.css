@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #fceaea;
+  background-color: #ffffff;
 }
 
 /* HERO + OVERLAY + LOGO */
@@ -76,7 +76,7 @@
   padding: 2rem;
   z-index: 3;
   position: relative;
-  background-color: #fceaea;
+  background-color: #ffffff;
 }
 
 .navGrid {
