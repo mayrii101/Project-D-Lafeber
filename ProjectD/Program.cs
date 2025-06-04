@@ -36,9 +36,9 @@ builder.Services.AddControllers()
 
 //Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer("Server=lafeberdb.database.windows.net,1433;" +
-                         "Database=LFDatabaseAzure;" +
-                         "User Id=CloudSAdeff4fed;" +
+    options.UseSqlServer("Server=localhost,1433;" +
+                         "Database=LF-Database;" +
+                         "User Id= sa;" +
                          "Password=Admin123!;" +
                          "TrustServerCertificate=True;" +
                          "Encrypt=False;" +
