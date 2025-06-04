@@ -108,10 +108,11 @@
   background-color: #ffffff;
   border-radius: 0;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  min-height: 270px;
+  min-height: 260px;
+  width: 280px;
   /* taller cards */
-  padding: 2.5rem 2rem;
-  font-size: 1.25rem;
+  padding: 1.5rem 1.5rem;
+  font-size: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -127,10 +128,11 @@
   background-color: #ffffff;
   border-radius: 0;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  min-height: 270px;
+  min-height: 280px;
+  width: 300px;
   /* taller cards */
-  padding: 2.5rem 2rem;
-  font-size: 1.25rem;
+  padding: 1.5rem 1.5rem;
+  font-size: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -363,14 +365,13 @@
   display: flex;
   justify-content: flex-start;
   /* aligns to the left */
-  margin: 0rem 0;
-  padding-left: 2rem;
+  margin: -40px 0 0 0;
   /* optional: adds space from left edge */
 }
 
 .chart-container>div {
-  width: 600;
+  width: 600px;
   /* increase the chart size */
-  height: 400;
+  height: 400px;
   /* adjust as needed */
 }
