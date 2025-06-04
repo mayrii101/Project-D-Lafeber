@@ -18,8 +18,7 @@ namespace ProjectD.Models
         public List<OrderLine> ProductLines { get; set; } = new();
 
         [NotMapped]
-        public int TotalWeight => ProductLines.Sum(pl => pl.Product.WeightKg * pl.Quantity);
-
+        public int TotalWeight => ProductLines?.Sum(pl => (pl.Product?.WeightKg ?? 0) * pl.Quantity) ?? 0;
         public OrderStatus Status { get; set; }
 
         public DateTime OrderDate { get; set; }
