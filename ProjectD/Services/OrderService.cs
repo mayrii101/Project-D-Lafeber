@@ -45,6 +45,20 @@ namespace ProjectD.Services
 
         public async Task<Order> CreateOrderAsync(Order order)
         {
+            // Load Product entities for each OrderLine by ProductId
+            foreach (var line in order.ProductLines)
+            {
+                var product = await _context.Products.FindAsync(line.ProductId);
+                if (product == null)
+                {
+                    throw new Exception($"Product with ID {line.ProductId} not found.");
+                }
+
+                line.Product = product;
+
+                // Optional: Validate quantity or other fields here if needed
+            }
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             return order;

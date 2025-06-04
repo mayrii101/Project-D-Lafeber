@@ -20,7 +20,7 @@ namespace ProjectD.Models
         public int Quantity { get; set; }
 
         [NotMapped]
-        public double LineTotal => Product.Price * Quantity;
+        public double LineTotal => Product != null ? Product.Price * Quantity : 0;
         public bool IsDeleted { get; set; }
     }
 }
