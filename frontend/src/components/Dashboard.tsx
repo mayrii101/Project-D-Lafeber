@@ -7,6 +7,7 @@ import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
 import OrderStatusChart from "./OrderStatusChart";
+import XmlUpload from "./XMLupload";
 
 interface Order {
   id: number;
@@ -93,6 +94,7 @@ const Dashboard: React.FC = () => {
 
   const [showKlanten, setShowKlanten] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [showXmlUpload, setShowXmlUpload] = useState(false);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -224,6 +226,18 @@ const Dashboard: React.FC = () => {
           searchTerm={customerSearchTerm}
           onSearchChange={setCustomerSearchTerm}
         />
+      )}
+
+      {showXmlUpload && (
+        <div className="modal">
+          <button
+            onClick={() => setShowXmlUpload(false)}
+            style={{ float: "right", margin: "10px", fontSize: "18px" }}
+          >
+            ✖ Close
+          </button>
+          <XmlUpload />
+        </div>
       )}
     </div>
   );
