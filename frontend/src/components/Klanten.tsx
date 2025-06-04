@@ -1,4 +1,5 @@
 import React from "react";
+import SearchBar from "./Searchbar";
 
 interface Customer {
   id: number;
@@ -16,6 +17,8 @@ interface KlantenProps {
   onSelectCustomer: (customer: Customer) => void;
   onBack: () => void;
   onClose: () => void;
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
 }
 
 const Klanten: React.FC<KlantenProps> = ({
@@ -24,63 +27,63 @@ const Klanten: React.FC<KlantenProps> = ({
   onSelectCustomer,
   onBack,
   onClose,
+  searchTerm,
+  onSearchChange,
 }) => {
+  const filtered = customers.filter((customer) => {
+    const s = searchTerm.toLowerCase();
+    return (
+      customer.bedrijfsNaam.toLowerCase().includes(s) ||
+      customer.contactPersoon.toLowerCase().includes(s) ||
+      customer.email.toLowerCase().includes(s) ||
+      customer.telefoonNummer.toLowerCase().includes(s) ||
+      customer.adres.toLowerCase().includes(s)
+    );
+  });
+
   return (
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
           <h2>
             {selectedCustomer
-              ? `Klant #${selectedCustomer.id} Details`
-              : `Klanten (${customers.length})`}
+              ? `Klant: ${selectedCustomer.bedrijfsNaam}`
+              : `Klanten (${filtered.length})`}
           </h2>
           <div className="modal-header-buttons">
-            {selectedCustomer && (
-              <button className="back-button" onClick={onBack}>
-                ←
-              </button>
-            )}
-            <button className="close-button" onClick={onClose}>
-              &times;
-            </button>
+            {selectedCustomer && <button onClick={onBack}>←</button>}
+            <button onClick={onClose}>&times;</button>
           </div>
         </div>
+
         <div className="modal-content">
-          {selectedCustomer ? (
-            <div className="order-details">
-              <div className="detail-row">
-                <span className="detail-label">Bedrijfsnaam:</span>
-                <span>{selectedCustomer.bedrijfsNaam}</span>
+          {!selectedCustomer ? (
+            <>
+              <SearchBar
+                searchTerm={searchTerm}
+                onSearchChange={onSearchChange}
+                placeholder="Zoek klanten..."
+              />
+              <div style={{ borderBottom: "1px solid #eee", margin: "0.5rem 0 1rem" }}></div>
+
+              <div className="all-customers">
+                {filtered.map((customer) => (
+                  <div
+                    key={customer.id}
+                    className="clickable order-summary"
+                    onClick={() => onSelectCustomer(customer)}
+                  >
+                    <span>{customer.bedrijfsNaam}</span>
+                  </div>
+                ))}
               </div>
-              <div className="detail-row">
-                <span className="detail-label">Contactpersoon:</span>
-                <span>{selectedCustomer.contactPersoon}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Email:</span>
-                <span>{selectedCustomer.email}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Telefoonnummer:</span>
-                <span>{selectedCustomer.telefoonNummer}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Adres:</span>
-                <span>{selectedCustomer.adres}</span>
-              </div>
-            </div>
+            </>
           ) : (
-            <div className="all-orders">
-              {customers.map((customer) => (
-                <div
-                  key={customer.id}
-                  className="order-summary clickable"
-                  onClick={() => onSelectCustomer(customer)}
-                >
-                  <span>{customer.bedrijfsNaam}</span>
-                  <span>{customer.contactPersoon}</span>
-                </div>
-              ))}
+            <div className="customer-details">
+              <p>Naam: {selectedCustomer.contactPersoon}</p>
+              <p>Email: {selectedCustomer.email}</p>
+              <p>Tel: {selectedCustomer.telefoonNummer}</p>
+              <p>Adres: {selectedCustomer.adres}</p>
             </div>
           )}
         </div>

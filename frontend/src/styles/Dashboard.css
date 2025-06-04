@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #e8e1e1;
+  background-color: #fceaea;
 }
 
 /* HERO + OVERLAY + LOGO */
@@ -76,7 +76,7 @@
   padding: 2rem;
   z-index: 3;
   position: relative;
-  background-color: #e8e1e1;
+  background-color: #fceaea;
 }
 
 .navGrid {
@@ -304,4 +304,28 @@
   justify-content: space-between;
   padding: 0.75rem 0;
   border-bottom: 1px solid #eee;
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row {
+  margin-bottom: 0.75rem;
+  /* of 1rem voor meer ruimte */
+  display: flex;
+  gap: 0.5rem;
 }

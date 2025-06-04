@@ -1,5 +1,6 @@
 import React from "react";
-// Of eventueel direct interface hier importeren
+import SearchBar from "./Searchbar";
+import Filter from "./Filter";
 
 interface BestellingenProps {
   filteredOrders: Order[];
@@ -7,6 +8,10 @@ interface BestellingenProps {
   onSelectOrder: (order: Order) => void;
   onBack: () => void;
   onClose: () => void;
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
+  selectedStatus: string;
+  onStatusChange: (status: string) => void;
 }
 
 interface Order {
@@ -45,27 +50,41 @@ const Bestellingen: React.FC<BestellingenProps> = ({
   onSelectOrder,
   onBack,
   onClose,
+  searchTerm,
+  onSearchChange,
+  selectedStatus,
+  onStatusChange,
 }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
-          <h2>
-            {selectedOrder
-              ? `Order #${selectedOrder.id} Details`
-              : `Bestellingen (${filteredOrders.length})`}
-          </h2>
-          <div className="modal-header-buttons">
-            {selectedOrder && (
-              <button className="back-button" onClick={onBack}>
-                ←
-              </button>
+          <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2>
+                {selectedOrder
+                  ? `Order #${selectedOrder.id} Details`
+                  : `Bestellingen (${filteredOrders.length})`}
+              </h2>
+              <div className="modal-header-buttons">
+                {selectedOrder && <button onClick={onBack}>←</button>}
+                <button onClick={onClose}>&times;</button>
+              </div>
+            </div>
+
+            {!selectedOrder && (
+              <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+                <SearchBar
+                  searchTerm={searchTerm}
+                  onSearchChange={onSearchChange}
+                  placeholder="Zoek bestellingen..."
+                />
+                <Filter selectedStatus={selectedStatus} onStatusChange={onStatusChange} />
+              </div>
             )}
-            <button className="close-button" onClick={onClose}>
-              &times;
-            </button>
           </div>
         </div>
+
         <div className="modal-content">
           {selectedOrder ? (
             <div className="order-details">

@@ -1,4 +1,5 @@
 import React from "react";
+import SearchBar from "./Searchbar";
 
 interface Product {
   id: number;
@@ -19,6 +20,8 @@ interface ProductenProps {
   onSelectProduct: (product: Product) => void;
   onBack: () => void;
   onClose: () => void;
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
 }
 
 const Producten: React.FC<ProductenProps> = ({
@@ -27,77 +30,54 @@ const Producten: React.FC<ProductenProps> = ({
   onSelectProduct,
   onBack,
   onClose,
+  searchTerm,
+  onSearchChange,
 }) => {
+  const filtered = products.filter((product) =>
+    product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
           <h2>
             {selectedProduct
-              ? `Product #${selectedProduct.id} Details`
-              : `Producten (${products.length})`}
+              ? `Product: ${selectedProduct.productName}`
+              : `Producten (${filtered.length})`}
           </h2>
           <div className="modal-header-buttons">
-            {selectedProduct && (
-              <button className="back-button" onClick={onBack}>
-                ←
-              </button>
-            )}
-            <button className="close-button" onClick={onClose}>
-              &times;
-            </button>
+            {selectedProduct && <button onClick={onBack}>←</button>}
+            <button onClick={onClose}>&times;</button>
           </div>
         </div>
+
         <div className="modal-content">
-          {selectedProduct ? (
-            <div className="order-details">
-              <div className="detail-row">
-                <span className="detail-label">Naam:</span>
-                <span>{selectedProduct.productName}</span>
+          {!selectedProduct ? (
+            <>
+              <SearchBar
+                searchTerm={searchTerm}
+                onSearchChange={onSearchChange}
+                placeholder="Zoek producten..."
+              />
+              <div style={{ borderBottom: "1px solid #eee", margin: "0.5rem 0 1rem" }}></div>
+
+              <div className="all-products">
+                {filtered.map((product) => (
+                  <div
+                    key={product.id}
+                    className="clickable order-summary"
+                    onClick={() => onSelectProduct(product)}
+                  >
+                    <span>{product.productName}</span>
+                  </div>
+                ))}
               </div>
-              <div className="detail-row">
-                <span className="detail-label">SKU:</span>
-                <span>{selectedProduct.sku}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Gewicht:</span>
-                <span>{selectedProduct.weightKg} kg</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Materiaal:</span>
-                <span>{selectedProduct.material}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Batch:</span>
-                <span>{selectedProduct.batchNumber}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Prijs:</span>
-                <span>€{selectedProduct.price.toFixed(2)}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Categorie:</span>
-                <span>{selectedProduct.category}</span>
-              </div>
-              {selectedProduct.expirationDate && (
-                <div className="detail-row">
-                  <span className="detail-label">Houdbaar tot:</span>
-                  <span>{new Date(selectedProduct.expirationDate).toLocaleDateString()}</span>
-                </div>
-              )}
-            </div>
+            </>
           ) : (
-            <div className="all-orders">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="order-summary clickable"
-                  onClick={() => onSelectProduct(product)}
-                >
-                  <span>{product.productName}</span>
-                  <span>€{product.price.toFixed(2)}</span>
-                </div>
-              ))}
+            <div className="product-details">
+              <p>Naam: {selectedProduct.productName}</p>
+              <p>Prijs: €{selectedProduct.price}</p>
             </div>
           )}
         </div>

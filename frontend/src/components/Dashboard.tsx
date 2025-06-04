@@ -60,13 +60,18 @@ interface Customer {
   isDeleted: boolean;
 }
 
-
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+
+  const [productSearchTerm, setProductSearchTerm] = useState("");
+  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
 
   const [showBestellingen, setShowBestellingen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -74,73 +79,56 @@ const Dashboard: React.FC = () => {
   const [showProducten, setShowProducten] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const [showklanten, setShowklanten] = useState(false);
+  const [showKlanten, setShowKlanten] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [customers, setCustomers] = useState<Customer[]>([]);
-
-
   useEffect(() => {
-    // Orders
-    fetch("http://localhost:5000/api/order")
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data);
-        setFilteredOrders(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch orders:", err);
-        setLoading(false);
-      });
+    const fetchAllData = async () => {
+      try {
+        const [ordersRes, productsRes, customersRes] = await Promise.all([
+          fetch("http://localhost:5000/api/order"),
+          fetch("http://localhost:5000/api/products"),
+          fetch("http://localhost:5000/api/customer"),
+        ]);
 
-    // Producten
-    fetch("http://localhost:5000/api/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error("Failed to fetch products:", err));
+        const [ordersData, productsData, customersData] = await Promise.all([
+          ordersRes.json(),
+          productsRes.json(),
+          customersRes.json(),
+        ]);
 
-    // klanten
-    fetch("http://localhost:5000/api/customer")
-      .then((res) => res.json())
-      .then((data) => setCustomers(data))
-      .catch((err) => console.error("Failed to fetch customers:", err));
+        setOrders(ordersData);
+        setFilteredOrders(ordersData);
+        setProducts(productsData);
+        setCustomers(customersData);
+        setLoading(false);
+      } catch (err) {
+        console.error("Fout bij ophalen data:", err);
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
   }, []);
-
 
   useEffect(() => {
     const filtered = orders.filter((order) => {
-      const lowerSearch = searchTerm.toLowerCase();
-      const matchesSearch =
-        order.id.toString().includes(searchTerm) ||
-        order.status.toLowerCase().includes(lowerSearch) ||
-        order.customer.bedrijfsNaam.toLowerCase().includes(lowerSearch) ||
-        order.customer.email.toLowerCase().includes(lowerSearch);
+      const matchesSearch = order.id.toString().includes(searchTerm);
       const matchesStatus =
-        !selectedStatus ||
-        order.status.toLowerCase() === selectedStatus.toLowerCase();
+        !selectedStatus || order.status.toLowerCase() === selectedStatus.toLowerCase();
       return matchesSearch && matchesStatus;
     });
 
-    const sorted = [...filtered].sort(
-      (a, b) =>
-        new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
-    );
-
-    setFilteredOrders(sorted);
+    setFilteredOrders(filtered);
   }, [searchTerm, orders, selectedStatus]);
-
-  const handleOrderClick = (order: Order) => {
-    setSelectedOrder(order);
-    setShowBestellingen(true);
-  };
 
   const closeModal = () => {
     setShowBestellingen(false);
     setShowProducten(false);
-    setShowklanten(false);
+    setShowKlanten(false);
     setSelectedOrder(null);
+    setSelectedProduct(null);
+    setSelectedCustomer(null);
   };
 
   return (
@@ -152,7 +140,11 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
         <div className="heroControls">
-          <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+          <SearchBar
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            placeholder="Zoek bestellingen..."
+          />
           <Filter selectedStatus={selectedStatus} onStatusChange={setSelectedStatus} />
         </div>
       </header>
@@ -165,50 +157,21 @@ const Dashboard: React.FC = () => {
             <div className="addIcon">＋</div>
           </Card>
 
-          <Card
-            className="cardDefault"
-            onClick={() => setShowBestellingen(true)}
-            style={{ cursor: "pointer" }}
-          >
+          <Card className="cardDefault" onClick={() => setShowBestellingen(true)} style={{ cursor: "pointer" }}>
             <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
-          <Card
-            className="cardDefault"
-            onClick={() => setShowProducten(true)}
-            style={{ cursor: "pointer" }}
-          >
+
+          <Card className="cardDefault" onClick={() => setShowProducten(true)} style={{ cursor: "pointer" }}>
             <div className="cardTitleDefault">Producten ({products.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
 
-          <Card
-            className="cardDefault"
-            onClick={() => setShowklanten(true)}
-            style={{ cursor: "pointer" }}
-          >
+          <Card className="cardDefault" onClick={() => setShowKlanten(true)} style={{ cursor: "pointer" }}>
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
         </div>
-
-        {!loading && filteredOrders.length > 0 && (
-          <div className="recent-orders">
-            <h2>Recent Orders</h2>
-            <div className="orders-list">
-              {filteredOrders.slice(0, 5).map((order) => (
-                <div
-                  key={order.id}
-                  className="order-item clickable"
-                  onClick={() => handleOrderClick(order)}
-                >
-                  <span>Order #{order.id}</span>
-                  <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
 
       {showBestellingen && (
@@ -218,19 +181,12 @@ const Dashboard: React.FC = () => {
           onSelectOrder={setSelectedOrder}
           onBack={() => setSelectedOrder(null)}
           onClose={closeModal}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          selectedStatus={selectedStatus}
+          onStatusChange={setSelectedStatus}
         />
       )}
-
-      {showklanten && (
-        <Klanten
-          customers={customers}
-          selectedCustomer={selectedCustomer}
-          onSelectCustomer={setSelectedCustomer}
-          onBack={() => setSelectedCustomer(null)}
-          onClose={closeModal}
-        />
-      )}
-
 
       {showProducten && (
         <Producten
@@ -239,9 +195,22 @@ const Dashboard: React.FC = () => {
           onSelectProduct={setSelectedProduct}
           onBack={() => setSelectedProduct(null)}
           onClose={closeModal}
+          searchTerm={productSearchTerm}
+          onSearchChange={setProductSearchTerm}
         />
       )}
 
+      {showKlanten && (
+        <Klanten
+          customers={customers}
+          selectedCustomer={selectedCustomer}
+          onSelectCustomer={setSelectedCustomer}
+          onBack={() => setSelectedCustomer(null)}
+          onClose={closeModal}
+          searchTerm={customerSearchTerm}
+          onSearchChange={setCustomerSearchTerm}
+        />
+      )}
     </div>
   );
 };
