@@ -11,13 +11,13 @@ Content-Type: application/json
 {
   "customerId": 1,
   "orderDate": "2025-04-28T00:00:00",
-  "deliveryAddress": "1234 Main St",
+  "deliveryAddress": "Limburg",
   "expectedDeliveryDate": "2025-05-01T00:00:00",
-  "status": "Delivered",
+  "status": "Pending",
   "productLines": [
     {
       "productId": 1,
-      "quantity": 10
+      "quantity": 6
     }
   ]
 }

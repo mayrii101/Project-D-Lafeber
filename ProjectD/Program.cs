@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 //JSON enum converter (enums worden als string gebruikt/gelezen) + Prevent Circular References
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

@@ -1,0 +1,12 @@
+<Product>
+  <Id>5</Id>
+  <ProductName>Gevelsteen</ProductName>
+  <SKU>GS-2048</SKU>
+  <WeightKg>1200</WeightKg>
+  <Material>Clay</Material>
+  <BatchNumber>2048</BatchNumber>
+  <Price>45.75</Price>
+  <Category>Bouwmaterialen</Category>
+  <ExpirationDate></ExpirationDate>
+  <IsDeleted>false</IsDeleted>
+</Product>

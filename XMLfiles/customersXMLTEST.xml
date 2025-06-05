@@ -1,0 +1,20 @@
+<Customers>
+  <Customer>
+    <Id>1</Id>
+    <BedrijfsNaam>testXMlcompany1</BedrijfsNaam>
+    <ContactPersoon>XML</ContactPersoon>
+    <Email>xml.devries@example.com</Email>
+    <TelefoonNummer>+31 20 123 4567</TelefoonNummer>
+    <Adres>Keizersgracht 123, Amsterdam</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <Id>2</Id>
+    <BedrijfsNaam>testXMlcompany2</BedrijfsNaam>
+    <ContactPersoon>Xml</ContactPersoon>
+    <Email>xml.vandenberg@innovatech.nl</Email>
+    <TelefoonNummer>+31 10 987 6543</TelefoonNummer>
+    <Adres>Marktstraat 45, Rotterdam</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+</Customers>
