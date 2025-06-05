@@ -46,23 +46,60 @@ function XmlUpload() {
 
     return (
         <div>
-            <h3 style={{ marginBottom: '1.5rem' }}>Kies hier de bestanden die u wilt uploaden</h3>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
-                        XML File 1:
+            <h3
+                style={{
+                    marginBottom: '1.5rem',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                }}
+            >
+                Kies hier de bestanden die u wilt uploaden, deze bestanden zullen worden geupload naar de huidige database.
+            </h3>
+            <form
+                onSubmit={handleSubmit}
+                style={{
+                    display: 'flex',
+                    gap: '2rem',
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                    justifyContent: 'flex-start',
+                    marginLeft: '15rem',
+                    paddingTop: '1rem',
+                }}
+            >
+                <div style={{ width: '200px' }}>
+                    <label
+                        style={{
+                            display: 'block',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                            marginTop: '0.5rem',
+                        }}
+                    >
+                        XML bestand 1:
                     </label>
-                    <input type="file" accept=".xml" onChange={handleFile1Change} />
-                </div>
-                <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
-                        XML File 2:
+                    <label className="custom-file-upload">
+                        <input type="file" accept=".xml" onChange={handleFile1Change} />
                     </label>
-                    <input type="file" accept=".xml" onChange={handleFile2Change} />
                 </div>
-                <button type="submit" style={{ height: '2.8rem', alignSelf: 'flex-end', padding: '0 1.2rem', fontWeight: '600' }}>
-                    Upload and Import
-                </button>
+
+                <div style={{ width: '200px' }}>
+                    <label
+                        style={{
+                            display: 'block',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                            marginTop: '0.5rem',
+                        }}
+                    >
+                        XML bestand 2:
+                    </label>
+                    <label className="custom-file-upload">
+                        <input type="file" accept=".xml" onChange={handleFile2Change} />
+                    </label>
+                </div>
+
+                <button type="submit">Upload</button>
             </form>
             {message && <p style={{ marginTop: '1rem', fontWeight: '500' }}>{message}</p>}
         </div>

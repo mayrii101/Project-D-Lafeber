@@ -58,6 +58,7 @@ const Bestellingen: React.FC<BestellingenProps> = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
+        <button onClick={onClose} className="close-button">&times;</button>
         <div className="modal-header">
           <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -68,7 +69,6 @@ const Bestellingen: React.FC<BestellingenProps> = ({
               </h2>
               <div className="modal-header-buttons">
                 {selectedOrder && <button onClick={onBack}>←</button>}
-                <button onClick={onClose}>&times;</button>
               </div>
             </div>
 

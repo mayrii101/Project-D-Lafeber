@@ -45,6 +45,7 @@ const Klanten: React.FC<KlantenProps> = ({
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
+          <button onClick={onClose} className="close-button">&times;</button>
           <h2>
             {selectedCustomer
               ? `Klant: ${selectedCustomer.bedrijfsNaam}`
@@ -52,7 +53,6 @@ const Klanten: React.FC<KlantenProps> = ({
           </h2>
           <div className="modal-header-buttons">
             {selectedCustomer && <button onClick={onBack}>←</button>}
-            <button onClick={onClose}>&times;</button>
           </div>
         </div>
 
