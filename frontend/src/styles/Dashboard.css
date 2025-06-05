@@ -18,7 +18,7 @@
   position: relative;
   width: 100%;
   max-width: 100%;
-  height: 430px;
+  height: 300px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -97,9 +97,17 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 3.5rem 2rem;
   /* more vertical and horizontal spacing */
-  margin-top: -500px;
   padding: 10rem 10rem 0 10rem;
+  padding: 10rem;
+  /* uniform padding */
+  margin-top: 0;
   /* no bottom padding */
+}
+
+.cardDefault,
+.cardUpdates {
+  margin-top: -25rem;
+  /* pushes only the cards down */
 }
 
 /* Cards — square corners, subtle shadows, taller */
@@ -108,8 +116,8 @@
   background-color: #ffffff;
   border-radius: 0;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  min-height: 260px;
-  width: 280px;
+  height: 200px;
+  width: 210px;
   /* taller cards */
   padding: 1.5rem 1.5rem;
   font-size: 1rem;
@@ -118,7 +126,7 @@
   justify-content: space-between;
   transition: transform 0.25s ease, background-color 0.3s ease;
   cursor: default;
-  color: #0f1e34;
+  color: #0d2549;
   font-weight: 600;
   user-select: none;
 }
@@ -128,8 +136,8 @@
   background-color: #ffffff;
   border-radius: 0;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  min-height: 280px;
-  width: 300px;
+  height: 200px;
+  width: 210px;
   /* taller cards */
   padding: 1.5rem 1.5rem;
   font-size: 1rem;
@@ -138,7 +146,7 @@
   justify-content: space-between;
   transition: transform 0.25s ease, background-color 0.3s ease;
   cursor: default;
-  color: #1f2937;
+  color: #0d2549;
   font-weight: 600;
   user-select: none;
 }
@@ -176,13 +184,11 @@
 /* Card titles */
 .cardTitleDefault,
 .cardTitle {
-  padding-top: 7rem;
+  padding-top: 3rem;
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 15px;
 }
-
-
 
 /* Links */
 .linkPrimary,
@@ -298,15 +304,24 @@
 }
 
 /* Modal content */
+
+
 .modal {
   background-color: white;
-  border-radius: 12px;
+  border-radius: 4px;
+  /* Less round */
   width: 90%;
   max-width: 1000px;
   max-height: 999vh;
   overflow-y: auto;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   padding: 1.5rem;
+  border-top: 35px solid #b1b1b1;
+  /* Match .cardDefault top border */
+}
+
+.modal.modal-updates {
+  border-top: 35px solid #053a94;
 }
 
 .modal-header {
@@ -317,6 +332,17 @@
   margin-bottom: 1rem;
 }
 
+.modal-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.modal-header-buttons {
+  display: flex;
+  align-items: center;
+}
+
 .close-button {
   background: none;
   border: none;
@@ -325,10 +351,54 @@
   color: #999;
 }
 
+.close-button-large {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e74c3c;
+  /* Bright red */
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-button-large:hover,
+.close-button-large:focus {
+  color: #c0392b;
+  /* Darker red */
+  outline: none;
+}
+
 .modal-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
+}
+
+form label {
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  display: block;
+}
+
+form input[type="file"] {
+  width: 100%;
+}
+
+/* Button style for the upload */
+form button[type="submit"] {
+  background-color: #3874ed;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+  background-color: #2a5bcc;
 }
 
 .order-summary {
@@ -365,7 +435,7 @@
   display: flex;
   justify-content: flex-start;
   /* aligns to the left */
-  margin: -40px 0 0 0;
+  margin: -320px 0 0 0;
   /* optional: adds space from left edge */
 }
 

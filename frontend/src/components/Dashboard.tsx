@@ -147,9 +147,7 @@ const Dashboard: React.FC = () => {
     setShowBestellingen(false);
     setShowProducten(false);
     setShowKlanten(false);
-    setSelectedOrder(null);
-    setSelectedProduct(null);
-    setSelectedCustomer(null);
+    setShowXmlUpload(false);
   };
 
   return (

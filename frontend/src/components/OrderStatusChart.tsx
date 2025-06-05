@@ -63,7 +63,7 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
                         nameKey="name"
                         cx="50%"
                         cy="50%"
-                        outerRadius={190}
+                        outerRadius={150}
                         labelLine={false}  // Disable label lines
                         label={renderLabel} // Custom label
                     >

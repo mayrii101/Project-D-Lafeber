@@ -46,23 +46,25 @@ function XmlUpload() {
 
     return (
         <div>
-            <h2>Upload XML Files</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
+            <h3 style={{ marginBottom: '1.5rem' }}>Kies hier de bestanden die u wilt uploaden</h3>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '1rem' }}>
+                <div style={{ flex: 1 }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                         XML File 1:
-                        <input type="file" accept=".xml" onChange={handleFile1Change} />
                     </label>
+                    <input type="file" accept=".xml" onChange={handleFile1Change} />
                 </div>
-                <div>
-                    <label>
+                <div style={{ flex: 1 }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                         XML File 2:
-                        <input type="file" accept=".xml" onChange={handleFile2Change} />
                     </label>
+                    <input type="file" accept=".xml" onChange={handleFile2Change} />
                 </div>
-                <button type="submit">Upload and Import</button>
+                <button type="submit" style={{ height: '2.8rem', alignSelf: 'flex-end', padding: '0 1.2rem', fontWeight: '600' }}>
+                    Upload and Import
+                </button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p style={{ marginTop: '1rem', fontWeight: '500' }}>{message}</p>}
         </div>
     );
 }
