@@ -375,3 +375,24 @@
   height: 400px;
   /* adjust as needed */
 }
+/* keep existing styles */
+.chart-container {
+  display: flex;
+  gap: 2rem; /* space between charts */
+  justify-content: center; /* center horizontally */
+  align-items: flex-start; /* align charts at top */
+}
+
+/* For fixed bottom-right position: */
+.order-bar-chart-fixed {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 600px;
+  height: 400px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 1000;
+}

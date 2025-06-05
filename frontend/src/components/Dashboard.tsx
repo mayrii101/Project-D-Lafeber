@@ -7,6 +7,7 @@ import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
 import OrderStatusChart from "./OrderStatusChart";
+import OrderBarChart from "./OrderBarChart";
 
 interface Order {
   id: number;
@@ -60,6 +61,7 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
+
 const getOrderStatusCounts = (orders: Order[]) => {
   const counts: Record<string, number> = {};
   orders.forEach(order => {
@@ -152,13 +154,13 @@ const Dashboard: React.FC = () => {
       >
         <div className="overlay">
           <div className="logoWrapper">
-            <div className="logoText">Lafeber Insights</div>          </div>
+            <div className="logoText">Lafeber Insights</div>
+          </div>
         </div>
       </header>
 
       <main className="main">
         <div className="navGrid">
-
           <Card className="cardDefault cardUpdates">
             <div className="cardTitleDefault">Updates</div>
             <div className="linkSecondary">→ Bekijken</div>
@@ -180,10 +182,14 @@ const Dashboard: React.FC = () => {
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
         </div>
+
         {/* Chart section */}
-        <div className="chart-container">
-          <div>
+        <div className="chart-container" style={{ display: "flex", gap: "2rem" }}>
+          <div style={{ flex: 1 }}>
             <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
+          </div>
+          <div style={{ flex: 1, paddingTop: "7rem" }}>
+            <OrderBarChart orders={filteredOrders} />
           </div>
         </div>
       </main>
