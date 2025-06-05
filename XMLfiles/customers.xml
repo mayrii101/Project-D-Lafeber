@@ -1,9 +1,0 @@
-<Customer>
-  <Id>10</Id>
-  <BedrijfsNaam>NovaTech Solutions</BedrijfsNaam>
-  <ContactPersoon>Eva Janssen</ContactPersoon>
-  <Email>eva.janssen@novatech.com</Email>
-  <TelefoonNummer>+31-204567890</TelefoonNummer>
-  <Adres>Marktstraat 45, Amsterdam</Adres>
-  <IsDeleted>false</IsDeleted>
-</Customer>

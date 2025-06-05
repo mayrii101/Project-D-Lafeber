@@ -1,11 +1,21 @@
 <Product>
-  <Id>5</Id>
-  <ProductName>Gevelsteen</ProductName>
+  <ProductName>Testproduct1</ProductName>
   <SKU>GS-2048</SKU>
   <WeightKg>1200</WeightKg>
   <Material>Clay</Material>
   <BatchNumber>2048</BatchNumber>
   <Price>45.75</Price>
+  <Category>Bouwmaterialen</Category>
+  <ExpirationDate></ExpirationDate>
+  <IsDeleted>false</IsDeleted>
+</Product>
+<Product>
+  <ProductName>Testproduct2</ProductName>
+  <SKU>GS-2048</SKU>
+  <WeightKg>800</WeightKg>
+  <Material>Stone</Material>
+  <BatchNumber>2048</BatchNumber>
+  <Price>76.23</Price>
   <Category>Bouwmaterialen</Category>
   <ExpirationDate></ExpirationDate>
   <IsDeleted>false</IsDeleted>

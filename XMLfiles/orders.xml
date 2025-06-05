@@ -1,6 +1,20 @@
 <Order>
-  <Id>10</Id>
   <CustomerId>2</CustomerId>
+  <OrderDate>2025-04-28T00:00:00</OrderDate>
+  <DeliveryAddress>Rotterdam</DeliveryAddress>
+  <ExpectedDeliveryDate>2025-05-02T00:00:00</ExpectedDeliveryDate>
+  <ActualDeliveryDate></ActualDeliveryDate>
+  <Status>Delivered</Status>
+  <IsDeleted>false</IsDeleted>
+  <ProductLines>
+    <ProductLine>
+      <ProductId>2</ProductId>
+      <Quantity>10</Quantity>
+    </ProductLine>
+  </ProductLines>
+</Order>
+<Order>
+  <CustomerId>1</CustomerId>
   <OrderDate>2025-04-28T00:00:00</OrderDate>
   <DeliveryAddress>Rotterdam</DeliveryAddress>
   <ExpectedDeliveryDate>2025-05-02T00:00:00</ExpectedDeliveryDate>
@@ -9,7 +23,7 @@
   <IsDeleted>false</IsDeleted>
   <ProductLines>
     <ProductLine>
-      <ProductId>1</ProductId>
+      <ProductId>2</ProductId>
       <Quantity>10</Quantity>
     </ProductLine>
   </ProductLines>
