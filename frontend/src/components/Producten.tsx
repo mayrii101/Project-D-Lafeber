@@ -40,6 +40,7 @@ const Producten: React.FC<ProductenProps> = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
+        <button onClick={onClose} className="close-button">&times;</button>
         <div className="modal-header">
           <h2>
             {selectedProduct
@@ -47,8 +48,7 @@ const Producten: React.FC<ProductenProps> = ({
               : `Producten (${filtered.length})`}
           </h2>
           <div className="modal-header-buttons">
-            {selectedProduct && <button onClick={onBack}>←</button>}
-            <button onClick={onClose}>&times;</button>
+
           </div>
         </div>
 

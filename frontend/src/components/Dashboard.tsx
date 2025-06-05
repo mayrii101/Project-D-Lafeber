@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "./card";
 import "../styles/Dashboard.css";
-import SearchBar from "./Searchbar";
-import Filter from "./Filter";
 import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
 import OrderStatusChart from "./OrderStatusChart";
+import XmlUploadModal from "./XmlUploadModal";
 
 interface Order {
   id: number;
@@ -93,7 +92,16 @@ const Dashboard: React.FC = () => {
 
   const [showKlanten, setShowKlanten] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-
+  const [showXmlUpload, setShowXmlUpload] = useState(false);
+  const closeModel = () => {
+    setShowBestellingen(false);
+    setShowProducten(false);
+    setShowKlanten(false);
+    setShowXmlUpload(false);
+    setSelectedOrder(null);
+    setSelectedProduct(null);
+    setSelectedCustomer(null);
+  };
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -139,16 +147,14 @@ const Dashboard: React.FC = () => {
     setShowBestellingen(false);
     setShowProducten(false);
     setShowKlanten(false);
-    setSelectedOrder(null);
-    setSelectedProduct(null);
-    setSelectedCustomer(null);
+    setShowXmlUpload(false);
   };
 
   return (
     <div className="container">
       <header
         className="hero"
-        style={{ backgroundImage: `url('/Warehouse.jpg')` }}
+        style={{ backgroundImage: `url('/warehouseee.jpg')` }}
       >
         <div className="overlay">
           <div className="logoWrapper">
@@ -159,7 +165,11 @@ const Dashboard: React.FC = () => {
       <main className="main">
         <div className="navGrid">
 
-          <Card className="cardDefault cardUpdates">
+          <Card
+            className="cardDefault cardUpdates"
+            onClick={() => setShowXmlUpload(true)}
+            style={{ cursor: "pointer" }}
+          >
             <div className="cardTitleDefault">Updates</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon">＋</div>
@@ -224,6 +234,10 @@ const Dashboard: React.FC = () => {
           searchTerm={customerSearchTerm}
           onSearchChange={setCustomerSearchTerm}
         />
+      )}
+
+      {showXmlUpload && (
+        <XmlUploadModal onClose={closeModal} />
       )}
     </div>
   );

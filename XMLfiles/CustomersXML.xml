@@ -1,0 +1,18 @@
+<Customers>
+  <Customer>
+    <BedrijfsNaam>Testbedrijf1</BedrijfsNaam>
+    <ContactPersoon>testpersoon1</ContactPersoon>
+    <Email>tests@example.com</Email>
+    <TelefoonNummer>+31 20 123 4567</TelefoonNummer>
+    <Adres>Keizersgracht 123, Amsterdam</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>Testbedrijf2</BedrijfsNaam>
+    <ContactPersoon>testpersoon2</ContactPersoon>
+    <Email>test@innovatech.nl</Email>
+    <TelefoonNummer>+31 10 987 6543</TelefoonNummer>
+    <Adres>Marktstraat 45, Rotterdam</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+</Customers>
