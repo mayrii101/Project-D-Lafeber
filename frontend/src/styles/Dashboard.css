@@ -28,6 +28,19 @@
   overflow: hidden;
 }
 
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(4px);
+  transform: scale(1.05);
+  /* prevents edge clipping from blur */
+  z-index: 0;
+}
+
 .overlay {
   position: absolute;
   top: 0;
@@ -118,8 +131,7 @@
   position: relative;
   /* needed for pseudo-element */
   border-radius: 12px;
-  background: linear-gradient(135deg, #7d3bf8, #6318ef);
-  box-shadow: 0 8px 18px rgba(125, 59, 248, 0.3);
+  background: linear-gradient(135deg, #6d88ff, rgb(75, 77, 204));
   height: 240px;
   width: 210px;
   padding: 1.5rem;
@@ -129,7 +141,7 @@
   justify-content: space-between;
   transition: transform 0.25s ease, background 0.3s ease;
   cursor: default;
-  color: #fff;
+  color: #ffffff;
   font-weight: 600;
   user-select: none;
   overflow: hidden;
@@ -145,7 +157,7 @@
   width: 100%;
   height: 35px;
   /* same as old border-top */
-  background: linear-gradient(135deg, #9a64ff, #7a3dfc);
+  background: linear-gradient(135deg, rgb(87, 89, 249), #4b4ef1);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -154,13 +166,13 @@
 
 .cardDefault:hover {
   transform: translateY(-7px);
-  background: linear-gradient(135deg, #6318ef, #4a0fc1);
-  box-shadow: 0 12px 30px rgba(99, 24, 239, 0.6);
+  background: linear-gradient(135deg, #4460dd, rgb(54, 57, 204));
+  box-shadow: 0 12px 30px rgba(24, 42, 239, 0.6);
   color: #fff;
 }
 
 .cardDefault:hover::before {
-  background: linear-gradient(135deg, #7a3dfc, #5a19e0);
+  background: linear-gradient(135deg, #3351d8, rgb(36, 38, 187));
 }
 
 
@@ -168,7 +180,6 @@
   position: relative;
   border-radius: 12px;
   background: linear-gradient(135deg, #2563eb, #1e40af);
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
   height: 240px;
   width: 210px;
   padding: 1.5rem;
@@ -178,7 +189,7 @@
   justify-content: space-between;
   transition: transform 0.25s ease, background 0.3s ease;
   cursor: default;
-  color: #e0e7ff;
+  color: #ffffff;
   font-weight: 600;
   user-select: none;
   overflow: hidden;
@@ -212,7 +223,7 @@
 
 .cardUpdates .cardTitleDefault,
 .cardUpdates .linkSecondary {
-  color: #e0e7ff;
+  color: #ffffff;
 }
 
 /* Card titles */
@@ -239,7 +250,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #3d86fa;
+  color: #ffffff;
 }
 
 /* Add icon */

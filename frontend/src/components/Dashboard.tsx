@@ -154,7 +154,7 @@ const Dashboard: React.FC = () => {
     <div className="container">
       <header
         className="hero"
-        style={{ backgroundImage: `url('/Warehouse.jpg')` }}
+        style={{ backgroundImage: `url('/warehouseee.jpg')` }}
       >
         <div className="overlay">
           <div className="logoWrapper">
