@@ -170,7 +170,7 @@ const Dashboard: React.FC = () => {
             onClick={() => setShowXmlUpload(true)}
             style={{ cursor: "pointer" }}
           >
-            <div className="cardTitleDefault">Updates</div>
+            <div className="cardTitleDefault">XML uploaden</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon">＋</div>
           </Card>
