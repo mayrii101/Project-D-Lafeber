@@ -309,15 +309,17 @@
 .modal {
   background-color: white;
   border-radius: 4px;
-  /* Less round */
   width: 90%;
   max-width: 1000px;
   max-height: 999vh;
   overflow-y: auto;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   padding: 1.5rem;
+  padding-top: 3rem;
+  /* Make space for top button */
   border-top: 35px solid #b1b1b1;
-  /* Match .cardDefault top border */
+  position: relative;
+  /* For absolute close button */
 }
 
 .modal.modal-updates {
@@ -340,33 +342,37 @@
 
 .modal-header-buttons {
   display: flex;
+  gap: 0.5rem;
   align-items: center;
 }
 
 .close-button {
-  background: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 35px;
+  /* Same as border-top height */
+  background: #e74c3c;
+  /* Red background */
+  color: white;
   border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #999;
-}
-
-.close-button-large {
-  background: transparent;
-  border: none;
-  font-size: 2rem;
+  font-size: 1.25rem;
   font-weight: bold;
-  color: #e74c3c;
-  /* Bright red */
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 0 6px;
   cursor: pointer;
-  line-height: 1;
-  transition: color 0.2s ease;
+  z-index: 10;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.close-button-large:hover,
-.close-button-large:focus {
-  color: #c0392b;
-  /* Darker red */
+
+.close-button:hover,
+.close-button:focus {
+  background-color: #e74c3c;
+  color: white;
   outline: none;
 }
 
