@@ -345,7 +345,7 @@
   background-color: rgba(255, 255, 255, 0.973);
   border-radius: 4px;
   width: 90%;
-  max-width: 1000px;
+  max-width: 700px;
   max-height: 999vh;
   overflow-y: auto;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -450,13 +450,11 @@ form button[type="submit"] {
 
 form button[type="submit"]:hover {
   background: linear-gradient(135deg, #6318ef, #4a0fc1);
-  box-shadow: 0 6px 20px rgba(99, 24, 239, 0.6);
   transform: translateY(-2px);
 }
 
 form button[type="submit"]:active {
   transform: translateY(0);
-  box-shadow: 0 3px 10px rgba(99, 24, 239, 0.4);
 }
 
 .custom-file-upload {
@@ -520,6 +518,14 @@ form button[type="submit"]:active {
   /* optional: adds space from left edge */
 }
 
+.chartShadow {
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(125, 59, 248, 0.3);
+  /* Optional: add a subtle background to make shadow visible */
+  background: white;
+  padding: 1rem;
+}
+
 .chart-container>div {
   width: 600px;
   /* increase the chart size */
@@ -562,18 +568,15 @@ h3 {
   padding: 0;
   border: none;
   box-sizing: border-box;
-  box-shadow: 0 4px 15px rgba(125, 59, 248, 0.4);
 }
 
 .custom-file-upload:hover {
   background: linear-gradient(135deg, #6318ef, #4a0fc1);
-  box-shadow: 0 6px 20px rgba(99, 24, 239, 0.6);
   transform: translateY(-2px);
 }
 
 .custom-file-upload:active {
   transform: translateY(0);
-  box-shadow: 0 3px 10px rgba(99, 24, 239, 0.4);
 }
 
 .custom-file-upload::after {

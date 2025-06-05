@@ -17,22 +17,23 @@ interface OrderStatusChartProps {
     data: StatusData[];
 }
 
-const COLORS = ["#053a94", "#a1c5ff", "#3874ed", "#3d86fa", "#3ddafd"];
+
+const BLUE_GRADIENTS = [
+    ["#2555d4", "#3a72c4"],  // Bright royal blue to medium blue
+    ["#2e86ff", "#5aa0f0"],  // Vibrant blue to soft sky blue
+    ["#3a7ee6", "#6aa8ff"],  // Stronger blue to lighter bright blue
+    ["#1f5de0", "#4a7fc8"],  // Rich blue to medium blue
+    ["#2f65ff", "#3b63b1"],  // Vivid blue to medium dark blue
+];
 
 const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
     if (!data || data.length === 0) {
         return <p>Geen data beschikbaar voor statusoverzicht.</p>;
     }
 
-    // Calculate total for percentages
-    const total = data.reduce((sum, entry) => sum + entry.value, 0);
-
-    // Custom label renderer
     const renderLabel = (props: any) => {
         const { cx, cy, midAngle, outerRadius, index, percent } = props;
         const RADIAN = Math.PI / 180;
-
-        // Push label radius 20 pixels beyond outerRadius to move it outside the pie
         const labelRadius = outerRadius + 20;
 
         const x = cx + labelRadius * Math.cos(-midAngle * RADIAN);
@@ -57,6 +58,27 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
         <div style={{ width: "600px", height: 600 }}>
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
+                    <defs>
+                        {BLUE_GRADIENTS.map(([start, end], index) => (
+                            <linearGradient
+                                key={index}
+                                id={`grad-${index}`}
+                                x1="0%"
+                                y1="0%"
+                                x2="100%"
+                                y2="100%"
+                            >
+                                <stop offset="0%" stopColor={start} stopOpacity={1} />
+                                <stop offset="100%" stopColor={end} stopOpacity={1} />
+                            </linearGradient>
+                        ))}
+
+                        <filter id="soft-drop-shadow" height="180%" width="180%" x="-40%" y="-40%" colorInterpolationFilters="sRGB">
+                            <feDropShadow dx="0" dy="1" stdDeviation="10" floodColor="#00008b" floodOpacity="0.1" />
+                            <feDropShadow dx="0" dy="2" stdDeviation="10" floodColor="#00008b" floodOpacity="0.07" />
+                        </filter>
+                    </defs>
+
                     <Pie
                         data={data}
                         dataKey="value"
@@ -64,13 +86,16 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
                         cx="50%"
                         cy="50%"
                         outerRadius={150}
-                        labelLine={false}  // Disable label lines
-                        label={renderLabel} // Custom label
+                        labelLine={false}
+                        label={renderLabel}
+                        stroke="#ffffff"
+                        strokeWidth={0.5}
                     >
                         {data.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill={COLORS[index % COLORS.length]}
+                                fill={`url(#grad-${index % BLUE_GRADIENTS.length})`}
+                                filter="url(#soft-drop-shadow)"
                             />
                         ))}
                     </Pie>
