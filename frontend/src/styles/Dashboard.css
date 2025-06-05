@@ -356,6 +356,11 @@
   /* border-top: 35px solid #b1b1b1;  <-- removed */
 }
 
+.modal.modal-xml {
+  max-width: 600px;
+  /* adjust this value as needed */
+}
+
 .close-button {
   position: absolute;
   top: 0;

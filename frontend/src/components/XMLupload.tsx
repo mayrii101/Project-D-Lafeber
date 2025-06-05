@@ -45,7 +45,13 @@ function XmlUpload() {
     };
 
     return (
-        <div>
+        <div
+            style={{
+                maxWidth: '600px',
+                margin: '0 auto',
+                padding: '2rem',
+            }}
+        >
             <h3
                 style={{
                     marginBottom: '1.5rem',
@@ -59,48 +65,52 @@ function XmlUpload() {
                 onSubmit={handleSubmit}
                 style={{
                     display: 'flex',
-                    gap: '2rem',
-                    alignItems: 'center',
-                    marginBottom: '1rem',
-                    justifyContent: 'flex-start',
-                    marginLeft: '15rem',
-                    paddingTop: '1rem',
+                    flexDirection: 'column',
+                    gap: '1.5rem',
                 }}
             >
-                <div style={{ width: '200px' }}>
-                    <label
-                        style={{
-                            display: 'block',
-                            fontWeight: '600',
-                            marginBottom: '0.5rem',
-                            marginTop: '0.5rem',
-                        }}
-                    >
-                        XML bestand 1:
-                    </label>
-                    <label className="custom-file-upload">
-                        <input type="file" accept=".xml" onChange={handleFile1Change} />
-                    </label>
-                </div>
+                {/* Row for both file inputs */}
+                <div
+                    style={{
+                        display: 'flex',
+                        gap: '1rem',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <div style={{ flex: 1 }}>
+                        <label
+                            style={{
+                                display: 'block',
+                                fontWeight: '600',
+                                marginBottom: '0.5rem',
+                            }}
+                        >
+                            XML bestand 1:
+                        </label>
+                        <label className="custom-file-upload">
+                            <input type="file" accept=".xml" onChange={handleFile1Change} />
+                        </label>
+                    </div>
 
-                <div style={{ width: '200px' }}>
-                    <label
-                        style={{
-                            display: 'block',
-                            fontWeight: '600',
-                            marginBottom: '0.5rem',
-                            marginTop: '0.5rem',
-                        }}
-                    >
-                        XML bestand 2:
-                    </label>
-                    <label className="custom-file-upload">
-                        <input type="file" accept=".xml" onChange={handleFile2Change} />
-                    </label>
+                    <div style={{ flex: 1 }}>
+                        <label
+                            style={{
+                                display: 'block',
+                                fontWeight: '600',
+                                marginBottom: '0.5rem',
+                            }}
+                        >
+                            XML bestand 2:
+                        </label>
+                        <label className="custom-file-upload">
+                            <input type="file" accept=".xml" onChange={handleFile2Change} />
+                        </label>
+                    </div>
                 </div>
 
                 <button type="submit">Upload</button>
             </form>
+
             {message && <p style={{ marginTop: '1rem', fontWeight: '500' }}>{message}</p>}
         </div>
     );
