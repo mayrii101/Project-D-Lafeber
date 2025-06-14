@@ -1,4 +1,3 @@
-# .github/workflows/ci.yml
 name: .NET Build and Test
 
 on:
@@ -8,8 +7,41 @@ on:
     branches: [ Development ]
 
 jobs:
-  build-and-test:
+  build:
+    name: Build Backend and Test Projects
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: List files at root (debug)
+        run: ls -la
+
+      - name: List files recursively (debug)
+        run: ls -R
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Backend Dependencies
+        run: dotnet restore ProjectD/ProjectD.csproj
+
+      - name: Build Backend
+        run: dotnet build ProjectD/ProjectD.csproj --configuration Release --no-restore
+
+      - name: Restore Test Dependencies
+        run: dotnet restore ProjectD.Tests/ProjectD.Tests.csproj
+
+      - name: Build Tests
+        run: dotnet build ProjectD.Tests/ProjectD.Tests.csproj --configuration Release --no-restore
+
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout Code
@@ -18,13 +50,10 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  
+          dotnet-version: '8.0.x'
 
-      - name: Restore NuGet packages
-        run: dotnet restore Project-D-Lafeber.sln
+      - name: Restore Test Dependencies
+        run: dotnet restore ProjectD.Tests/ProjectD.Tests.csproj
 
-      - name: Build Solution
-        run: dotnet build Project-D-Lafeber.sln --configuration Release --no-restore
-
-      - name: Run Unit Tests
-        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
+      - name: Run Tests
+        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --verbosity normal
