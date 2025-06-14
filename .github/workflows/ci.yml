@@ -56,4 +56,4 @@ jobs:
         run: dotnet restore ProjectD.Tests/ProjectD.Tests.csproj
 
       - name: Run Tests
-        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
+        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --verbosity normal
