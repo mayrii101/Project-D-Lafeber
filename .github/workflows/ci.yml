@@ -18,13 +18,13 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # Use your actual .NET version
+          dotnet-version: '8.0.x'  
 
       - name: Restore NuGet packages
-        run: dotnet restore project-d-lafeber.sln
+        run: dotnet restore Project-D-Lafeber.sln
 
       - name: Build Solution
-        run: dotnet build project-d-lafeber.sln --configuration Release --no-restore
+        run: dotnet build Project-D-Lafeber.sln --configuration Release --no-restore
 
       - name: Run Unit Tests
         run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
