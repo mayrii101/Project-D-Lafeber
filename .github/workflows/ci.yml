@@ -7,7 +7,8 @@ on:
     branches: [ Development ]
 
 jobs:
-  build-and-test:
+  build:
+    name: Build Backend and Test Projects
     runs-on: ubuntu-latest
 
     steps:
@@ -25,24 +26,34 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore NuGet packages for tests
+      - name: Restore Backend Dependencies
+        run: dotnet restore ProjectD/ProjectD.csproj
+
+      - name: Build Backend
+        run: dotnet build ProjectD/ProjectD.csproj --configuration Release --no-restore
+
+      - name: Restore Test Dependencies
         run: dotnet restore ProjectD.Tests/ProjectD.Tests.csproj
 
-      - name: Build test project
+      - name: Build Tests
         run: dotnet build ProjectD.Tests/ProjectD.Tests.csproj --configuration Release --no-restore
 
-      - name: Run Unit Tests
-        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --verbosity normal
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    needs: build
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
         with:
-          node-version: '18'   
+          dotnet-version: '8.0.x'
 
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm install
+      - name: Restore Test Dependencies
+        run: dotnet restore ProjectD.Tests/ProjectD.Tests.csproj
 
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
+      - name: Run Tests
+        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
