@@ -14,10 +14,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: List files at root
+      - name: List files at root (debug)
         run: ls -la
 
-      - name: List files recursively
+      - name: List files recursively (debug)
         run: ls -R
 
       - name: Setup .NET SDK
@@ -25,11 +25,24 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore NuGet packages
-        run: dotnet restore Project-D-Lafeber.sln
+      - name: Restore NuGet packages for tests
+        run: dotnet restore ProjectD.Tests/ProjectD.Tests.csproj
 
-      - name: Build Solution
-        run: dotnet build Project-D-Lafeber.sln --configuration Release --no-restore
+      - name: Build test project
+        run: dotnet build ProjectD.Tests/ProjectD.Tests.csproj --configuration Release --no-restore
 
       - name: Run Unit Tests
         run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'   
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
