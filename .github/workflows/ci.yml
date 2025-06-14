@@ -32,7 +32,7 @@ jobs:
         run: dotnet build ProjectD.Tests/ProjectD.Tests.csproj --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
+        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --verbosity normal
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
