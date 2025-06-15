@@ -55,7 +55,7 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
     };
 
     return (
-        <div style={{ width: "600px", height: 600 }}>
+        <div style={{ width: "550px", height: 550 }}>
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <defs>
