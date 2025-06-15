@@ -19,11 +19,11 @@ interface OrderStatusChartProps {
 
 
 const BLUE_GRADIENTS = [
-    ["#2555d4", "#3a72c4"],  // Bright royal blue to medium blue
-    ["#2e86ff", "#5aa0f0"],  // Vibrant blue to soft sky blue
-    ["#3a7ee6", "#6aa8ff"],  // Stronger blue to lighter bright blue
-    ["#1f5de0", "#4a7fc8"],  // Rich blue to medium blue
-    ["#2f65ff", "#3b63b1"],  // Vivid blue to medium dark blue
+    ["#193a80", "#2555d4"],  // Deep navy blue to bright royal blue
+    ["#2e86ff", "#5aa0f0"],  // Vibrant blue to soft sky blue (kept light)
+    ["#1e4a96", "#3a7ee6"],  // Darker blue to lighter bright blue
+    ["#123b91", "#4a7fc8"],  // Navy to medium blue
+    ["#1d3faa", "#3b63b1"]   // Bold dark blue to medium dark blue
 ];
 
 const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {

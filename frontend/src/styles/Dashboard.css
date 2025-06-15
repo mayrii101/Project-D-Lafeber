@@ -35,7 +35,7 @@
   background-image: inherit;
   background-size: cover;
   background-position: center;
-  filter: blur(4px);
+  filter: blur(6px);
   transform: scale(1.05);
   /* prevents edge clipping from blur */
   z-index: 0;
@@ -47,8 +47,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(2, 7, 32, 0.738);
-  /* dim overlay */
+  background-color: rgba(2, 7, 32, 0.9);
   display: flex;
   align-items: flex-start;
   padding: 2rem;
@@ -129,11 +128,10 @@
 /* Cards — square corners, subtle shadows, taller */
 .cardDefault {
   position: relative;
-  /* needed for pseudo-element */
   border-radius: 12px;
   background: linear-gradient(135deg, #0b3ca5, #091849);
-  height: 240px;
-  width: 210px;
+  height: 210px;
+  width: 180px;
   padding: 1.5rem;
   font-size: 1rem;
   display: flex;
@@ -142,10 +140,9 @@
   transition: transform 0.25s ease, background 0.3s ease;
   cursor: default;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 100;
   user-select: none;
   overflow: hidden;
-  /* clip pseudo-element */
 }
 
 /* Top border gradient */
@@ -179,9 +176,9 @@
 .cardUpdates {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #276d22, #002d05);
-  height: 240px;
-  width: 210px;
+  background: linear-gradient(135deg, #5c34a0, #3d016e);
+  height: 210px;
+  width: 180px;
   padding: 1.5rem;
   font-size: 1rem;
   display: flex;
@@ -203,7 +200,7 @@
   left: 0;
   width: 100%;
   height: 35px;
-  background: linear-gradient(135deg, #276d22, #002d05);
+  background: linear-gradient(135deg, #5c34a0, #3d016e);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -212,13 +209,13 @@
 
 .cardUpdates:hover {
   transform: translateY(-7px);
-  background: linear-gradient(135deg, #3ca034, #016e0d);
-  box-shadow: 0 12px 30px rgba(30, 175, 44, 0.6);
+  background: linear-gradient(135deg, #5c34a0, #3d016e);
+  box-shadow: 0 12px 30px rgba(86, 30, 175, 0.6);
   color: #fff;
 }
 
 .cardUpdates:hover::before {
-  background: linear-gradient(135deg, #3ca034, #016e0d);
+  background: linear-gradient(135deg, #5c34a0, #3d016e);
 }
 
 .cardUpdates .cardTitleDefault,
@@ -230,7 +227,7 @@
 .cardTitleDefault,
 .cardTitle {
   padding-top: 3rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 15px;
 }
