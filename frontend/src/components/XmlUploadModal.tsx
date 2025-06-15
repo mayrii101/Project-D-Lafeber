@@ -8,7 +8,7 @@ interface XmlUploadModalProps {
 const XmlUploadModal: React.FC<XmlUploadModalProps> = ({ onClose }) => {
   return (
     <div className="modal-overlay">
-      <div className="modal modal-xml"> {/* <-- added modal-xml */}
+      <div className="modal modal-xml">
         <button onClick={onClose} className="close-button" aria-label="Close modal">
           &times;
         </button>
