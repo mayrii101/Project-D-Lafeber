@@ -1,30 +1,26 @@
-
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
 function XmlUpload() {
-    const [xmlFile1, setXmlFile1] = useState<File | null>(null);
-    const [xmlFile2, setXmlFile2] = useState<File | null>(null);
+    const [xmlFile, setXmlFile] = useState<File | null>(null);
     const [message, setMessage] = useState<string>("");
 
-    const handleFile1Change = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) setXmlFile1(e.target.files[0]);
-    };
-
-    const handleFile2Change = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) setXmlFile2(e.target.files[0]);
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setXmlFile(e.target.files[0]);
+            setMessage(""); // Clear message when selecting a new file
+        }
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!xmlFile1 || !xmlFile2) {
-            setMessage("Please select both XML files.");
+        if (!xmlFile) {
+            setMessage("Please select an XML file.");
             return;
         }
 
         const formData = new FormData();
-        formData.append("xmlFile1", xmlFile1);
-        formData.append("xmlFile2", xmlFile2);
+        formData.append("xmlFile", xmlFile);
 
         try {
             const response = await fetch("http://localhost:5000/api/XmlImport/upload", {
@@ -34,7 +30,7 @@ function XmlUpload() {
 
             if (response.ok) {
                 const result = await response.json();
-                setMessage(result.message || "Files imported successfully!");
+                setMessage(result.message || "File imported successfully!");
             } else {
                 const errorText = await response.text();
                 setMessage(`Upload failed: ${errorText}`);
@@ -59,7 +55,7 @@ function XmlUpload() {
                     fontWeight: '500',
                 }}
             >
-                Kies hier de bestanden die u wilt uploaden, deze bestanden zullen worden geupload naar de huidige database.
+                Kies hier het XML-bestand dat u wilt uploaden naar de huidige database.
             </h3>
             <form
                 onSubmit={handleSubmit}
@@ -69,43 +65,22 @@ function XmlUpload() {
                     gap: '1.5rem',
                 }}
             >
-                {/* Row for both file inputs */}
-                <div
-                    style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <div style={{ flex: 1 }}>
-                        <label
-                            style={{
-                                display: 'block',
-                                fontWeight: '600',
-                                marginBottom: '0.5rem',
-                            }}
-                        >
-                            XML bestand 1:
-                        </label>
-                        <label className="custom-file-upload">
-                            <input type="file" accept=".xml" onChange={handleFile1Change} />
-                        </label>
-                    </div>
-
-                    <div style={{ flex: 1 }}>
-                        <label
-                            style={{
-                                display: 'block',
-                                fontWeight: '600',
-                                marginBottom: '0.5rem',
-                            }}
-                        >
-                            XML bestand 2:
-                        </label>
-                        <label className="custom-file-upload">
-                            <input type="file" accept=".xml" onChange={handleFile2Change} />
-                        </label>
-                    </div>
+                <div>
+                    <label
+                        style={{
+                            display: 'block',
+                            fontWeight: '600',
+                            marginBottom: '0.5rem',
+                        }}
+                    >
+                        XML bestand:
+                    </label>
+                    <input type="file" accept=".xml" onChange={handleFileChange} />
+                    {xmlFile && (
+                        <p style={{ marginTop: '0.5rem', fontStyle: 'italic' }}>
+                            Geselecteerd bestand: <strong>{xmlFile.name}</strong>
+                        </p>
+                    )}
                 </div>
 
                 <button type="submit">Upload</button>
