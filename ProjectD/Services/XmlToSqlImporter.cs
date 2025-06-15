@@ -22,11 +22,10 @@ namespace ProjectD.Services
             _logger = logger;
         }
 
-        public async Task ImportFromTwoXmlStringsAsync(string xmlContent1, string xmlContent2)
+        public async Task ImportFromXmlStringAsync(string xmlContent)
         {
-            _logger.LogInformation("Starting import from two XML strings.");
-            var xml1 = XDocument.Parse(xmlContent1);
-            var xml2 = XDocument.Parse(xmlContent2);
+            _logger.LogInformation("Starting import from single XML string.");
+            var xml = XDocument.Parse(xmlContent);
 
             bool supportsTransactions = !_context.Database.ProviderName.Equals("Microsoft.EntityFrameworkCore.InMemory", StringComparison.OrdinalIgnoreCase);
 
@@ -36,21 +35,21 @@ namespace ProjectD.Services
 
                 try
                 {
-                    await ImportCustomersAsync(xml1);
-                    await ImportEmployeesAsync(xml1);
-                    await ImportWarehousesAsync(xml1);
-                    await ImportProductsAsync(xml1);
-                    await ImportVehiclesAsync(xml1);
+                    await ImportCustomersAsync(xml);
+                    await ImportEmployeesAsync(xml);
+                    await ImportWarehousesAsync(xml);
+                    await ImportProductsAsync(xml);
+                    await ImportVehiclesAsync(xml);
 
-                    await ImportOrdersAsync(xml2);
-                    await ImportOrderLinesAsync(xml2);
-                    await ImportShipmentsAsync(xml2);
-                    await ImportShipmentOrdersAsync(xml2);
-                    await ImportInventoryAsync(xml2);
-                    await ImportInventoryTransactionsAsync(xml2);
+                    await ImportOrdersAsync(xml);
+                    await ImportOrderLinesAsync(xml);
+                    await ImportShipmentsAsync(xml);
+                    await ImportShipmentOrdersAsync(xml);
+                    await ImportInventoryAsync(xml);
+                    await ImportInventoryTransactionsAsync(xml);
 
                     await transaction.CommitAsync();
-                    _logger.LogInformation("Data imported successfully from both XML strings with transaction.");
+                    _logger.LogInformation("Data imported successfully from single XML string with transaction.");
                 }
                 catch (Exception ex)
                 {
@@ -63,20 +62,20 @@ namespace ProjectD.Services
             {
                 try
                 {
-                    await ImportCustomersAsync(xml1);
-                    await ImportEmployeesAsync(xml1);
-                    await ImportWarehousesAsync(xml1);
-                    await ImportProductsAsync(xml1);
-                    await ImportVehiclesAsync(xml1);
+                    await ImportCustomersAsync(xml);
+                    await ImportEmployeesAsync(xml);
+                    await ImportWarehousesAsync(xml);
+                    await ImportProductsAsync(xml);
+                    await ImportVehiclesAsync(xml);
 
-                    await ImportOrdersAsync(xml2);
-                    await ImportOrderLinesAsync(xml2);
-                    await ImportShipmentsAsync(xml2);
-                    await ImportShipmentOrdersAsync(xml2);
-                    await ImportInventoryAsync(xml2);
-                    await ImportInventoryTransactionsAsync(xml2);
+                    await ImportOrdersAsync(xml);
+                    await ImportOrderLinesAsync(xml);
+                    await ImportShipmentsAsync(xml);
+                    await ImportShipmentOrdersAsync(xml);
+                    await ImportInventoryAsync(xml);
+                    await ImportInventoryTransactionsAsync(xml);
 
-                    _logger.LogInformation("Data imported successfully from both XML strings without transaction.");
+                    _logger.LogInformation("Data imported successfully from single XML string without transaction.");
                 }
                 catch (Exception ex)
                 {
