@@ -1,17 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectD.Models;
 
+
 namespace ProjectD.Services
 {
 
     public interface IShipmentService
     {
-        Task<List<Shipment>> GetAllShipmentsAsync();
-        Task<Shipment> GetShipmentByIdAsync(int id);
-        Task<Shipment> CreateShipmentAsync(Shipment shipment);
+        Task<List<ShipmentDto>> GetAllShipmentsAsync();
+        Task<ShipmentDto> GetShipmentByIdAsync(int id);
+        Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto);
         Task<Shipment> UpdateShipmentAsync(int id, Shipment shipment);
         Task<bool> SoftDeleteShipmentAsync(int id);  // Soft delete instead of hard delete
     }
+
+
 
     public class ShipmentService : IShipmentService
     {
@@ -22,22 +25,92 @@ namespace ProjectD.Services
             _context = context;
         }
 
-        public async Task<List<Shipment>> GetAllShipmentsAsync()
+        public async Task<List<ShipmentDto>> GetAllShipmentsAsync()
         {
-            return await _context.Shipments.Where(s => !s.IsDeleted).ToListAsync();
+            var shipments = await _context.Shipments
+                .Where(s => !s.IsDeleted)
+                .Include(s => s.ShipmentOrders)
+                    .ThenInclude(so => so.Order)
+                .ToListAsync();
+
+            return shipments.Select(s => new ShipmentDto
+            {
+                Id = s.Id,
+                VehicleId = s.VehicleId,
+                DriverId = s.DriverId,
+                Status = s.Status,
+                DepartureDate = s.DepartureDate,
+                ExpectedDeliveryDate = s.ExpectedDeliveryDate,
+                OrderIds = s.ShipmentOrders.Select(so => so.OrderId).ToList()
+            }).ToList();
         }
 
-        public async Task<Shipment> GetShipmentByIdAsync(int id)
+        public async Task<ShipmentDto> GetShipmentByIdAsync(int id)
         {
-            return await _context.Shipments.Where(s => !s.IsDeleted).FirstOrDefaultAsync(s => s.Id == id);
+            var shipment = await _context.Shipments
+                .Where(s => !s.IsDeleted && s.Id == id)
+                .Include(s => s.ShipmentOrders)
+                    .ThenInclude(so => so.Order)
+                .FirstOrDefaultAsync();
+
+            if (shipment == null) return null;
+
+            return new ShipmentDto
+            {
+                Id = shipment.Id,
+                VehicleId = shipment.VehicleId,
+                DriverId = shipment.DriverId,
+                Status = shipment.Status,
+                DepartureDate = shipment.DepartureDate,
+                ExpectedDeliveryDate = shipment.ExpectedDeliveryDate,
+                OrderIds = shipment.ShipmentOrders.Select(so => so.OrderId).ToList()
+            };
         }
 
-        public async Task<Shipment> CreateShipmentAsync(Shipment shipment)
+        private DateTime ParseDateTime(string date, string time)
         {
+            var datePart = DateTime.ParseExact(date, "dd-MM-yyyy", null);
+            var timePart = TimeSpan.Parse(time);
+            return datePart.Date + timePart;
+        }
+
+        public async Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto)
+        {
+            var departureDateTime = ParseDateTime(dto.DepartureDate, dto.DepartureTime);
+            DateTime? expectedDeliveryDateTime = null;
+
+            if (!string.IsNullOrEmpty(dto.ExpectedDeliveryDate) && !string.IsNullOrEmpty(dto.ExpectedDeliveryTime))
+            {
+                expectedDeliveryDateTime = ParseDateTime(dto.ExpectedDeliveryDate, dto.ExpectedDeliveryTime);
+            }
+
+            var shipment = new Shipment
+            {
+                VehicleId = dto.VehicleId,
+                DriverId = dto.DriverId,
+                Status = dto.Status,
+                DepartureDate = departureDateTime,
+                ExpectedDeliveryDate = expectedDeliveryDateTime,
+                ShipmentOrders = dto.OrderIds
+                    .Select(orderId => new ShipmentOrder { OrderId = orderId })
+                    .ToList()
+            };
+
             _context.Shipments.Add(shipment);
             await _context.SaveChangesAsync();
-            return shipment;
+
+            return new ShipmentDto
+            {
+                Id = shipment.Id,
+                VehicleId = shipment.VehicleId,
+                DriverId = shipment.DriverId,
+                Status = shipment.Status,
+                DepartureDate = shipment.DepartureDate,
+                ExpectedDeliveryDate = shipment.ExpectedDeliveryDate,
+                OrderIds = shipment.ShipmentOrders.Select(so => so.OrderId).ToList()
+            };
         }
+
 
         public async Task<Shipment> UpdateShipmentAsync(int id, Shipment shipment)
         {
@@ -84,25 +157,5 @@ namespace ProjectD.Services
             return true;
         }
 
-        public bool CreateShipmentOrder(int orderId, int shipmentId)
-        {
-            var order = _context.Orders.Find(orderId);
-            var shipment = _context.Shipments.Find(shipmentId);
-
-            if (order != null && shipment != null)
-            {
-                var shipmentOrder = new ShipmentOrder
-                {
-                    Shipment = shipment,
-                    Order = order
-                };
-
-                _context.ShipmentOrders.Add(shipmentOrder);
-                _context.SaveChanges();
-                return true;
-            }
-
-            return false;
-        }
     }
 }

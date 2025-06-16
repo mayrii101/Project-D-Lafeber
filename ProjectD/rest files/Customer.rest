@@ -31,4 +31,4 @@ Content-Type: application/json
 }
 
 ### Soft delete a customer
-DELETE http://localhost:5000/api/customer/3
+DELETE http://localhost:5000/api/customer/2004
