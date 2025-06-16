@@ -4,7 +4,6 @@ import "../styles/Dashboard.css";
 import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
-import OrderStatusChart from "./OrderStatusChart";
 import XmlUploadModal from "./XmlUploadModal";
 
 interface Order {
@@ -189,12 +188,6 @@ const Dashboard: React.FC = () => {
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
-        </div>
-        {/* Chart section */}
-        <div className="chart-container">
-          <div>
-            <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
-          </div>
         </div>
       </main>
 

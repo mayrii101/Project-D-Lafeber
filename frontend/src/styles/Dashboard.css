@@ -602,3 +602,14 @@ h3 {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.order-summary.clickable:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  /* lichtblauwe achtergrond */
+  color: #1e3a8a;
+  /* donkerblauwe tekst */
+  font-weight: 600;
+  cursor: pointer;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
