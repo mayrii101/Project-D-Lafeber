@@ -19,14 +19,12 @@ namespace ProjectD.Models
         public DateTime? ActualDeliveryDate { get; set; }
         public bool IsDeleted { get; set; }
 
-        // Navigation property for many-to-many relationship with Order
         public ICollection<ShipmentOrder> ShipmentOrders { get; set; } = new List<ShipmentOrder>();
 
         [NotMapped]
         public ICollection<Order> Orders => ShipmentOrders.Select(so => so.Order).ToList();
     }
 
-    // ShipmentOrder Model (many-to-many relationship between Shipment and Order)
     public class ShipmentOrder
     {
         public int ShipmentId { get; set; }
@@ -40,8 +38,13 @@ namespace ProjectD.Models
         public int VehicleId { get; set; }
         public int DriverId { get; set; }
         public ShipmentStatus Status { get; set; }
-        public DateTime DepartureDate { get; set; }
-        public DateTime? ExpectedDeliveryDate { get; set; }
+
+        public string DepartureDate { get; set; } = "";     //30-04-2025
+        public string DepartureTime { get; set; } = "";     //14:30
+
+        public string? ExpectedDeliveryDate { get; set; }   //02-05-2025
+        public string? ExpectedDeliveryTime { get; set; }   //09:00
+
         public List<int> OrderIds { get; set; } = new();
     }
 

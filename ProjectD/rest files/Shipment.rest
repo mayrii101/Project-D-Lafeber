@@ -12,8 +12,10 @@ Content-Type: application/json
   "vehicleId": 1,
   "driverId": 1,
   "status": "Delivered",
-  "departureDate": "2025-04-30T00:00:00",
-  "expectedDeliveryDate": "2025-05-02T00:00:00",
+  "departureDate": "30-04-2025",
+  "departureTime": "14:30",
+  "expectedDeliveryDate": "02-05-2025",
+  "expectedDeliveryTime": "09:00",
   "orderIds": [1]
 }
 
