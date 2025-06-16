@@ -6,6 +6,9 @@ import Producten from "./Producten";
 import Klanten from "./Klanten";
 import XmlUploadModal from "./XmlUploadModal";
 import KlantAanmakenModal from "./KlantAanmakenModal";
+import ProductAanmakenModal from "./ProductAanmakenModal";
+import OrderAanmakenModal from "./OrderAanmakenModal";
+
 
 interface Order {
   id: number;
@@ -99,6 +102,9 @@ const Dashboard: React.FC = () => {
   const [customerSearchAddress, setCustomerSearchAddress] = useState("");
 
   const [showKlantForm, setShowKlantForm] = useState(false);
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [showOrderForm, setShowOrderForm] = useState(false);
+
 
   const closeModel = () => {
     setShowBestellingen(false);
@@ -172,15 +178,43 @@ const Dashboard: React.FC = () => {
       <main className="main">
         <div className="navGrid">
 
-          <Card className="cardDefault" onClick={() => setShowBestellingen(true)} style={{ cursor: "pointer" }}>
+          <Card
+            className="cardDefault"
+            onClick={() => setShowBestellingen(true)}
+            style={{ cursor: "pointer", position: "relative" }}
+          >
             <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
+            <div
+              className="addIcon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowOrderForm(true);
+              }}
+            >
+              ＋
+            </div>
           </Card>
 
-          <Card className="cardDefault" onClick={() => setShowProducten(true)} style={{ cursor: "pointer" }}>
+
+          <Card
+            className="cardDefault"
+            onClick={() => setShowProducten(true)}
+            style={{ cursor: "pointer", position: "relative" }}
+          >
             <div className="cardTitleDefault">Producten ({products.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
+            <div
+              className="addIcon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowProductForm(true);
+              }}
+            >
+              ＋
+            </div>
           </Card>
+
 
           <Card
             className="cardDefault"
@@ -269,6 +303,32 @@ const Dashboard: React.FC = () => {
         />
       )}
 
+      {showProductForm && (
+        <ProductAanmakenModal
+          onClose={() => setShowProductForm(false)}
+          onSuccess={() => {
+            fetch("http://localhost:5000/api/product")
+              .then((res) => res.json())
+              .then((data) => setProducts(data));
+          }}
+        />
+      )}
+
+      {showOrderForm && (
+        <OrderAanmakenModal
+          onClose={() => setShowOrderForm(false)}
+          onSuccess={() => {
+            fetch("http://localhost:5000/api/order")
+              .then((res) => res.json())
+              .then((data) => {
+                setOrders(data);
+                setFilteredOrders(data);
+              });
+          }}
+          klanten={customers}
+          producten={products}
+        />
+      )}
 
       {showXmlUpload && (
         <XmlUploadModal onClose={closeModal} />
