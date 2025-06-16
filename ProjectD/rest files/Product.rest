@@ -5,16 +5,16 @@ GET http://localhost:5000/api/product
 GET http://localhost:5000/api/products/1
 
 ### Create a new product
-POST http://localhost:5000/api/products
+POST http://localhost:5000/api/product
 Content-Type: application/json
 
 {
-  "productName": "Widget",
-  "weightKg": 2.5,
-  "material": "Steel",
-  "batchNumber": "B123",
-  "price": 99.99,
-  "category": "Gadgets"
+  "productName": "Dark Oak Houten Balk",
+  "weightKg": 300,
+  "material": "Hout",
+  "batchNumber": 123,
+  "price": 430.89,
+  "category": "Balken"
 }
 
 ### Update a product
