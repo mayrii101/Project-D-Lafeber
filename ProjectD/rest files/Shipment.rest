@@ -2,7 +2,7 @@
 GET http://localhost:5000/api/shipment
 
 ### Get shipment by ID
-GET http://localhost:5000/api/shipments/
+GET http://localhost:5000/api/shipment/1
 
 ### Create a new shipment
 POST http://localhost:5000/api/shipment
@@ -14,7 +14,7 @@ Content-Type: application/json
   "status": "Delivered",
   "departureDate": "2025-04-30T00:00:00",
   "expectedDeliveryDate": "2025-05-02T00:00:00",
-  "orders": [1]
+  "orderIds": [1]
 }
 
 ### Update a shipment

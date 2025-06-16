@@ -44,4 +44,19 @@ namespace ProjectD.Models
         public DateTime? ExpectedDeliveryDate { get; set; }
         public List<int> OrderIds { get; set; } = new();
     }
+
+
+
+    public class ShipmentDto
+    {
+        public int Id { get; set; }
+        public int VehicleId { get; set; }
+        public int DriverId { get; set; }
+        public ShipmentStatus Status { get; set; }
+        public DateTime DepartureDate { get; set; }
+        public DateTime? ExpectedDeliveryDate { get; set; }
+
+        public List<int> OrderIds { get; set; } = new();
+    }
+
 }

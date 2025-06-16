@@ -8,7 +8,7 @@ namespace ProjectD.Services
     {
         Task<List<Shipment>> GetAllShipmentsAsync();
         Task<Shipment> GetShipmentByIdAsync(int id);
-        Task<Shipment> CreateShipmentAsync(ShipmentCreateDto dto);
+        Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto);
         Task<Shipment> UpdateShipmentAsync(int id, Shipment shipment);
         Task<bool> SoftDeleteShipmentAsync(int id);  // Soft delete instead of hard delete
     }
@@ -32,7 +32,7 @@ namespace ProjectD.Services
             return await _context.Shipments.Where(s => !s.IsDeleted).FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task<Shipment> CreateShipmentAsync(ShipmentCreateDto dto)
+        public async Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto)
         {
             var shipment = new Shipment
             {
@@ -49,7 +49,16 @@ namespace ProjectD.Services
             _context.Shipments.Add(shipment);
             await _context.SaveChangesAsync();
 
-            return shipment;
+            return new ShipmentDto
+            {
+                Id = shipment.Id,
+                VehicleId = shipment.VehicleId,
+                DriverId = shipment.DriverId,
+                Status = shipment.Status,
+                DepartureDate = shipment.DepartureDate,
+                ExpectedDeliveryDate = shipment.ExpectedDeliveryDate,
+                OrderIds = shipment.ShipmentOrders.Select(so => so.OrderId).ToList()
+            };
         }
 
         public async Task<Shipment> UpdateShipmentAsync(int id, Shipment shipment)
