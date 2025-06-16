@@ -31,7 +31,7 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct([FromBody] Product product)
         {
             var createdProduct = await _productService.CreateProductAsync(product);
             return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
