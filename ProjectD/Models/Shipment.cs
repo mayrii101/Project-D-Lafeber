@@ -11,8 +11,8 @@ namespace ProjectD.Models
         public int Id { get; set; }
         public int VehicleId { get; set; }
         public int DriverId { get; set; }
-        public Vehicle Vehicle { get; set; } // Navigation property
-        public Employee Driver { get; set; }  // Navigation property
+        public Vehicle? Vehicle { get; set; } // Navigation property
+        public Employee? Driver { get; set; }  // Navigation property
         public ShipmentStatus Status { get; set; }
         public DateTime DepartureDate { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
@@ -33,5 +33,15 @@ namespace ProjectD.Models
         public Shipment Shipment { get; set; }
         public int OrderId { get; set; }
         public Order Order { get; set; }
+    }
+
+    public class ShipmentCreateDto
+    {
+        public int VehicleId { get; set; }
+        public int DriverId { get; set; }
+        public ShipmentStatus Status { get; set; }
+        public DateTime DepartureDate { get; set; }
+        public DateTime? ExpectedDeliveryDate { get; set; }
+        public List<int> OrderIds { get; set; } = new();
     }
 }

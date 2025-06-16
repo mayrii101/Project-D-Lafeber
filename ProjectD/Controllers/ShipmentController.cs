@@ -31,9 +31,9 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Shipment>> CreateShipment(Shipment shipment)
+        public async Task<ActionResult<Shipment>> CreateShipment(ShipmentCreateDto dto)
         {
-            var createdShipment = await _shipmentService.CreateShipmentAsync(shipment);
+            var createdShipment = await _shipmentService.CreateShipmentAsync(dto);
             return CreatedAtAction(nameof(GetShipment), new { id = createdShipment.Id }, createdShipment);
         }
 

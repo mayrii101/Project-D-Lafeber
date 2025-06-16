@@ -10,6 +10,7 @@ Content-Type: application/json
 
 {
   "productName": "Dark Oak Houten Balk",
+  "sku":"SD9209",
   "weightKg": 300,
   "material": "Hout",
   "batchNumber": 123,

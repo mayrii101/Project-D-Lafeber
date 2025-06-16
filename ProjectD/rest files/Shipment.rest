@@ -2,19 +2,19 @@
 GET http://localhost:5000/api/shipment
 
 ### Get shipment by ID
-GET http://localhost:5000/api/shipments/1
+GET http://localhost:5000/api/shipments/
 
 ### Create a new shipment
-POST http://localhost:5000/api/shipments
+POST http://localhost:5000/api/shipment
 Content-Type: application/json
 
 {
   "vehicleId": 1,
   "driverId": 1,
-  "status": "Scheduled",
+  "status": "Delivered",
   "departureDate": "2025-04-30T00:00:00",
   "expectedDeliveryDate": "2025-05-02T00:00:00",
-  "orders": []
+  "orders": [1]
 }
 
 ### Update a shipment
