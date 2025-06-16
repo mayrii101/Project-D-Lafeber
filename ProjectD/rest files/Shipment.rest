@@ -2,7 +2,7 @@
 GET http://localhost:5000/api/shipment
 
 ### Get shipment by ID
-GET http://localhost:5000/api/shipment/1
+GET http://localhost:5000/api/shipment/1009
 
 ### Create a new shipment
 POST http://localhost:5000/api/shipment
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Soft delete a shipment
-DELETE http://localhost:5000/api/shipments/1
+DELETE http://localhost:5000/api/shipment/1009
 
 ### Create shipment order (assign order to shipment)
 POST http://localhost:5000/api/shipments/create-shipment-order
