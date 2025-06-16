@@ -16,7 +16,7 @@ Content-Type: application/json
   "departureTime": "14:30",
   "expectedDeliveryDate": "02-05-2025",
   "expectedDeliveryTime": "09:00",
-  "orderIds": [1]
+  "orderIds": [2006]
 }
 
 ### Update a shipment

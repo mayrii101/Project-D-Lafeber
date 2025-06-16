@@ -41,17 +41,19 @@ public class ProductIntegrationTests
             Category = "Test"
         };
 
-        var createActionResult = await controller.CreateProduct(product);
-        var createdResult = createActionResult.Result as CreatedAtActionResult;
-        var created = createdResult?.Value as Product;
+        var createResult = await controller.CreateProduct(product);
+        var createdResult = createResult as CreatedAtActionResult;
+        var createdProduct = createdResult?.Value as Product;
 
-        var getActionResult = await controller.GetProduct(created.Id);
-        var fetchedResult = getActionResult.Result as OkObjectResult;
+        Assert.NotNull(createdProduct);
+
+        var getResult = await controller.GetProduct(createdProduct.Id);
+        var fetchedResult = getResult.Result as OkObjectResult;
         var fetchedProduct = fetchedResult?.Value as Product;
 
-        Assert.NotNull(created);
         Assert.NotNull(fetchedProduct);
-        Assert.Equal(product.ProductName, fetchedProduct.ProductName);
+        Assert.Equal("Test Product", fetchedProduct.ProductName);
+        Assert.Equal("TP123", fetchedProduct.SKU);
     }
 
     [Fact]
@@ -72,12 +74,15 @@ public class ProductIntegrationTests
         };
 
         var createResult = await controller.CreateProduct(product);
-        var created = (createResult.Result as CreatedAtActionResult)?.Value as Product;
+        var created = (createResult as CreatedAtActionResult)?.Value as Product;
 
         created.ProductName = "Nieuwe Naam";
-        var updateResult = await controller.UpdateProduct(created.Id, created);
-        var updated = (updateResult.Result as OkObjectResult)?.Value as Product;
 
+        var updateResult = await controller.UpdateProduct(created.Id, created);
+        var okResult = updateResult.Result as OkObjectResult;
+        var updated = okResult?.Value as Product;
+
+        Assert.NotNull(updated);
         Assert.Equal("Nieuwe Naam", updated.ProductName);
     }
 
@@ -99,7 +104,7 @@ public class ProductIntegrationTests
         };
 
         var createResult = await controller.CreateProduct(product);
-        var created = (createResult.Result as CreatedAtActionResult)?.Value as Product;
+        var created = (createResult as CreatedAtActionResult)?.Value as Product;
 
         var deleteResult = await controller.SoftDeleteProduct(created.Id);
         Assert.IsType<NoContentResult>(deleteResult);
@@ -114,16 +119,30 @@ public class ProductIntegrationTests
         var context = GetInMemoryDbContext();
         var controller = GetController(context);
 
-        await controller.CreateProduct(new Product { ProductName = "Actief Product", SKU = "A1", Price = 5.0 });
-        var toDelete = new Product { ProductName = "Verwijderd Product", SKU = "B1", Price = 7.0 };
+        await controller.CreateProduct(new Product
+        {
+            ProductName = "Actief Product",
+            SKU = "A1",
+            Price = 5.0
+        });
+
+        var toDelete = new Product
+        {
+            ProductName = "Verwijderd Product",
+            SKU = "B1",
+            Price = 7.0
+        };
+
         var result = await controller.CreateProduct(toDelete);
-        var created = (result.Result as CreatedAtActionResult)?.Value as Product;
+        var created = (result as CreatedAtActionResult)?.Value as Product;
+
         await controller.SoftDeleteProduct(created.Id);
 
         var getAllResult = await controller.GetAllProducts();
         var okResult = getAllResult.Result as OkObjectResult;
         var products = okResult?.Value as List<Product>;
 
+        Assert.NotNull(products);
         Assert.Single(products);
         Assert.DoesNotContain(products, p => p.ProductName == "Verwijderd Product");
     }
