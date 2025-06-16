@@ -7,8 +7,8 @@ namespace ProjectD.Services
 
     public interface IShipmentService
     {
-        Task<List<Shipment>> GetAllShipmentsAsync();
-        Task<Shipment> GetShipmentByIdAsync(int id);
+        Task<List<ShipmentDto>> GetAllShipmentsAsync();
+        Task<ShipmentDto> GetShipmentByIdAsync(int id);
         Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto);
         Task<Shipment> UpdateShipmentAsync(int id, Shipment shipment);
         Task<bool> SoftDeleteShipmentAsync(int id);  // Soft delete instead of hard delete
@@ -25,14 +25,46 @@ namespace ProjectD.Services
             _context = context;
         }
 
-        public async Task<List<Shipment>> GetAllShipmentsAsync()
+        public async Task<List<ShipmentDto>> GetAllShipmentsAsync()
         {
-            return await _context.Shipments.Where(s => !s.IsDeleted).ToListAsync();
+            var shipments = await _context.Shipments
+                .Where(s => !s.IsDeleted)
+                .Include(s => s.ShipmentOrders)
+                    .ThenInclude(so => so.Order)
+                .ToListAsync();
+
+            return shipments.Select(s => new ShipmentDto
+            {
+                Id = s.Id,
+                VehicleId = s.VehicleId,
+                DriverId = s.DriverId,
+                Status = s.Status,
+                DepartureDate = s.DepartureDate,
+                ExpectedDeliveryDate = s.ExpectedDeliveryDate,
+                OrderIds = s.ShipmentOrders.Select(so => so.OrderId).ToList()
+            }).ToList();
         }
 
-        public async Task<Shipment> GetShipmentByIdAsync(int id)
+        public async Task<ShipmentDto> GetShipmentByIdAsync(int id)
         {
-            return await _context.Shipments.Where(s => !s.IsDeleted).FirstOrDefaultAsync(s => s.Id == id);
+            var shipment = await _context.Shipments
+                .Where(s => !s.IsDeleted && s.Id == id)
+                .Include(s => s.ShipmentOrders)
+                    .ThenInclude(so => so.Order)
+                .FirstOrDefaultAsync();
+
+            if (shipment == null) return null;
+
+            return new ShipmentDto
+            {
+                Id = shipment.Id,
+                VehicleId = shipment.VehicleId,
+                DriverId = shipment.DriverId,
+                Status = shipment.Status,
+                DepartureDate = shipment.DepartureDate,
+                ExpectedDeliveryDate = shipment.ExpectedDeliveryDate,
+                OrderIds = shipment.ShipmentOrders.Select(so => so.OrderId).ToList()
+            };
         }
 
         private DateTime ParseDateTime(string date, string time)

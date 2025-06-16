@@ -16,14 +16,14 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Shipment>>> GetAllShipments()
+        public async Task<ActionResult<List<ShipmentDto>>> GetAllShipments()
         {
             var shipments = await _shipmentService.GetAllShipmentsAsync();
             return Ok(shipments);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Shipment>> GetShipment(int id)
+        public async Task<ActionResult<ShipmentDto>> GetShipment(int id)
         {
             var shipment = await _shipmentService.GetShipmentByIdAsync(id);
             if (shipment == null) return NotFound();
