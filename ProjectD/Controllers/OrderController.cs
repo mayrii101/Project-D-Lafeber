@@ -99,9 +99,9 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(OrderCreateDto dto)
         {
-            var createdOrder = await _orderService.CreateOrderAsync(order);
+            var createdOrder = await _orderService.CreateOrderAsync(dto);
             return CreatedAtAction(nameof(GetOrderById), new { id = createdOrder.Id }, createdOrder);
         }
 

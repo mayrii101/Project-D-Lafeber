@@ -164,16 +164,6 @@ const Dashboard: React.FC = () => {
       <main className="main">
         <div className="navGrid">
 
-          <Card
-            className="cardDefault cardUpdates"
-            onClick={() => setShowXmlUpload(true)}
-            style={{ cursor: "pointer" }}
-          >
-            <div className="cardTitleDefault">XML uploaden</div>
-            <div className="linkSecondary">→ Bekijken</div>
-            <div className="addIcon">＋</div>
-          </Card>
-
           <Card className="cardDefault" onClick={() => setShowBestellingen(true)} style={{ cursor: "pointer" }}>
             <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
@@ -187,6 +177,18 @@ const Dashboard: React.FC = () => {
           <Card className="cardDefault" onClick={() => setShowKlanten(true)} style={{ cursor: "pointer" }}>
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
+          </Card>
+          <Card
+            className="cardDefault cardUpdates"
+            onClick={() => setShowXmlUpload(true)}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="cardTitleDefault">XML uploaden</div>
+            <div className="text-sm text-muted-foreground italic">
+              Alleen voor technisch personeel
+            </div>
+            <div className="linkSecondary">→ Bekijken</div>
+            <div className="addIcon">＋</div>
           </Card>
         </div>
       </main>

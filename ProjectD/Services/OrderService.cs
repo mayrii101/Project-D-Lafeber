@@ -6,7 +6,7 @@ namespace ProjectD.Services
     {
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order?> GetOrderByIdAsync(int id);
-        Task<Order> CreateOrderAsync(Order order);
+        Task<Order> CreateOrderAsync(OrderCreateDto dto);
         Task<Order?> UpdateOrderAsync(int id, Order order);
         Task<bool> SoftDeleteOrderAsync(int id);
     }
@@ -43,11 +43,41 @@ namespace ProjectD.Services
                 .FirstOrDefaultAsync(o => o.Id == id && !o.IsDeleted);
         }
 
-        public async Task<Order> CreateOrderAsync(Order order)
+        private DateTime ParseDateTime(string date, string time)
         {
+            var datePart = DateTime.ParseExact(date, "dd-MM-yyyy", null);
+            var timePart = TimeSpan.Parse(time);
+            return datePart.Date + timePart;
+        }
+        public async Task<Order> CreateOrderAsync(OrderCreateDto dto)
+        {
+            var orderDateTime = ParseDateTime(dto.OrderDate, dto.OrderTime);
+            var expectedDeliveryDateTime = ParseDateTime(dto.ExpectedDeliveryDate, dto.ExpectedDeliveryTime);
+
+            var order = new Order
+            {
+                CustomerId = dto.CustomerId,
+                OrderDate = orderDateTime,
+                DeliveryAddress = dto.DeliveryAddress,
+                ExpectedDeliveryDate = expectedDeliveryDateTime,
+                Status = dto.Status,
+                ProductLines = dto.ProductLines.Select(pl => new OrderLine
+                {
+                    ProductId = pl.ProductId,
+                    Quantity = pl.Quantity
+                }).ToList()
+            };
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            return order;
+
+            // Reload order with related products
+            var createdOrder = await _context.Orders
+                .Include(o => o.ProductLines)
+                    .ThenInclude(ol => ol.Product)
+                .FirstOrDefaultAsync(o => o.Id == order.Id);
+
+            return createdOrder!;
         }
 
         public async Task<Order?> UpdateOrderAsync(int id, Order order)

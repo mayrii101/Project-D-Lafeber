@@ -34,4 +34,27 @@ namespace ProjectD.Models
         public ICollection<ShipmentOrder> ShipmentOrders { get; set; } = new List<ShipmentOrder>();
 
     }
+
+    public class OrderCreateDto
+    {
+        public int CustomerId { get; set; }
+
+        public string OrderDate { get; set; } = "";     // e.g. "28-04-2025"
+        public string OrderTime { get; set; } = "";     // e.g. "14:30"
+
+        public string DeliveryAddress { get; set; } = "";
+
+        public string ExpectedDeliveryDate { get; set; } = "";
+        public string ExpectedDeliveryTime { get; set; } = "";
+
+        public OrderStatus Status { get; set; }
+
+        public List<OrderLineCreateDto> ProductLines { get; set; } = new();
+    }
+
+    public class OrderLineCreateDto
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+    }
 }

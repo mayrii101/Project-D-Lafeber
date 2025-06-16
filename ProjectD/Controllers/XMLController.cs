@@ -21,57 +21,43 @@ public class XmlImportController : ControllerBase
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadXmlFiles([FromForm] XmlFilesUploadDto filesDto)
+    public async Task<IActionResult> UploadXmlFile([FromForm] XmlFileUploadDto fileDto)
     {
-        _logger.LogInformation("Received request to upload XML files.");
+        _logger.LogInformation("Received request to upload a single XML file.");
 
-        if (filesDto.XmlFile1 == null || filesDto.XmlFile2 == null)
+        if (fileDto.XmlFile == null)
         {
-            _logger.LogWarning("Upload request missing one or both XML files.");
-            return BadRequest("Both XML files must be provided.");
+            _logger.LogWarning("Upload request is missing the XML file.");
+            return BadRequest("XML file must be provided.");
         }
 
         try
         {
-            _logger.LogInformation("Reading XML files content.");
-
-            string xmlContent1;
-            string xmlContent2;
-
-            using (var reader1 = new StreamReader(filesDto.XmlFile1.OpenReadStream()))
+            string xmlContent;
+            using (var reader = new StreamReader(fileDto.XmlFile.OpenReadStream()))
             {
-                xmlContent1 = await reader1.ReadToEndAsync();
+                xmlContent = await reader.ReadToEndAsync();
             }
 
-            _logger.LogInformation("Read first XML file successfully. Size: {Size} characters", xmlContent1.Length);
-
-            using (var reader2 = new StreamReader(filesDto.XmlFile2.OpenReadStream()))
-            {
-                xmlContent2 = await reader2.ReadToEndAsync();
-            }
-
-            _logger.LogInformation("Read second XML file successfully. Size: {Size} characters", xmlContent2.Length);
-
+            _logger.LogInformation("Read XML file successfully. Size: {Size} characters", xmlContent.Length);
             _logger.LogInformation("Starting import process.");
-            await _importer.ImportFromTwoXmlStringsAsync(xmlContent1, xmlContent2);
-            _logger.LogInformation("Import process completed successfully.");
 
-            return Ok(new { message = "Files imported successfully" });
+            await _importer.ImportFromXmlStringAsync(xmlContent);
+
+            _logger.LogInformation("Import process completed successfully.");
+            return Ok(new { message = "File imported successfully" });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to import XML files.");
-            return StatusCode(500, "Internal server error while importing XML files.");
+            _logger.LogError(ex, "Failed to import XML file.");
+            return StatusCode(500, "Internal server error while importing XML file.");
         }
     }
 }
 
-// DTO for model binding uploaded files
-public class XmlFilesUploadDto
+// DTO for model binding a single uploaded file
+public class XmlFileUploadDto
 {
-    [FromForm(Name = "xmlFile1")]
-    public IFormFile XmlFile1 { get; set; }
-
-    [FromForm(Name = "xmlFile2")]
-    public IFormFile XmlFile2 { get; set; }
+    [FromForm(Name = "xmlFile")]
+    public IFormFile XmlFile { get; set; }
 }
