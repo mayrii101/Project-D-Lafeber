@@ -5,6 +5,7 @@ import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
 import XmlUploadModal from "./XmlUploadModal";
+import KlantAanmakenModal from "./KlantAanmakenModal";
 
 interface Order {
   id: number;
@@ -92,6 +93,13 @@ const Dashboard: React.FC = () => {
   const [showKlanten, setShowKlanten] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [showXmlUpload, setShowXmlUpload] = useState(false);
+
+  const [customerSearchName, setCustomerSearchName] = useState("");
+  const [customerSearchCompany, setCustomerSearchCompany] = useState("");
+  const [customerSearchAddress, setCustomerSearchAddress] = useState("");
+
+  const [showKlantForm, setShowKlantForm] = useState(false);
+
   const closeModel = () => {
     setShowBestellingen(false);
     setShowProducten(false);
@@ -174,10 +182,24 @@ const Dashboard: React.FC = () => {
             <div className="linkSecondary">→ Bekijken</div>
           </Card>
 
-          <Card className="cardDefault" onClick={() => setShowKlanten(true)} style={{ cursor: "pointer" }}>
+          <Card
+            className="cardDefault"
+            onClick={() => setShowKlanten(true)}
+            style={{ cursor: "pointer", position: "relative" }}
+          >
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
+            <div
+              className="addIcon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowKlantForm(true);
+              }}
+            >
+              ＋
+            </div>
           </Card>
+
           <Card
             className="cardDefault cardUpdates"
             onClick={() => setShowXmlUpload(true)}
@@ -226,10 +248,27 @@ const Dashboard: React.FC = () => {
           onSelectCustomer={setSelectedCustomer}
           onBack={() => setSelectedCustomer(null)}
           onClose={closeModal}
-          searchTerm={customerSearchTerm}
-          onSearchChange={setCustomerSearchTerm}
+          searchName={customerSearchName}
+          onSearchNameChange={setCustomerSearchName}
+          searchCompany={customerSearchCompany}
+          onSearchCompanyChange={setCustomerSearchCompany}
+          searchAddress={customerSearchAddress}
+          onSearchAddressChange={setCustomerSearchAddress}
         />
       )}
+
+      {showKlantForm && (
+        <KlantAanmakenModal
+          onClose={() => setShowKlantForm(false)}
+          onSuccess={() => {
+            // herlaad klanten
+            fetch("http://localhost:5000/api/customer")
+              .then((res) => res.json())
+              .then((data) => setCustomers(data));
+          }}
+        />
+      )}
+
 
       {showXmlUpload && (
         <XmlUploadModal onClose={closeModal} />
