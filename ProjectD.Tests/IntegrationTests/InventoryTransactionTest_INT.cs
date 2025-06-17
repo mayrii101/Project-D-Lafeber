@@ -1,80 +1,126 @@
-/*
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using ProjectD.Models;
 using Xunit;
+using Microsoft.EntityFrameworkCore;
+using ProjectD.Models;
+using ProjectD.Services;
+using AzureSqlConnectionDemo.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
-namespace ProjectD.IntegrationTests
+public class InventoryTransactionIntegrationTests
 {
-    public class InventoryTransactionIntegrationTests : IDisposable
+    private ApplicationDbContext GetInMemoryDbContext()
     {
-        private readonly HttpClient _client;
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase($"TestDb_{Guid.NewGuid()}")
+            .Options;
 
-        public InventoryTransactionIntegrationTests()
+        return new ApplicationDbContext(options);
+    }
+
+    private InventoryTransactionController GetController(ApplicationDbContext context)
+    {
+        var service = new InventoryTransactionService(context);
+        return new InventoryTransactionController(service);
+    }
+
+    private InventoryTransaction CreateTestTransaction()
+    {
+        return new InventoryTransaction
         {
-            // Point this to your running API URL
-            _client = new HttpClient
-            {
-                BaseAddress = new Uri("http://localhost:5000")
-            };
-        }
+            ProductId = 1,
+            Quantity = 10,
+            Type = InventoryTransactionType.Inbound,
+            Timestamp = DateTime.UtcNow,
+            EmployeeId = 1,
+            SourceOrDestination = "Magazijn A"
+        };
+    }
 
-        [Fact]
-        public async Task GetAllInventoryTransactions_ReturnsList()
-        {
-            var response = await _client.GetAsync("/api/InventoryTransaction");
-            response.EnsureSuccessStatusCode();
+    [Fact]
+    public async Task Can_Create_And_Get_InventoryTransaction()
+    {
+        var context = GetInMemoryDbContext();
+        var controller = GetController(context);
 
-            var transactions = await response.Content.ReadFromJsonAsync<List<InventoryTransaction>>();
-            Assert.NotNull(transactions);
-        }
+        var transaction = CreateTestTransaction();
 
-        [Fact]
-        public async Task CreateUpdateAndDeleteInventoryTransaction_WorksCorrectly()
-        {
-            // Create a new transaction
-            var newTransaction = new InventoryTransaction
-            {
-                ProductId = 1,
-                Quantity = 10,
-                Type = InventoryTransactionType.Inbound, // adjust enum accordingly
-                Timestamp = DateTime.UtcNow,
-                EmployeeId = 1,
-                SourceOrDestination = "Supplier",
-                IsDeleted = false
-            };
+        var createResult = await controller.CreateInventoryTransaction(transaction);
+        var createdResult = createResult.Result as CreatedAtActionResult;
+        var created = createdResult?.Value as InventoryTransaction;
 
-            var createResponse = await _client.PostAsJsonAsync("/api/InventoryTransaction", newTransaction);
-            createResponse.EnsureSuccessStatusCode();
+        var getResult = await controller.GetInventoryTransactionById(created!.Id);
+        var fetchedResult = getResult.Result as OkObjectResult;
+        var fetched = fetchedResult?.Value as InventoryTransaction;
 
-            var createdTransaction = await createResponse.Content.ReadFromJsonAsync<InventoryTransaction>();
-            Assert.NotNull(createdTransaction);
-            Assert.Equal(newTransaction.ProductId, createdTransaction.ProductId);
+        Assert.NotNull(created);
+        Assert.NotNull(fetched);
+        Assert.Equal(transaction.Quantity, fetched.Quantity);
+        Assert.Equal(transaction.SourceOrDestination, fetched.SourceOrDestination);
+    }
 
-            // Update the transaction
-            createdTransaction.Quantity = 20;
-            var updateResponse = await _client.PutAsJsonAsync($"/api/InventoryTransaction/{createdTransaction.Id}", createdTransaction);
-            updateResponse.EnsureSuccessStatusCode();
+    [Fact]
+    public async Task Can_Update_InventoryTransaction()
+    {
+        var context = GetInMemoryDbContext();
+        var controller = GetController(context);
 
-            var updatedTransaction = await updateResponse.Content.ReadFromJsonAsync<InventoryTransaction>();
-            Assert.Equal(20, updatedTransaction.Quantity);
+        var transaction = CreateTestTransaction();
 
-            // Soft delete the transaction
-            var deleteResponse = await _client.DeleteAsync($"/api/InventoryTransaction/{createdTransaction.Id}");
-            Assert.True(deleteResponse.IsSuccessStatusCode);
+        var createResult = await controller.CreateInventoryTransaction(transaction);
+        var createdResult = createResult.Result as CreatedAtActionResult;
+        var created = createdResult?.Value as InventoryTransaction;
 
-            // Verify deletion by trying to get the deleted transaction
-            var getDeletedResponse = await _client.GetAsync($"/api/InventoryTransaction/{createdTransaction.Id}");
-            Assert.Equal(System.Net.HttpStatusCode.NotFound, getDeletedResponse.StatusCode);
-        }
+        created!.Quantity = 20;
 
-        public void Dispose()
-        {
-            _client?.Dispose();
-        }
+        var updateResult = await controller.UpdateInventoryTransaction(created.Id, created);
+        var okResult = updateResult.Result as OkObjectResult;
+        var updated = okResult?.Value as InventoryTransaction;
+
+        Assert.NotNull(updated);
+        Assert.Equal(20, updated.Quantity);
+    }
+
+    [Fact]
+    public async Task Can_SoftDelete_InventoryTransaction()
+    {
+        var context = GetInMemoryDbContext();
+        var controller = GetController(context);
+
+        var transaction = CreateTestTransaction();
+
+        var createResult = await controller.CreateInventoryTransaction(transaction);
+        var createdResult = createResult.Result as CreatedAtActionResult;
+        var created = createdResult?.Value as InventoryTransaction;
+
+        var deleteResult = await controller.SoftDeleteInventoryTransaction(created!.Id);
+        Assert.IsType<NoContentResult>(deleteResult);
+
+        var getResult = await controller.GetInventoryTransactionById(created.Id);
+        Assert.IsType<NotFoundResult>(getResult.Result);
+    }
+
+    [Fact]
+    public async Task GetAll_Returns_Only_NotDeleted_Transactions()
+    {
+        var context = GetInMemoryDbContext();
+        var controller = GetController(context);
+
+        await controller.CreateInventoryTransaction(CreateTestTransaction());
+
+        var deletedTransaction = CreateTestTransaction();
+        var createResult = await controller.CreateInventoryTransaction(deletedTransaction);
+        var createdResult = createResult.Result as CreatedAtActionResult;
+        var created = createdResult?.Value as InventoryTransaction;
+
+        await controller.SoftDeleteInventoryTransaction(created!.Id);
+
+        var getAllResult = await controller.GetInventoryTransactions();
+        var okResult = getAllResult.Result as OkObjectResult;
+        var transactions = okResult?.Value as List<InventoryTransaction>;
+
+        Assert.Single(transactions);
+        Assert.DoesNotContain(transactions, t => t.Id == created.Id);
     }
 }
-*/ 
