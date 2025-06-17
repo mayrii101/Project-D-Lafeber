@@ -458,25 +458,6 @@ form button[type="submit"]:active {
   transform: translateY(0);
 }
 
-.custom-file-upload {
-  display: inline-block;
-  background-color: #b28bff;
-  /* Tailwind's yellow-400 */
-  color: #1f2937;
-  /* dark gray text */
-  padding: 0.5rem 1rem;
-  border-radius: 2px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  position: relative;
-}
-
-.custom-file-upload:hover {
-  background-color: #7215fc;
-  /* Tailwind's yellow-500 */
-}
-
 .custom-file-upload input[type="file"] {
   display: none;
 }
