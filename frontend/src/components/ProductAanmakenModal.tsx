@@ -14,21 +14,32 @@ const ProductAanmakenModal: React.FC<Props> = ({ onClose, onSuccess }) => {
         batchNumber: "",
         price: "",
         category: "",
-        expirationDate: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value });
     };
 
     const handleSubmit = async () => {
         try {
+            const body = {
+                productName: form.productName,
+                sku: form.sku,
+                weightKg: parseFloat(form.weightKg),
+                material: form.material,
+                batchNumber: parseInt(form.batchNumber),
+                price: parseFloat(form.price),
+                category: form.category,
+                isDeleted: false, // belangrijk voor je backend
+            };
+
             const response = await fetch("http://localhost:5000/api/product", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(form),
+                body: JSON.stringify(body),
             });
 
             if (response.ok) {
@@ -48,22 +59,38 @@ const ProductAanmakenModal: React.FC<Props> = ({ onClose, onSuccess }) => {
                 <button onClick={onClose} className="close-button">&times;</button>
                 <h2>Product Aanmaken</h2>
 
-                <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                    {Object.entries(form).map(([key, value]) => (
-                        <div className="form-group" key={key}>
-                            <label htmlFor={key}>{key}</label>
+                <form
+                    className="form"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                    }}
+                >
+                    {[
+                        { name: "productName", label: "Productnaam" },
+                        { name: "sku", label: "SKU" },
+                        { name: "weightKg", label: "Gewicht (kg)" },
+                        { name: "material", label: "Materiaal" },
+                        { name: "batchNumber", label: "Batchnummer" },
+                        { name: "price", label: "Prijs (€)" },
+                        { name: "category", label: "Categorie" },
+                    ].map(({ name, label }) => (
+                        <div className="form-group" key={name}>
+                            <label htmlFor={name}>{label}</label>
                             <input
-                                id={key}
-                                type="text"
-                                name={key}
-                                value={value}
+                                id={name}
+                                type={["weightKg", "price", "batchNumber"].includes(name) ? "number" : "text"}
+                                name={name}
+                                value={(form as any)[name]}
                                 onChange={handleChange}
-                                required={key !== "expirationDate"}
+                                required
                             />
                         </div>
                     ))}
 
-                    <button type="submit" className="submit-button">Aanmaken</button>
+                    <button type="submit" className="submit-button">
+                        Aanmaken
+                    </button>
                 </form>
             </div>
         </div>
