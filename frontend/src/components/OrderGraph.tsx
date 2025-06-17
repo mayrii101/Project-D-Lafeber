@@ -20,7 +20,7 @@ const OrderGraph: React.FC<OrderGraphProps> = ({ data }) => {
       style={{
         width: "100%",
         height: 350,
-        marginTop: "50px", // zorgt ervoor dat de grafiek iets lager staat
+        marginTop: "60px", // zorgt ervoor dat de grafiek iets lager staat
         padding: "10px",
         backgroundColor: "#fff",
         borderRadius: "12px",
