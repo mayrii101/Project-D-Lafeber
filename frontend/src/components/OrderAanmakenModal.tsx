@@ -13,33 +13,39 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         productId: producten[0]?.id || 0,
         quantity: 1,
         deliveryAddress: "",
+        orderDate: "",
+        orderTime: "",
         expectedDeliveryDate: "",
+        expectedDeliveryTime: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async () => {
+        const body = {
+            customerId: Number(form.customerId),
+            orderDate: form.orderDate,
+            orderTime: form.orderTime,
+            deliveryAddress: form.deliveryAddress,
+            expectedDeliveryDate: form.expectedDeliveryDate,
+            expectedDeliveryTime: form.expectedDeliveryTime,
+            status: "Pending", // altijd automatisch Pending
+            productLines: [
+                {
+                    productId: Number(form.productId),
+                    quantity: Number(form.quantity),
+                },
+            ],
+        };
+
         try {
             const response = await fetch("http://localhost:5000/api/order", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    customerId: Number(form.customerId),
-                    productLines: [
-                        {
-                            productId: Number(form.productId),
-                            quantity: Number(form.quantity),
-                            price: 0,
-                        },
-                    ],
-                    deliveryAddress: form.deliveryAddress,
-                    expectedDeliveryDate: form.expectedDeliveryDate,
-                    status: "pending",
-                }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
             });
 
             if (response.ok) {
@@ -61,10 +67,10 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
 
                 <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                     <div className="form-group">
-                        <label>Customer</label>
+                        <label>Klant</label>
                         <select name="customerId" value={form.customerId} onChange={handleChange}>
-                            {klanten.map((klant) => (
-                                <option key={klant.id} value={klant.id}>{klant.bedrijfsNaam}</option>
+                            {klanten.map(k => (
+                                <option key={k.id} value={k.id}>{k.bedrijfsNaam}</option>
                             ))}
                         </select>
                     </div>
@@ -72,7 +78,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Product</label>
                         <select name="productId" value={form.productId} onChange={handleChange}>
-                            {producten.map((p) => (
+                            {producten.map(p => (
                                 <option key={p.id} value={p.id}>{p.productName}</option>
                             ))}
                         </select>
@@ -84,6 +90,16 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     </div>
 
                     <div className="form-group">
+                        <label>Orderdatum</label>
+                        <input type="date" name="orderDate" value={form.orderDate} onChange={handleChange} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Ordertijd</label>
+                        <input type="time" name="orderTime" value={form.orderTime} onChange={handleChange} required />
+                    </div>
+
+                    <div className="form-group">
                         <label>Verzendadres</label>
                         <input type="text" name="deliveryAddress" value={form.deliveryAddress} onChange={handleChange} required />
                     </div>
@@ -91,6 +107,11 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Verwachte Leverdatum</label>
                         <input type="date" name="expectedDeliveryDate" value={form.expectedDeliveryDate} onChange={handleChange} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Verwachte Levertijd</label>
+                        <input type="time" name="expectedDeliveryTime" value={form.expectedDeliveryTime} onChange={handleChange} required />
                     </div>
 
                     <button type="submit" className="submit-button">Aanmaken</button>
