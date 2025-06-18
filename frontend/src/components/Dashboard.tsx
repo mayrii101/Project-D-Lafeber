@@ -62,17 +62,6 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
-const getOrderStatusCounts = (orders: Order[]) => {
-  const counts: Record<string, number> = {};
-  orders.forEach(order => {
-    const status = order.status;
-    counts[status] = (counts[status] || 0) + 1;
-  });
-  return Object.entries(counts).map(([status, count]) => ({
-    name: status,
-    value: count
-  }));
-};
 
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -83,9 +72,11 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
-
   const [productSearchTerm, setProductSearchTerm] = useState("");
-  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
+
+  const [customerSearchName, setCustomerSearchName] = useState("");
+  const [customerSearchCompany, setCustomerSearchCompany] = useState("");
+  const [customerSearchAddress, setCustomerSearchAddress] = useState("");
 
   const [showBestellingen, setShowBestellingen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -95,20 +86,11 @@ const Dashboard: React.FC = () => {
 
   const [showKlanten, setShowKlanten] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+
   const [showXmlUpload, setShowXmlUpload] = useState(false);
-
-  const [customerSearchName, setCustomerSearchName] = useState("");
-  const [customerSearchCompany, setCustomerSearchCompany] = useState("");
-  const [customerSearchAddress, setCustomerSearchAddress] = useState("");
-
   const [showKlantForm, setShowKlantForm] = useState(false);
   const [showProductForm, setShowProductForm] = useState(false);
   const [showOrderForm, setShowOrderForm] = useState(false);
-
-  const [showNotes, setShowNotes] = useState(false);
-  const [notes, setNotes] = useState("");
-
-  const toggleNotes = () => setShowNotes(prev => !prev);
 
   const closeModel = () => {
     setShowBestellingen(false);
@@ -151,10 +133,8 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const filtered = orders.filter((order) => {
-      const matchesSearch =
-        !searchTerm || order.id.toString().includes(searchTerm);
-      const matchesStatus =
-        !selectedStatus || order.status.toLowerCase() === selectedStatus.toLowerCase();
+      const matchesSearch = !searchTerm || order.id.toString().includes(searchTerm);
+      const matchesStatus = !selectedStatus || order.status.toLowerCase() === selectedStatus.toLowerCase();
       return matchesSearch && matchesStatus;
     });
 
@@ -173,26 +153,25 @@ const Dashboard: React.FC = () => {
 
       <main className="main">
         <div className="navGrid">
-          {/* Cards */}
-          <Card className="cardDefault" onClick={() => setShowBestellingen(true)} style={{ cursor: "pointer", position: "relative" }}>
+          <Card className="cardDefault" onClick={() => setShowBestellingen(true)}>
             <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowOrderForm(true); }}>＋</div>
           </Card>
 
-          <Card className="cardDefault" onClick={() => setShowProducten(true)} style={{ cursor: "pointer", position: "relative" }}>
+          <Card className="cardDefault" onClick={() => setShowProducten(true)}>
             <div className="cardTitleDefault">Producten ({products.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowProductForm(true); }}>＋</div>
           </Card>
 
-          <Card className="cardDefault" onClick={() => setShowKlanten(true)} style={{ cursor: "pointer", position: "relative" }}>
+          <Card className="cardDefault" onClick={() => setShowKlanten(true)}>
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowKlantForm(true); }}>＋</div>
           </Card>
 
-          <Card className="cardDefault cardUpdates" onClick={() => setShowXmlUpload(true)} style={{ cursor: "pointer" }}>
+          <Card className="cardDefault cardUpdates" onClick={() => setShowXmlUpload(true)}>
             <div className="cardTitleDefault">XML uploaden</div>
             <div className="text-sm text-muted-foreground italic">Alleen voor technisch personeel</div>
             <div className="linkSecondary">→ Bekijken</div>
@@ -201,17 +180,10 @@ const Dashboard: React.FC = () => {
         </div>
       </main>
 
-      <div className={`sticky-note-toggle ${showNotes ? "open" : ""}`} onClick={toggleNotes}>📝</div>
+      {/* Sticky Note Component */}
+      <Notitie />
 
-      <div className={`sticky-note-panel ${showNotes ? "open" : ""}`}>
-        <textarea
-          className="sticky-note-textarea"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Typ hier je notities..."
-        />
-      </div>
-
+      {/* Modals & Views */}
       {showBestellingen && (
         <Bestellingen
           filteredOrders={filteredOrders}

@@ -1,49 +1,51 @@
 import React, { useEffect, useState } from "react";
 
-interface Props {
-    visible: boolean;
-    onClose: () => void;
-}
-
-const Notitie: React.FC<Props> = ({ visible, onClose }) => {
+const Notitie: React.FC = () => {
+    const [visible, setVisible] = useState(false);
     const [notes, setNotes] = useState("");
 
-    useEffect(() => {
-        fetch("http://localhost:5000/api/stickynote")
-            .then((res) => res.json())
-            .then((data) => {
-                setNotes(data.content || "");
-            });
-    }, []);
+    const toggleVisibility = () => setVisible((prev) => !prev);
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            fetch("http://localhost:5000/api/stickynote", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(notes),
-            });
-        }, 800);
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/api/stickynote")
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setNotes(data.content || "");
+    //         });
+    // }, []);
 
-        return () => clearTimeout(timeout);
-    }, [notes]);
+    // useEffect(() => {
+    //     const timeout = setTimeout(() => {
+    //         fetch("http://localhost:5000/api/stickynote", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(notes),
+    //         });
+    //     }, 800);
 
-    if (!visible) return null;
+    //     return () => clearTimeout(timeout);
+    // }, [notes]);
 
     return (
-        <div className={`sticky-note-panel open`}>
-            <textarea
-                className="sticky-note-textarea"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Typ hier je notities..."
-            />
-            <div className="sticky-note-toggle open" onClick={onClose}>
+        <>
+            <div
+                className={`sticky-note-toggle ${visible ? "open" : ""}`}
+                onClick={toggleVisibility}
+            >
                 📝
             </div>
-        </div>
+
+            <div className={`sticky-note-panel ${visible ? "open" : ""}`}>
+                <textarea
+                    className="sticky-note-textarea"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Typ hier je notities..."
+                />
+            </div>
+        </>
     );
 };
 
