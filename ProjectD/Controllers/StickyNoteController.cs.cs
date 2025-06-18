@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectD.Models;
 using ProjectD.Services;
 
-namespace AzureSqlConnectionDemo.Controllers
+namespace ProjectD.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,17 +16,17 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<StickyNote>> Get()
+        public async Task<ActionResult<StickyNoteDto>> GetNote()
         {
             var note = await _noteService.GetNoteAsync();
-            return Ok(note);
+            return Ok(new StickyNoteDto { Content = note?.Content ?? "" });
         }
 
         [HttpPost]
-        public async Task<ActionResult<StickyNote>> Save([FromBody] string content)
+        public async Task<ActionResult> SaveNote([FromBody] string content)
         {
-            var updated = await _noteService.SaveNoteAsync(content);
-            return Ok(updated);
+            await _noteService.SaveNoteAsync(content);
+            return NoContent();
         }
     }
 }
