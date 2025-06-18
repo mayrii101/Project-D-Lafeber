@@ -8,7 +8,7 @@ import XmlUploadModal from "./XmlUploadModal";
 import KlantAanmakenModal from "./KlantAanmakenModal";
 import ProductAanmakenModal from "./ProductAanmakenModal";
 import OrderAanmakenModal from "./OrderAanmakenModal";
-
+import Notitie from "./Notitie";
 
 interface Order {
   id: number;
