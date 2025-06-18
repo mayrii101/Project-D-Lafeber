@@ -110,7 +110,6 @@ const Dashboard: React.FC = () => {
 
   const toggleNotes = () => setShowNotes(prev => !prev);
 
-
   const closeModel = () => {
     setShowBestellingen(false);
     setShowProducten(false);
@@ -120,6 +119,7 @@ const Dashboard: React.FC = () => {
     setSelectedProduct(null);
     setSelectedCustomer(null);
   };
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -161,118 +161,56 @@ const Dashboard: React.FC = () => {
     setFilteredOrders(filtered);
   }, [searchTerm, orders, selectedStatus]);
 
-  const closeModal = () => {
-    setShowBestellingen(false);
-    setShowProducten(false);
-    setShowKlanten(false);
-    setShowXmlUpload(false);
-  };
-
   return (
     <div className="container">
-      <header
-        className="hero"
-        style={{ backgroundImage: `url('/warehouseee.jpg')` }}
-      >
+      <header className="hero" style={{ backgroundImage: `url('/warehouseee.jpg')` }}>
         <div className="overlay">
           <div className="logoWrapper">
-            <div className="logoText">Lafeber Insights</div>          </div>
+            <div className="logoText">Lafeber Insights</div>
+          </div>
         </div>
       </header>
 
       <main className="main">
         <div className="navGrid">
-
-          <Card
-            className="cardDefault"
-            onClick={() => setShowBestellingen(true)}
-            style={{ cursor: "pointer", position: "relative" }}
-          >
+          {/* Cards */}
+          <Card className="cardDefault" onClick={() => setShowBestellingen(true)} style={{ cursor: "pointer", position: "relative" }}>
             <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
-            <div
-              className="addIcon"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowOrderForm(true);
-              }}
-            >
-              ＋
-            </div>
+            <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowOrderForm(true); }}>＋</div>
           </Card>
 
-
-          <Card
-            className="cardDefault"
-            onClick={() => setShowProducten(true)}
-            style={{ cursor: "pointer", position: "relative" }}
-          >
+          <Card className="cardDefault" onClick={() => setShowProducten(true)} style={{ cursor: "pointer", position: "relative" }}>
             <div className="cardTitleDefault">Producten ({products.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
-            <div
-              className="addIcon"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowProductForm(true);
-              }}
-            >
-              ＋
-            </div>
+            <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowProductForm(true); }}>＋</div>
           </Card>
 
-
-          <Card
-            className="cardDefault"
-            onClick={() => setShowKlanten(true)}
-            style={{ cursor: "pointer", position: "relative" }}
-          >
+          <Card className="cardDefault" onClick={() => setShowKlanten(true)} style={{ cursor: "pointer", position: "relative" }}>
             <div className="cardTitleDefault">Klanten ({customers.length})</div>
             <div className="linkSecondary">→ Bekijken</div>
-            <div
-              className="addIcon"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowKlantForm(true);
-              }}
-            >
-              ＋
-            </div>
+            <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowKlantForm(true); }}>＋</div>
           </Card>
 
-          <Card
-            className="cardDefault cardUpdates"
-            onClick={() => setShowXmlUpload(true)}
-            style={{ cursor: "pointer" }}
-          >
+          <Card className="cardDefault cardUpdates" onClick={() => setShowXmlUpload(true)} style={{ cursor: "pointer" }}>
             <div className="cardTitleDefault">XML uploaden</div>
-            <div className="text-sm text-muted-foreground italic">
-              Alleen voor technisch personeel
-            </div>
+            <div className="text-sm text-muted-foreground italic">Alleen voor technisch personeel</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon">＋</div>
           </Card>
         </div>
       </main>
 
-      <div
-        className={`sticky-note-toggle ${showNotes ? "open" : ""}`}
-        onClick={toggleNotes}
-      >
-        📝
+      <div className={`sticky-note-toggle ${showNotes ? "open" : ""}`} onClick={toggleNotes}>📝</div>
+
+      <div className={`sticky-note-panel ${showNotes ? "open" : ""}`}>
+        <textarea
+          className="sticky-note-textarea"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Typ hier je notities..."
+        />
       </div>
-
-      {showNotes && (
-        <div className="sticky-note-panel">
-          <textarea
-            className="sticky-note-textarea"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Typ hier je notities..."
-          />
-        </div>
-      )}
-
-
 
       {showBestellingen && (
         <Bestellingen
@@ -280,7 +218,7 @@ const Dashboard: React.FC = () => {
           selectedOrder={selectedOrder}
           onSelectOrder={setSelectedOrder}
           onBack={() => setSelectedOrder(null)}
-          onClose={closeModal}
+          onClose={closeModel}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           selectedStatus={selectedStatus}
@@ -294,7 +232,7 @@ const Dashboard: React.FC = () => {
           selectedProduct={selectedProduct}
           onSelectProduct={setSelectedProduct}
           onBack={() => setSelectedProduct(null)}
-          onClose={closeModal}
+          onClose={closeModel}
           searchTerm={productSearchTerm}
           onSearchChange={setProductSearchTerm}
         />
@@ -306,7 +244,7 @@ const Dashboard: React.FC = () => {
           selectedCustomer={selectedCustomer}
           onSelectCustomer={setSelectedCustomer}
           onBack={() => setSelectedCustomer(null)}
-          onClose={closeModal}
+          onClose={closeModel}
           searchName={customerSearchName}
           onSearchNameChange={setCustomerSearchName}
           searchCompany={customerSearchCompany}
@@ -320,7 +258,6 @@ const Dashboard: React.FC = () => {
         <KlantAanmakenModal
           onClose={() => setShowKlantForm(false)}
           onSuccess={() => {
-            // herlaad klanten
             fetch("http://localhost:5000/api/customer")
               .then((res) => res.json())
               .then((data) => setCustomers(data));
@@ -355,9 +292,7 @@ const Dashboard: React.FC = () => {
         />
       )}
 
-      {showXmlUpload && (
-        <XmlUploadModal onClose={closeModal} />
-      )}
+      {showXmlUpload && <XmlUploadModal onClose={closeModel} />}
     </div>
   );
 };
