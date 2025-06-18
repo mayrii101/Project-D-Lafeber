@@ -712,7 +712,7 @@ h3 {
 
 .sticky-note-toggle {
   position: fixed;
-  top: 120px;
+  top: 220px;
   right: 0;
   font-size: 24px;
   background-color: orange;
@@ -735,10 +735,10 @@ h3 {
 
 .sticky-note-panel {
   position: fixed;
-  top: 0;
+  top: 100px;
   right: 0;
   width: 300px;
-  height: 100vh;
+  height: 60vh;
   background-color: #fff9dc;
   border-left: 4px solid orange;
   z-index: 1101;
@@ -767,7 +767,6 @@ h3 {
       #f1c40f 24px);
   background-size: 100% 24px;
   background-position-y: 8px;
-  /* Zorg dat de eerste lijn matcht met padding-top */
 }
 
 
