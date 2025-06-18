@@ -105,6 +105,11 @@ const Dashboard: React.FC = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [showOrderForm, setShowOrderForm] = useState(false);
 
+  const [showNotes, setShowNotes] = useState(false);
+  const [notes, setNotes] = useState("");
+
+  const toggleNotes = () => setShowNotes(prev => !prev);
+
 
   const closeModel = () => {
     setShowBestellingen(false);
@@ -248,6 +253,26 @@ const Dashboard: React.FC = () => {
           </Card>
         </div>
       </main>
+
+      <div
+        className={`sticky-note-toggle ${showNotes ? "open" : ""}`}
+        onClick={toggleNotes}
+      >
+        📝
+      </div>
+
+      {showNotes && (
+        <div className="sticky-note-panel">
+          <textarea
+            className="sticky-note-textarea"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Typ hier je notities..."
+          />
+        </div>
+      )}
+
+
 
       {showBestellingen && (
         <Bestellingen

@@ -707,3 +707,64 @@ h3 {
   background-color: white;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
+
+/* notities */
+
+/* Toggleknop (📝) om notitieblok te openen/sluiten */
+.sticky-note-toggle {
+  position: fixed;
+  top: 120px;
+  right: 0;
+  font-size: 24px;
+  background-color: orange;
+  color: white;
+  padding: 0.5rem 0.7rem;
+  border-radius: 10px 0 0 10px;
+  cursor: pointer;
+  z-index: 1102;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+  transition: right 0.4s ease, background-color 0.2s ease;
+}
+
+.sticky-note-toggle:hover {
+  background-color: darkorange;
+}
+
+/* Zorgt ervoor dat de knop mee schuift als kladblok open is */
+.sticky-note-toggle.open {
+  right: 300px;
+}
+
+/* Paneel van het notitieblok */
+.sticky-note-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: #fff9dc;
+  border-left: 4px solid orange;
+  z-index: 1101;
+  box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
+  transform: translateX(0);
+  transition: transform 0.4s ease;
+}
+
+/* Tekstvak binnenin */
+.sticky-note-textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  resize: none;
+  padding: 1rem;
+  font-size: 1rem;
+  background: transparent;
+  color: #333;
+  font-family: "Inter", sans-serif;
+  outline: none;
+}
+
+/* Wanneer verborgen — schuif het paneel naar rechts buiten beeld */
+.sticky-note-panel.hidden {
+  transform: translateX(100%);
+}
