@@ -47,7 +47,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(2, 7, 32, 0.9);
+  background-color: rgba(41, 37, 46, 0.404);
   display: flex;
   align-items: flex-start;
   padding: 2rem;
@@ -129,7 +129,7 @@
 .cardDefault {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #0b3ca5, #091849);
+  background: linear-gradient(135deg, #4578e6, #9054f7);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -154,7 +154,7 @@
   width: 100%;
   height: 35px;
   /* same as old border-top */
-  background: linear-gradient(135deg, #0b3ca5, #091849);
+  background: linear-gradient(135deg, #3760b9, #5e36a2);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -176,7 +176,7 @@
 .cardUpdates {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #5c34a0, #3d016e);
+  background: linear-gradient(135deg, #661be7, #010e6e);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -200,7 +200,7 @@
   left: 0;
   width: 100%;
   height: 35px;
-  background: linear-gradient(135deg, #5c34a0, #3d016e);
+  background: linear-gradient(135deg, #5016b5, #00073b);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;

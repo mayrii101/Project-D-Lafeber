@@ -5,7 +5,6 @@ import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
 import OrderStatusChart from "./OrderStatusChart";
-import OrderGraph from "./OrderGraph";
 import XmlUploadModal from "./XmlUploadModal";
 
 interface Order {
@@ -60,7 +59,6 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
-
 const getOrderStatusCounts = (orders: Order[]) => {
   const counts: Record<string, number> = {};
   orders.forEach(order => {
@@ -104,7 +102,6 @@ const Dashboard: React.FC = () => {
     setSelectedProduct(null);
     setSelectedCustomer(null);
   };
-
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -161,8 +158,7 @@ const Dashboard: React.FC = () => {
       >
         <div className="overlay">
           <div className="logoWrapper">
-            <div className="logoText">Lafeber Insights</div>
-          </div>
+            <div className="logoText">Lafeber Insights</div>          </div>
         </div>
       </header>
 
@@ -200,9 +196,6 @@ const Dashboard: React.FC = () => {
         <div className="chart-container">
           <div>
             <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
-          </div>
-          <div>
-            <OrderGraph data={getOrderStatusCounts(filteredOrders)} />
           </div>
         </div>
       </main>
