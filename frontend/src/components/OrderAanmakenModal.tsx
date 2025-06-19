@@ -24,15 +24,36 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    const formatDateToDDMMYYYY = (dateStr: string) => {
+        const [year, month, day] = dateStr.split("-");
+        return `${day}-${month}-${year}`;
+    };
+
+    const CurrentDatetime = () => {
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, "0");
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const year = now.getFullYear();
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+
+        return {
+            date: `${day}-${month}-${year}`,
+            time: `${hours}:${minutes}`
+        };
+    };
+
     const handleSubmit = async () => {
+        const now = CurrentDatetime();
+
         const body = {
             customerId: Number(form.customerId),
-            orderDate: form.orderDate,
-            orderTime: form.orderTime,
+            orderDate: now.date,
+            orderTime: now.time,
             deliveryAddress: form.deliveryAddress,
-            expectedDeliveryDate: form.expectedDeliveryDate,
+            expectedDeliveryDate: formatDateToDDMMYYYY(form.expectedDeliveryDate),
             expectedDeliveryTime: form.expectedDeliveryTime,
-            status: "Pending", // altijd automatisch Pending
+            status: "Pending",
             productLines: [
                 {
                     productId: Number(form.productId),
@@ -52,7 +73,8 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 onSuccess();
                 onClose();
             } else {
-                console.error("Fout bij opslaan order");
+                const error = await response.json().catch(() => ({}));
+                console.error("Fout bij opslaan order:", response.status, error);
             }
         } catch (err) {
             console.error("Netwerkfout:", err);
@@ -87,16 +109,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Aantal</label>
                         <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Orderdatum</label>
-                        <input type="date" name="orderDate" value={form.orderDate} onChange={handleChange} required />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Ordertijd</label>
-                        <input type="time" name="orderTime" value={form.orderTime} onChange={handleChange} required />
                     </div>
 
                     <div className="form-group">
