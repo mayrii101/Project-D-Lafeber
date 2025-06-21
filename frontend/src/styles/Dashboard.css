@@ -140,6 +140,21 @@
   /* higher than ::before */
 }
 
+.addIcon:hover {
+  background: linear-gradient(135deg, #a86dfd, #7d3ceb);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+.addIcon.updates {
+  background: linear-gradient(135deg, #5016b5, #00073b);
+}
+
+.addIcon.updates:hover {
+  background: linear-gradient(135deg, #6634d0, #0a0f5c);
+}
+
 .cardDefault,
 .cardUpdates {
   margin-top: -25rem;

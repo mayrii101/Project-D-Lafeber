@@ -187,7 +187,7 @@ const Dashboard: React.FC = () => {
             <div className="cardTitleDefault">XML uploaden</div>
             <div className="text-sm text-muted-foreground italic">Alleen voor technisch personeel</div>
             <div className="linkSecondary">→ Bekijken</div>
-            <div className="addIcon">＋</div>
+            <div className="addIcon updates">＋</div>
           </Card>
         </div>
         {/* Chart section */}
