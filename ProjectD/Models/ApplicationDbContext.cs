@@ -18,6 +18,7 @@ namespace ProjectD.Models
         public DbSet<OrderLine> OrderLines { get; set; }
         public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
         public DbSet<ShipmentOrder> ShipmentOrders { get; set; }
+        public DbSet<StickyNote> StickyNotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
