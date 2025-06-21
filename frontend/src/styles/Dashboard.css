@@ -10,22 +10,27 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color: #f9fafb;
   font-family: 'Inter', sans-serif;
-  color: #1f2937;
+  color: #ffffff;
+  background-repeat: no-repeat;
 }
 
 
 /* HERO + OVERLAY + LOGO */
 .hero {
   position: relative;
+  top: 3.2rem;
+  left: -1.5rem;
+  /* or 200px etc. */
   width: 100%;
-  max-width: 100%;
-  height: 300px;
+  max-width: 1250px;
+  height: 320px;
+  margin: 0 auto;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .hero::before {
@@ -39,6 +44,8 @@
   transform: scale(1.05);
   /* prevents edge clipping from blur */
   z-index: 0;
+  border-radius: 20px;
+  /* match parent rounding */
 }
 
 .overlay {
@@ -47,12 +54,24 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(41, 37, 46, 0.404);
+  background: linear-gradient(135deg,
+      #feaa6eea 0%,
+      /* top right */
+      #000034ea 30%,
+      /* middle */
+      #481360f0 100%
+      /* bottom right */
+    );
+  /* Your custom overlay color */
   display: flex;
   align-items: flex-start;
   padding: 2rem;
   z-index: 0;
-  /* behind controls */
+  /* should be above ::before (z-index: 0), but below content */
+  border-radius: 20px;
+  /* Match the hero's border-radius */
+  pointer-events: none;
+  /* optional: allow clicks through overlay */
 }
 
 .heroControls {
@@ -119,17 +138,56 @@
   /* no bottom padding */
 }
 
+/* Add icon */
+.addIcon {
+  position: absolute;
+  top: 4px;
+  /* shift it up to center over the top border */
+  right: 12px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #9d4b9b, #531f53);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  /* higher than ::before */
+}
+
+.addIcon:hover {
+  background: linear-gradient(135deg, #a86dfd, #7d3ceb);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+.addIcon.updates {
+  background: linear-gradient(135deg, #5016b5, #00073b);
+}
+
+.addIcon.updates:hover {
+  background: linear-gradient(135deg, #6634d0, #0a0f5c);
+}
+
 .cardDefault,
 .cardUpdates {
-  margin-top: -25rem;
-  /* pushes only the cards down */
+  margin-top: -27rem;
+  position: relative;
+  overflow: visible;
+  /* ← allow button to overflow */
 }
+
 
 /* Cards — square corners, subtle shadows, taller */
 .cardDefault {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #4578e6, #9054f7);
+  background: linear-gradient(135deg, #f69569, #d96cd5);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -142,7 +200,6 @@
   color: #ffffff;
   font-weight: 100;
   user-select: none;
-  overflow: hidden;
 }
 
 /* Top border gradient */
@@ -152,9 +209,9 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 35px;
+  height: 40px;
   /* same as old border-top */
-  background: linear-gradient(135deg, #3760b9, #5e36a2);
+  background: linear-gradient(135deg, #b66c4a, #9d4b9b);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -189,7 +246,6 @@
   color: #ffffff;
   font-weight: 600;
   user-select: none;
-  overflow: hidden;
 }
 
 /* Top border gradient */
@@ -199,7 +255,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 35px;
+  height: 40px;
   background: linear-gradient(135deg, #5016b5, #00073b);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -250,14 +306,6 @@
   color: #ffffff;
 }
 
-/* Add icon */
-.addIcon {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
 
 /* Toolbar */
 .toolbar {
@@ -772,4 +820,89 @@ h3 {
 
 .sticky-note-panel.open {
   transform: translateX(0);
+}
+
+.cornerDecoration {
+  position: absolute;
+  z-index: 2;
+  width: 300px;
+  /* or even 400px depending on your screen */
+  height: auto;
+  opacity: 0.6;
+  /* make them less transparent */
+  pointer-events: none;
+  /* so they don't block clicks */
+  user-select: none;
+}
+
+.topRight {
+  top: 0;
+  right: 0;
+}
+
+.bottomLeft {
+  bottom: 0;
+  left: 0;
+}
+
+.select-button {
+  margin-left: 2.3rem;
+  margin-top: 3rem;
+  width: 140px;
+  /* wider than 60px for options visibility */
+  height: 60px;
+  background: linear-gradient(135deg, #53afff, #41a5fc);
+  border-radius: 30px;
+  /* pill shape to keep it smooth */
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  user-select: none;
+  border: none;
+  padding: 0 20px;
+  box-sizing: border-box;
+  appearance: none;
+  /* remove default arrow */
+  position: relative;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  box-shadow: 0 4px 6px rgba(0, 143, 255, 0.6);
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.select-button {
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: none;
+  background-color: #00bfae;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 191, 174, 0.4);
+  transition: background-color 0.3s ease;
+  appearance: none;
+
+  /* Arrow styling */
+  padding-right: 24px;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 12px;
+}
+
+.select-button:hover {
+  background-color: #008f86;
+}
+
+.filter-label {
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
 }
