@@ -154,14 +154,23 @@ const Dashboard: React.FC = () => {
   }, [searchTerm, orders, selectedStatus]);
 
   return (
-    <div className="container">
-      <header className="hero" style={{ backgroundImage: `url('/warehouseee.jpg')` }}>
-        <div className="overlay">
-          <div className="logoWrapper">
-            <div className="logoText">Lafeber Insights</div>
-          </div>
+    <div
+      className="container"
+      style={{
+        backgroundImage: `url('/background6.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+      }}
+    >
+      <div className="hero" style={{ backgroundImage: `url('/hero.jpg')` }}>
+        <div className="overlay" />
+        <div className="heroControls">
+          {/* Your buttons or content */}
         </div>
-      </header>
+      </div>
+
 
       <main className="main">
         <div className="navGrid">

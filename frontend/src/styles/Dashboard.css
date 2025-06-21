@@ -10,22 +10,27 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color: #f9fafb;
   font-family: 'Inter', sans-serif;
-  color: #1f2937;
+  color: #ffffff;
+  background-repeat: no-repeat;
 }
 
 
 /* HERO + OVERLAY + LOGO */
 .hero {
   position: relative;
+  top: 3.2rem;
+  left: -1.5rem;
+  /* or 200px etc. */
   width: 100%;
-  max-width: 100%;
-  height: 300px;
+  max-width: 1250px;
+  height: 320px;
+  margin: 0 auto;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .hero::before {
@@ -39,6 +44,8 @@
   transform: scale(1.05);
   /* prevents edge clipping from blur */
   z-index: 0;
+  border-radius: 20px;
+  /* match parent rounding */
 }
 
 .overlay {
@@ -47,12 +54,24 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(41, 37, 46, 0.404);
+  background: linear-gradient(135deg,
+      #feaa6eea 0%,
+      /* top right */
+      #000034ea 30%,
+      /* middle */
+      #481360f0 100%
+      /* bottom right */
+    );
+  /* Your custom overlay color */
   display: flex;
   align-items: flex-start;
   padding: 2rem;
   z-index: 0;
-  /* behind controls */
+  /* should be above ::before (z-index: 0), but below content */
+  border-radius: 20px;
+  /* Match the hero's border-radius */
+  pointer-events: none;
+  /* optional: allow clicks through overlay */
 }
 
 .heroControls {
@@ -129,7 +148,7 @@
   font-weight: bold;
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, #9054f7, #6525d5);
+  background: linear-gradient(135deg, #9d4b9b, #531f53);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -157,7 +176,7 @@
 
 .cardDefault,
 .cardUpdates {
-  margin-top: -25rem;
+  margin-top: -27rem;
   position: relative;
   overflow: visible;
   /* ← allow button to overflow */
@@ -168,7 +187,7 @@
 .cardDefault {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #4578e6, #9054f7);
+  background: linear-gradient(135deg, #f69569, #d96cd5);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -192,7 +211,7 @@
   width: 100%;
   height: 40px;
   /* same as old border-top */
-  background: linear-gradient(135deg, #3760b9, #5e36a2);
+  background: linear-gradient(135deg, #b66c4a, #9d4b9b);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -801,4 +820,27 @@ h3 {
 
 .sticky-note-panel.open {
   transform: translateX(0);
+}
+
+.cornerDecoration {
+  position: absolute;
+  z-index: 2;
+  width: 300px;
+  /* or even 400px depending on your screen */
+  height: auto;
+  opacity: 0.6;
+  /* make them less transparent */
+  pointer-events: none;
+  /* so they don't block clicks */
+  user-select: none;
+}
+
+.topRight {
+  top: 0;
+  right: 0;
+}
+
+.bottomLeft {
+  bottom: 0;
+  left: 0;
 }
