@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchBar from "./Searchbar";
 import Filter from "./Filter";
+import "../styles/Error.css";
 
 interface BestellingenProps {
   filteredOrders: Order[];
@@ -55,6 +56,51 @@ const Bestellingen: React.FC<BestellingenProps> = ({
   selectedStatus,
   onStatusChange,
 }) => {
+  const [klant, setKlant] = useState("");
+  const [product, setProduct] = useState("");
+  const [aantal, setAantal] = useState("");
+  const [verzendadres, setVerzendadres] = useState("");
+  const [verwachteLeverdatum, setVerwachteLeverdatum] = useState("");
+  const [errors, setErrors] = useState({
+    klant: "",
+    product: "",
+    aantal: "",
+    verzendadres: "",
+    verwachteLeverdatum: "",
+  });
+
+  const validate = () => {
+    const newErrors = {
+      klant: "",
+      product: "",
+      aantal: "",
+      verzendadres: "",
+      verwachteLeverdatum: "",
+    };
+
+    if (!klant.trim()) newErrors.klant = "Klant mag niet leeg zijn.";
+    if (!product.trim()) newErrors.product = "Product mag niet leeg zijn.";
+    const aantalNum = Number(aantal);
+    if (!aantal || isNaN(aantalNum) || aantalNum <= 0 || !Number.isInteger(aantalNum)) {
+      newErrors.aantal = "Aantal moet een geheel getal boven 0 zijn.";
+    }
+    if (!verzendadres.trim()) newErrors.verzendadres = "Verzendadres mag niet leeg zijn.";
+    if (new Date(verwachteLeverdatum) < new Date(new Date().toDateString())) {
+      newErrors.verwachteLeverdatum = "Verwachte leverdatum mag niet in het verleden liggen.";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((e) => e === "");
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    // Proceed with saving or creating the order
+    console.log("Form valid and ready for submission");
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal">
@@ -140,16 +186,56 @@ const Bestellingen: React.FC<BestellingenProps> = ({
                   Geen bestellingen gevonden.
                 </div>
               ) : (
-                filteredOrders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="order-summary clickable"
-                    onClick={() => onSelectOrder(order)}
-                  >
-                    <span>Order #{order.id}</span>
-                    <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
-                  </div>
-                ))
+                <>
+                  <form onSubmit={handleSubmit} className="order-form" style={{ marginBottom: "2rem" }}>
+                    <div className="form-group">
+                      <label>Klant</label>
+                      <input value={klant} onChange={(e) => setKlant(e.target.value)} />
+                      {errors.klant && <p className="error">{errors.klant}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label>Product</label>
+                      <input value={product} onChange={(e) => setProduct(e.target.value)} />
+                      {errors.product && <p className="error">{errors.product}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label>Aantal</label>
+                      <input value={aantal} onChange={(e) => setAantal(e.target.value)} />
+                      {errors.aantal && <p className="error">{errors.aantal}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label>Verzendadres</label>
+                      <input value={verzendadres} onChange={(e) => setVerzendadres(e.target.value)} />
+                      {errors.verzendadres && <p className="error">{errors.verzendadres}</p>}
+                    </div>
+
+                    <div className="form-group">
+                      <label>Verwachte leverdatum</label>
+                      <input
+                        type="date"
+                        value={verwachteLeverdatum}
+                        onChange={(e) => setVerwachteLeverdatum(e.target.value)}
+                      />
+                      {errors.verwachteLeverdatum && <p className="error">{errors.verwachteLeverdatum}</p>}
+                    </div>
+
+                    <button type="submit">Bestelling toevoegen</button>
+                  </form>
+
+                  {filteredOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="order-summary clickable"
+                      onClick={() => onSelectOrder(order)}
+                    >
+                      <span>Order #{order.id}</span>
+                      <span className={`status ${order.status.toLowerCase()}`}>{order.status}</span>
+                    </div>
+                  ))}
+                </>
               )}
             </div>
           )}
