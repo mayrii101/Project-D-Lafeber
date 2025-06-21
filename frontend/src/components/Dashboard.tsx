@@ -9,6 +9,7 @@ import KlantAanmakenModal from "./KlantAanmakenModal";
 import ProductAanmakenModal from "./ProductAanmakenModal";
 import OrderAanmakenModal from "./OrderAanmakenModal";
 import Notitie from "./Notitie";
+import OrderStatusChart from "./OrderStatusChart";
 
 interface Order {
   id: number;
@@ -62,6 +63,17 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
+const getOrderStatusCounts = (orders: Order[]) => {
+  const counts: Record<string, number> = {};
+  orders.forEach(order => {
+    const status = order.status;
+    counts[status] = (counts[status] || 0) + 1;
+  });
+  return Object.entries(counts).map(([status, count]) => ({
+    name: status,
+    value: count
+  }));
+};
 
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -178,6 +190,13 @@ const Dashboard: React.FC = () => {
             <div className="addIcon">＋</div>
           </Card>
         </div>
+        {/* Chart section */}
+        <div className="chart-container">
+          <div>
+            <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
+          </div>
+        </div>
+
       </main>
 
       {/* Sticky Note Component */}
