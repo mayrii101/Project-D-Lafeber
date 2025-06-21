@@ -1,8 +1,6 @@
-/* Container & Global */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap');
-
 
 .container {
   width: 100%;
@@ -12,16 +10,15 @@
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   color: #ffffff;
+  background-color: #0a0f1a;
   background-repeat: no-repeat;
 }
-
 
 /* HERO + OVERLAY + LOGO */
 .hero {
   position: relative;
   top: 3.2rem;
   left: -1.5rem;
-  /* or 200px etc. */
   width: 100%;
   max-width: 1250px;
   height: 320px;
@@ -42,10 +39,8 @@
   background-position: center;
   filter: blur(6px);
   transform: scale(1.05);
-  /* prevents edge clipping from blur */
   z-index: 0;
   border-radius: 20px;
-  /* match parent rounding */
 }
 
 .overlay {
@@ -54,24 +49,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg,
-      #feaa6eea 0%,
-      /* top right */
-      #000034ea 30%,
-      /* middle */
-      #481360f0 100%
-      /* bottom right */
-    );
-  /* Your custom overlay color */
+  background: linear-gradient(135deg, #1a2a3c 0%, #0c1a2f 70%, #000814 100%);
   display: flex;
   align-items: flex-start;
   padding: 2rem;
   z-index: 0;
-  /* should be above ::before (z-index: 0), but below content */
   border-radius: 20px;
-  /* Match the hero's border-radius */
   pointer-events: none;
-  /* optional: allow clicks through overlay */
 }
 
 .heroControls {
@@ -81,7 +65,6 @@
   display: flex;
   gap: 1rem;
   z-index: 1;
-  /* in front of overlay */
 }
 
 .logoImage {
@@ -104,15 +87,9 @@
   gap: 0.5rem;
 }
 
-.logoIcon {
-  font-size: 2rem;
-  color: white;
-}
-
+.logoIcon,
 .logoText {
-  font-size: 2rem;
   color: white;
-  font-weight: 600;
 }
 
 /* MAIN content */
@@ -120,7 +97,7 @@
   padding: 2rem 0;
   position: relative;
   background: transparent;
-  color: #1f2937;
+  color: #e5e7eb;
   max-width: 100%;
   margin: 0 auto;
 }
@@ -130,25 +107,19 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 3.5rem 2rem;
-  /* more vertical and horizontal spacing */
-  padding: 10rem 10rem 0 10rem;
   padding: 10rem;
-  /* uniform padding */
-  margin-top: 0;
-  /* no bottom padding */
 }
 
 /* Add icon */
 .addIcon {
   position: absolute;
   top: 4px;
-  /* shift it up to center over the top border */
   right: 12px;
   font-size: 1.5rem;
   font-weight: bold;
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, #9d4b9b, #531f53);
+  background: linear-gradient(135deg, #0d47a1, #002171);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -156,22 +127,21 @@
   cursor: pointer;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   z-index: 2;
-  /* higher than ::before */
 }
 
 .addIcon:hover {
-  background: linear-gradient(135deg, #a86dfd, #7d3ceb);
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
   transform: scale(1.1);
   transition: all 0.2s ease;
 }
 
 .addIcon.updates {
-  background: linear-gradient(135deg, #5016b5, #00073b);
+  background: linear-gradient(135deg, #003c8f, #001f54);
 }
 
 .addIcon.updates:hover {
-  background: linear-gradient(135deg, #6634d0, #0a0f5c);
+  background: linear-gradient(135deg, #0059b2, #002984);
 }
 
 .cardDefault,
@@ -179,15 +149,12 @@
   margin-top: -27rem;
   position: relative;
   overflow: visible;
-  /* ← allow button to overflow */
 }
 
-
-/* Cards — square corners, subtle shadows, taller */
+/* Card Default */
 .cardDefault {
-  position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #f69569, #d96cd5);
+  background: linear-gradient(135deg, #1e3a8a, #1e40af);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -202,7 +169,6 @@
   user-select: none;
 }
 
-/* Top border gradient */
 .cardDefault::before {
   content: "";
   position: absolute;
@@ -210,8 +176,7 @@
   left: 0;
   width: 100%;
   height: 40px;
-  /* same as old border-top */
-  background: linear-gradient(135deg, #b66c4a, #9d4b9b);
+  background: linear-gradient(135deg, #1e293b, #334155);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -220,20 +185,19 @@
 
 .cardDefault:hover {
   transform: translateY(-7px);
-  background: linear-gradient(135deg, #4460dd, rgb(54, 57, 204));
-  box-shadow: 0 12px 30px rgba(24, 42, 239, 0.6);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 12px 30px rgba(30, 64, 175, 0.6);
   color: #fff;
 }
 
 .cardDefault:hover::before {
-  background: linear-gradient(135deg, #3351d8, rgb(36, 38, 187));
+  background: linear-gradient(135deg, #1e40af, #1e3a8a);
 }
 
-
+/* Card Updates */
 .cardUpdates {
-  position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #661be7, #010e6e);
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -248,7 +212,6 @@
   user-select: none;
 }
 
-/* Top border gradient */
 .cardUpdates::before {
   content: "";
   position: absolute;
@@ -256,7 +219,7 @@
   left: 0;
   width: 100%;
   height: 40px;
-  background: linear-gradient(135deg, #5016b5, #00073b);
+  background: linear-gradient(135deg, #1e3a8a, #0f172a);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
@@ -265,19 +228,20 @@
 
 .cardUpdates:hover {
   transform: translateY(-7px);
-  background: linear-gradient(135deg, #5c34a0, #3d016e);
-  box-shadow: 0 12px 30px rgba(86, 30, 175, 0.6);
+  background: linear-gradient(135deg, #1e40af, #0a0f1a);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.6);
   color: #fff;
 }
 
 .cardUpdates:hover::before {
-  background: linear-gradient(135deg, #5c34a0, #3d016e);
+  background: linear-gradient(135deg, #1e40af, #0f172a);
 }
 
 .cardUpdates .cardTitleDefault,
 .cardUpdates .linkSecondary {
   color: #ffffff;
 }
+
 
 /* Card titles */
 .cardTitleDefault,
@@ -482,7 +446,7 @@ form input[type="file"] {
 }
 
 form button[type="submit"] {
-  background: linear-gradient(135deg, #5b3bf8, #0a22de);
+  background: linear-gradient(135deg, #0a22de, #0a22de);
   color: white;
   font-weight: 600;
   border: none;
@@ -550,7 +514,7 @@ form button[type="submit"]:active {
 
 .chartShadow {
   border-radius: 12px;
-  box-shadow: 0 8px 18px rgba(125, 59, 248, 0.3);
+  box-shadow: 0 8px 18px rgba(190, 169, 230, 0.3);
   /* Optional: add a subtle background to make shadow visible */
   background: white;
   padding: 1rem;
@@ -587,7 +551,7 @@ h3 {
   align-items: center;
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #53afff, #41a5fc);
+  background: linear-gradient(135deg, #f7f7f8, #f7f7f8);
   border-radius: 50%;
   cursor: pointer;
   color: white;
@@ -737,7 +701,7 @@ h3 {
 }
 
 .submit-button {
-  background: linear-gradient(to right, #3b82f6, #2563eb);
+  background: linear-gradient(to right, #fefefe, #fefefe);
   color: white;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
@@ -763,7 +727,7 @@ h3 {
   top: 220px;
   right: 0;
   font-size: 24px;
-  background-color: orange;
+  background-color: rgb(14, 12, 9);
   color: white;
   padding: 0.5rem 0.7rem;
   border-radius: 10px 0 0 10px;
@@ -774,7 +738,7 @@ h3 {
 }
 
 .sticky-note-toggle:hover {
-  background-color: darkorange;
+  background-color: rgb(245, 242, 239);
 }
 
 .sticky-note-toggle.open {
@@ -788,7 +752,7 @@ h3 {
   width: 300px;
   height: 60vh;
   background-color: #fff9dc;
-  border-left: 4px solid orange;
+  border-left: 4px solid rgb(249, 248, 245);
   z-index: 1101;
   box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
   transform: translateX(100%);
