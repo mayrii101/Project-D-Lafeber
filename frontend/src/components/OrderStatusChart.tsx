@@ -1,12 +1,8 @@
-import React from "react";
-import {
-    PieChart,
-    Pie,
-    Cell,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
-} from "recharts";
+import React, { useRef, useEffect, useState } from "react";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface StatusData {
     name: string;
@@ -17,92 +13,82 @@ interface OrderStatusChartProps {
     data: StatusData[];
 }
 
-
-const BLUE_GRADIENTS = [
-    ["#2555d4", "#3a72c4"],  // Bright royal blue to medium blue
-    ["#2e86ff", "#5aa0f0"],  // Vibrant blue to soft sky blue
-    ["#3a7ee6", "#6aa8ff"],  // Stronger blue to lighter bright blue
-    ["#1f5de0", "#4a7fc8"],  // Rich blue to medium blue
-    ["#2f65ff", "#3b63b1"],  // Vivid blue to medium dark blue
+const gradientColors = [
+    ["#3a4dbf", "#9a7eff"],
+    ["#43cea2", "#185a9d"],
+    ["#2ecc71", "#27ae60"],
+    ["#f7971e", "#ffd200"],
+    ["#ff6a00", "#ee0979"],
 ];
 
 const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
+    const chartRef = useRef<any>(null);
+    const [backgroundColors, setBackgroundColors] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (!chartRef.current) return;
+
+        const chart = chartRef.current;
+        const ctx = chart.ctx;
+        const chartArea = chart.chartArea;
+
+        if (!chartArea) return; // chart not ready yet
+
+        // Create gradients for each slice
+        const grads = data.map((_, index) => {
+            const gradient = ctx.createLinearGradient(
+                chartArea.left,
+                chartArea.top,
+                chartArea.right,
+                chartArea.bottom
+            );
+            const [start, end] = gradientColors[index % gradientColors.length];
+            gradient.addColorStop(0, start);
+            gradient.addColorStop(1, end);
+            return gradient;
+        });
+
+        setBackgroundColors(grads);
+    }, [data]);
+
     if (!data || data.length === 0) {
         return <p>Geen data beschikbaar voor statusoverzicht.</p>;
     }
 
-    const renderLabel = (props: any) => {
-        const { cx, cy, midAngle, outerRadius, index, percent } = props;
-        const RADIAN = Math.PI / 180;
-        const labelRadius = outerRadius + 20;
+    const chartData = {
+        labels: data.map((d) => d.name),
+        datasets: [
+            {
+                data: data.map((d) => d.value),
+                backgroundColor: backgroundColors.length === data.length ? backgroundColors : undefined,
+                borderColor: "#fff",
+                borderWidth: 1,
+            },
+        ],
+    };
 
-        const x = cx + labelRadius * Math.cos(-midAngle * RADIAN);
-        const y = cy + labelRadius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text
-                x={x}
-                y={y}
-                fill="black"
-                textAnchor={x > cx ? "start" : "end"}
-                dominantBaseline="central"
-                fontSize={14}
-                fontWeight="600"
-            >
-                {`${data[index].name}: ${(percent * 100).toFixed(0)}%`}
-            </text>
-        );
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "bottom" as const,
+                labels: {
+                    color: "#000",
+                    font: {
+                        weight: "bold" as const,
+                    },
+                },
+            },
+            tooltip: {
+                enabled: true,
+            },
+        },
     };
 
     return (
-        <div style={{ width: "600px", height: 600 }}>
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                    <defs>
-                        {BLUE_GRADIENTS.map(([start, end], index) => (
-                            <linearGradient
-                                key={index}
-                                id={`grad-${index}`}
-                                x1="0%"
-                                y1="0%"
-                                x2="100%"
-                                y2="100%"
-                            >
-                                <stop offset="0%" stopColor={start} stopOpacity={1} />
-                                <stop offset="100%" stopColor={end} stopOpacity={1} />
-                            </linearGradient>
-                        ))}
-
-                        <filter id="soft-drop-shadow" height="180%" width="180%" x="-40%" y="-40%" colorInterpolationFilters="sRGB">
-                            <feDropShadow dx="0" dy="1" stdDeviation="10" floodColor="#00008b" floodOpacity="0.1" />
-                            <feDropShadow dx="0" dy="2" stdDeviation="10" floodColor="#00008b" floodOpacity="0.07" />
-                        </filter>
-                    </defs>
-
-                    <Pie
-                        data={data}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={150}
-                        labelLine={false}
-                        label={renderLabel}
-                        stroke="#ffffff"
-                        strokeWidth={0.5}
-                    >
-                        {data.map((entry, index) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={`url(#grad-${index % BLUE_GRADIENTS.length})`}
-                                filter="url(#soft-drop-shadow)"
-                            />
-                        ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                </PieChart>
-            </ResponsiveContainer>
+        <div style={{ width: 350, height: 350, marginLeft: 80, marginTop: 80 }}>
+            <Pie ref={chartRef} data={chartData} options={options} />
         </div>
     );
 };

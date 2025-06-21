@@ -4,8 +4,11 @@ import "../styles/Dashboard.css";
 import Bestellingen from "./Bestellingen";
 import Producten from "./Producten";
 import Klanten from "./Klanten";
-import OrderStatusChart from "./OrderStatusChart";
 import XmlUploadModal from "./XmlUploadModal";
+import KlantAanmakenModal from "./KlantAanmakenModal";
+import ProductAanmakenModal from "./ProductAanmakenModal";
+import OrderAanmakenModal from "./OrderAanmakenModal";
+import Notitie from "./Notitie";
 
 interface Order {
   id: number;
@@ -59,17 +62,6 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
-const getOrderStatusCounts = (orders: Order[]) => {
-  const counts: Record<string, number> = {};
-  orders.forEach(order => {
-    const status = order.status;
-    counts[status] = (counts[status] || 0) + 1;
-  });
-  return Object.entries(counts).map(([status, count]) => ({
-    name: status,
-    value: count
-  }));
-};
 
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -80,9 +72,11 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
-
   const [productSearchTerm, setProductSearchTerm] = useState("");
-  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
+
+  const [customerSearchName, setCustomerSearchName] = useState("");
+  const [customerSearchCompany, setCustomerSearchCompany] = useState("");
+  const [customerSearchAddress, setCustomerSearchAddress] = useState("");
 
   const [showBestellingen, setShowBestellingen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -92,7 +86,12 @@ const Dashboard: React.FC = () => {
 
   const [showKlanten, setShowKlanten] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+
   const [showXmlUpload, setShowXmlUpload] = useState(false);
+  const [showKlantForm, setShowKlantForm] = useState(false);
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [showOrderForm, setShowOrderForm] = useState(false);
+
   const closeModel = () => {
     setShowBestellingen(false);
     setShowProducten(false);
@@ -102,6 +101,7 @@ const Dashboard: React.FC = () => {
     setSelectedProduct(null);
     setSelectedCustomer(null);
   };
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -133,78 +133,64 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const filtered = orders.filter((order) => {
-      const matchesSearch =
-        !searchTerm || order.id.toString().includes(searchTerm);
-      const matchesStatus =
-        !selectedStatus || order.status.toLowerCase() === selectedStatus.toLowerCase();
+      const matchesSearch = !searchTerm || order.id.toString().includes(searchTerm);
+      const matchesStatus = !selectedStatus || order.status.toLowerCase() === selectedStatus.toLowerCase();
       return matchesSearch && matchesStatus;
     });
 
     setFilteredOrders(filtered);
   }, [searchTerm, orders, selectedStatus]);
 
-  const closeModal = () => {
-    setShowBestellingen(false);
-    setShowProducten(false);
-    setShowKlanten(false);
-    setShowXmlUpload(false);
-  };
-
   return (
     <div className="container">
-      <header
-        className="hero"
-        style={{ backgroundImage: `url('/warehouseee.jpg')` }}
-      >
+      <header className="hero" style={{ backgroundImage: `url('/warehouseee.jpg')` }}>
         <div className="overlay">
           <div className="logoWrapper">
-            <div className="logoText">Lafeber Insights</div>          </div>
+            <div className="logoText">Lafeber Insights</div>
+          </div>
         </div>
       </header>
 
       <main className="main">
         <div className="navGrid">
+          <Card className="cardDefault" onClick={() => setShowBestellingen(true)}>
+            <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
+            <div className="linkSecondary">→ Bekijken</div>
+            <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowOrderForm(true); }}>＋</div>
+          </Card>
 
-          <Card
-            className="cardDefault cardUpdates"
-            onClick={() => setShowXmlUpload(true)}
-            style={{ cursor: "pointer" }}
-          >
+          <Card className="cardDefault" onClick={() => setShowProducten(true)}>
+            <div className="cardTitleDefault">Producten ({products.length})</div>
+            <div className="linkSecondary">→ Bekijken</div>
+            <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowProductForm(true); }}>＋</div>
+          </Card>
+
+          <Card className="cardDefault" onClick={() => setShowKlanten(true)}>
+            <div className="cardTitleDefault">Klanten ({customers.length})</div>
+            <div className="linkSecondary">→ Bekijken</div>
+            <div className="addIcon" onClick={(e) => { e.stopPropagation(); setShowKlantForm(true); }}>＋</div>
+          </Card>
+
+          <Card className="cardDefault cardUpdates" onClick={() => setShowXmlUpload(true)}>
             <div className="cardTitleDefault">XML uploaden</div>
+            <div className="text-sm text-muted-foreground italic">Alleen voor technisch personeel</div>
             <div className="linkSecondary">→ Bekijken</div>
             <div className="addIcon">＋</div>
           </Card>
-
-          <Card className="cardDefault" onClick={() => setShowBestellingen(true)} style={{ cursor: "pointer" }}>
-            <div className="cardTitleDefault">Bestellingen ({filteredOrders.length})</div>
-            <div className="linkSecondary">→ Bekijken</div>
-          </Card>
-
-          <Card className="cardDefault" onClick={() => setShowProducten(true)} style={{ cursor: "pointer" }}>
-            <div className="cardTitleDefault">Producten ({products.length})</div>
-            <div className="linkSecondary">→ Bekijken</div>
-          </Card>
-
-          <Card className="cardDefault" onClick={() => setShowKlanten(true)} style={{ cursor: "pointer" }}>
-            <div className="cardTitleDefault">Klanten ({customers.length})</div>
-            <div className="linkSecondary">→ Bekijken</div>
-          </Card>
-        </div>
-        {/* Chart section */}
-        <div className="chart-container">
-          <div>
-            <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
-          </div>
         </div>
       </main>
 
+      {/* Sticky Note Component */}
+      <Notitie />
+
+      {/* Modals & Views */}
       {showBestellingen && (
         <Bestellingen
           filteredOrders={filteredOrders}
           selectedOrder={selectedOrder}
           onSelectOrder={setSelectedOrder}
           onBack={() => setSelectedOrder(null)}
-          onClose={closeModal}
+          onClose={closeModel}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           selectedStatus={selectedStatus}
@@ -218,7 +204,7 @@ const Dashboard: React.FC = () => {
           selectedProduct={selectedProduct}
           onSelectProduct={setSelectedProduct}
           onBack={() => setSelectedProduct(null)}
-          onClose={closeModal}
+          onClose={closeModel}
           searchTerm={productSearchTerm}
           onSearchChange={setProductSearchTerm}
         />
@@ -230,15 +216,55 @@ const Dashboard: React.FC = () => {
           selectedCustomer={selectedCustomer}
           onSelectCustomer={setSelectedCustomer}
           onBack={() => setSelectedCustomer(null)}
-          onClose={closeModal}
-          searchTerm={customerSearchTerm}
-          onSearchChange={setCustomerSearchTerm}
+          onClose={closeModel}
+          searchName={customerSearchName}
+          onSearchNameChange={setCustomerSearchName}
+          searchCompany={customerSearchCompany}
+          onSearchCompanyChange={setCustomerSearchCompany}
+          searchAddress={customerSearchAddress}
+          onSearchAddressChange={setCustomerSearchAddress}
         />
       )}
 
-      {showXmlUpload && (
-        <XmlUploadModal onClose={closeModal} />
+      {showKlantForm && (
+        <KlantAanmakenModal
+          onClose={() => setShowKlantForm(false)}
+          onSuccess={() => {
+            fetch("http://localhost:5000/api/customer")
+              .then((res) => res.json())
+              .then((data) => setCustomers(data));
+          }}
+        />
       )}
+
+      {showProductForm && (
+        <ProductAanmakenModal
+          onClose={() => setShowProductForm(false)}
+          onSuccess={() => {
+            fetch("http://localhost:5000/api/product")
+              .then((res) => res.json())
+              .then((data) => setProducts(data));
+          }}
+        />
+      )}
+
+      {showOrderForm && (
+        <OrderAanmakenModal
+          onClose={() => setShowOrderForm(false)}
+          onSuccess={() => {
+            fetch("http://localhost:5000/api/order")
+              .then((res) => res.json())
+              .then((data) => {
+                setOrders(data);
+                setFilteredOrders(data);
+              });
+          }}
+          klanten={customers}
+          producten={products}
+        />
+      )}
+
+      {showXmlUpload && <XmlUploadModal onClose={closeModel} />}
     </div>
   );
 };

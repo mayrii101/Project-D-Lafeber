@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ProjectD.Models;
 using ProjectD.Services;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace AzureSqlConnectionDemo.Tests.Services
@@ -88,41 +88,56 @@ namespace AzureSqlConnectionDemo.Tests.Services
         [Fact]
         public async Task CreateOrderAsync_ShouldAddOrder()
         {
-            var newOrder = new Order
+            var newOrderDto = new OrderCreateDto
             {
                 CustomerId = 1,
-                OrderDate = DateTime.Today,
+                OrderDate = DateTime.Today.ToString("dd-MM-yyyy"),
+                OrderTime = "10:00:00",
                 DeliveryAddress = "New Address",
-                ExpectedDeliveryDate = DateTime.Today.AddDays(3),
+                ExpectedDeliveryDate = DateTime.Today.AddDays(3).ToString("dd-MM-yyyy"),
+                ExpectedDeliveryTime = "14:00:00",
                 Status = OrderStatus.Processing,
-                ProductLines = new List<OrderLine>()
+                ProductLines = new List<OrderLineCreateDto>
+                {
+                    new OrderLineCreateDto { ProductId = 1, Quantity = 2 }
+                }
             };
 
-            var result = await _service.CreateOrderAsync(newOrder);
-            var orders = await _context.Orders.ToListAsync();
+            var result = await _service.CreateOrderAsync(newOrderDto);
+            var orders = await _context.Orders.Include(o => o.ProductLines).ToListAsync();
 
             Assert.Equal(3, orders.Count);
             Assert.Equal("New Address", result.DeliveryAddress);
+            Assert.Single(result.ProductLines);
+            Assert.Equal(1, result.ProductLines.First().ProductId);
+            Assert.Equal(2, result.ProductLines.First().Quantity);
+            Assert.Equal(DateTime.Today, result.OrderDate.Date);
+            Assert.Equal(DateTime.Today.AddDays(3), result.ExpectedDeliveryDate.Date);
         }
 
         [Fact]
         public async Task UpdateOrderAsync_ShouldUpdateOrder()
         {
-            var update = new Order
+            var updatedOrder = new Order
             {
                 CustomerId = 1,
-                OrderDate = DateTime.Today,
+                OrderDate = DateTime.Today.AddDays(1),
                 DeliveryAddress = "Updated Address",
                 ExpectedDeliveryDate = DateTime.Today.AddDays(4),
                 Status = OrderStatus.Shipped,
-                ProductLines = new List<OrderLine>()
+                ProductLines = new List<OrderLine>
+                {
+                    new OrderLine { ProductId = 1, Quantity = 3 }
+                }
             };
 
-            var result = await _service.UpdateOrderAsync(1, update);
+            var result = await _service.UpdateOrderAsync(1, updatedOrder);
 
             Assert.NotNull(result);
             Assert.Equal("Updated Address", result.DeliveryAddress);
             Assert.Equal(OrderStatus.Shipped, result.Status);
+            Assert.Single(result.ProductLines);
+            Assert.Equal(3, result.ProductLines.First().Quantity);
         }
 
         [Fact]
@@ -166,4 +181,6 @@ namespace AzureSqlConnectionDemo.Tests.Services
             _context.Dispose();
         }
     }
+
+
 }

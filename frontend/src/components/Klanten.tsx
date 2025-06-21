@@ -17,8 +17,12 @@ interface KlantenProps {
   onSelectCustomer: (customer: Customer) => void;
   onBack: () => void;
   onClose: () => void;
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
+  searchName: string;
+  onSearchNameChange: (term: string) => void;
+  searchCompany: string;
+  onSearchCompanyChange: (term: string) => void;
+  searchAddress: string;
+  onSearchAddressChange: (term: string) => void;
 }
 
 const Klanten: React.FC<KlantenProps> = ({
@@ -27,17 +31,18 @@ const Klanten: React.FC<KlantenProps> = ({
   onSelectCustomer,
   onBack,
   onClose,
-  searchTerm,
-  onSearchChange,
+  searchName,
+  onSearchNameChange,
+  searchCompany,
+  onSearchCompanyChange,
+  searchAddress,
+  onSearchAddressChange,
 }) => {
   const filtered = customers.filter((customer) => {
-    const s = searchTerm.toLowerCase();
     return (
-      customer.bedrijfsNaam.toLowerCase().includes(s) ||
-      customer.contactPersoon.toLowerCase().includes(s) ||
-      customer.email.toLowerCase().includes(s) ||
-      customer.telefoonNummer.toLowerCase().includes(s) ||
-      customer.adres.toLowerCase().includes(s)
+      customer.contactPersoon.toLowerCase().includes(searchName.toLowerCase()) &&
+      customer.bedrijfsNaam.toLowerCase().includes(searchCompany.toLowerCase()) &&
+      customer.adres.toLowerCase().includes(searchAddress.toLowerCase())
     );
   });
 
@@ -61,12 +66,39 @@ const Klanten: React.FC<KlantenProps> = ({
         <div className="modal-content">
           {!selectedCustomer ? (
             <>
-              <SearchBar
-                searchTerm={searchTerm}
-                onSearchChange={onSearchChange}
-                placeholder="Zoek klanten..."
-              />
-              <div style={{ borderBottom: "1px solid #eee", margin: "0.5rem 0 1rem" }}></div>
+              <div className="klanten-search-wrapper">
+                <div className="search-row">
+                  <SearchBar
+                    searchTerm={searchName}
+                    onSearchChange={onSearchNameChange}
+                    placeholder="Zoek op naam/contactpersoon..."
+                  />
+                  <SearchBar
+                    searchTerm={searchCompany}
+                    onSearchChange={onSearchCompanyChange}
+                    placeholder="Zoek op bedrijfsnaam..."
+                  />
+                </div>
+
+                <div className="search-row-bottom">
+                  <SearchBar
+                    searchTerm={searchAddress}
+                    onSearchChange={onSearchAddressChange}
+                    placeholder="Zoek op adres/stad..."
+                  />
+                  <button
+                    className="reset-button"
+                    onClick={() => {
+                      onSearchNameChange("");
+                      onSearchCompanyChange("");
+                      onSearchAddressChange("");
+                    }}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+              <div style={{ borderBottom: "1px solid #eee", margin: "1rem 0" }}></div>
 
               <div className="all-customers">
                 {filtered.map((customer) => (
