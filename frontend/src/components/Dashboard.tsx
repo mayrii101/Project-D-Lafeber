@@ -10,6 +10,8 @@ import ProductAanmakenModal from "./ProductAanmakenModal";
 import OrderAanmakenModal from "./OrderAanmakenModal";
 import Notitie from "./Notitie";
 import OrderStatusChart from "./OrderStatusChart";
+import OrdersLast6MonthsChart from "./OrdersBarChart";
+
 
 interface Order {
   id: number;
@@ -203,6 +205,9 @@ const Dashboard: React.FC = () => {
         <div className="chart-container">
           <div>
             <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
+          </div>
+          <div>
+            <OrdersLast6MonthsChart orders={filteredOrders} />
           </div>
         </div>
 
