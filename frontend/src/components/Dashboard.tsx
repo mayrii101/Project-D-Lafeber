@@ -88,6 +88,7 @@ const Dashboard: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [productSearchTerm, setProductSearchTerm] = useState("");
 
+
   const [customerSearchName, setCustomerSearchName] = useState("");
   const [customerSearchCompany, setCustomerSearchCompany] = useState("");
   const [customerSearchAddress, setCustomerSearchAddress] = useState("");
@@ -105,6 +106,8 @@ const Dashboard: React.FC = () => {
   const [showKlantForm, setShowKlantForm] = useState(false);
   const [showProductForm, setShowProductForm] = useState(false);
   const [showOrderForm, setShowOrderForm] = useState(false);
+
+
 
   const closeModel = () => {
     setShowBestellingen(false);
@@ -207,7 +210,7 @@ const Dashboard: React.FC = () => {
             <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
           </div>
           <div>
-            <OrdersLast6MonthsChart orders={filteredOrders} />
+            <OrdersLast6MonthsChart orders={orders} products={products} />
           </div>
         </div>
 

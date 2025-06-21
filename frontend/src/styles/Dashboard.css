@@ -844,3 +844,65 @@ h3 {
   bottom: 0;
   left: 0;
 }
+
+.select-button {
+  margin-left: 2.3rem;
+  margin-top: 3rem;
+  width: 140px;
+  /* wider than 60px for options visibility */
+  height: 60px;
+  background: linear-gradient(135deg, #53afff, #41a5fc);
+  border-radius: 30px;
+  /* pill shape to keep it smooth */
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  user-select: none;
+  border: none;
+  padding: 0 20px;
+  box-sizing: border-box;
+  appearance: none;
+  /* remove default arrow */
+  position: relative;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  box-shadow: 0 4px 6px rgba(0, 143, 255, 0.6);
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.select-button {
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: none;
+  background-color: #00bfae;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 191, 174, 0.4);
+  transition: background-color 0.3s ease;
+  appearance: none;
+
+  /* Arrow styling */
+  padding-right: 24px;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="12" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 12px;
+}
+
+.select-button:hover {
+  background-color: #008f86;
+}
+
+.filter-label {
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+}
