@@ -37,10 +37,11 @@ namespace ProjectD.Models
 
     public class OrderCreateDto
     {
+        public int Id { get; set; }
         public int CustomerId { get; set; }
 
-        public string OrderDate { get; set; } = "";     // e.g. "28-04-2025"
-        public string OrderTime { get; set; } = "";     // e.g. "14:30"
+        public string OrderDate { get; set; } = "";
+        public string OrderTime { get; set; } = "";
 
         public string DeliveryAddress { get; set; } = "";
 
@@ -50,11 +51,20 @@ namespace ProjectD.Models
         public OrderStatus Status { get; set; }
 
         public List<OrderLineCreateDto> ProductLines { get; set; } = new();
+        public string? Message { get; set; } = null;
+
+        public List<ProductStockDto> ProductStocks { get; set; } = new();
     }
 
     public class OrderLineCreateDto
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
+    }
+
+    public class ProductStockDto
+    {
+        public int ProductId { get; set; }
+        public int RemainingStock { get; set; }
     }
 }

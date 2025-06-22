@@ -10,7 +10,7 @@ POST http://localhost:5000/api/order
 Content-Type: application/json
 
 {
-  "customerId": 1,
+  "customerId": 2,
   "orderDate": "28-04-2025",
   "orderTime": "14:30",
   "deliveryAddress": "Limburg",
@@ -19,8 +19,8 @@ Content-Type: application/json
   "status": "Pending",
   "productLines": [
     {
-      "productId": 1,
-      "quantity": 6
+      "productId": 1002,
+      "quantity": 1
     }
   ]
 }
@@ -37,7 +37,7 @@ Content-Type: application/json
   "status": "Processing",
   "productLines": [
     {
-      "productId": 2,
+      "productId": 1007,
       "quantity": 5
     }
   ]
