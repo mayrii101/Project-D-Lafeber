@@ -48,8 +48,6 @@ namespace ProjectD.Models
         public List<int> OrderIds { get; set; } = new();
     }
 
-
-
     public class ShipmentDto
     {
         public int Id { get; set; }

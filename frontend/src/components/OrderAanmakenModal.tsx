@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ShipmentModalWrapper from "./ShipmentModalWrapper";
 
 interface Props {
     onClose: () => void;
@@ -8,6 +9,12 @@ interface Props {
 }
 
 const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, producten }) => {
+    const [createdOrder, setCreatedOrder] = useState<null | {
+        id: number;
+        expectedDeliveryDate: string;
+        expectedDeliveryTime: string;
+    }>(null);
+
     const [form, setForm] = useState({
         customerId: klanten[0]?.id || 0,
         productId: producten[0]?.id || 0,
@@ -19,9 +26,12 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         expectedDeliveryTime: "",
     });
 
+    const [formError, setFormError] = useState("");
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
+        if (formError) setFormError("");
     };
 
     const formatDateToDDMMYYYY = (dateStr: string) => {
@@ -39,11 +49,13 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
 
         return {
             date: `${day}-${month}-${year}`,
-            time: `${hours}:${minutes}`
+            time: `${hours}:${minutes}`,
         };
     };
 
     const handleSubmit = async () => {
+        setFormError("");
+
         const now = CurrentDatetime();
 
         const body = {
@@ -70,16 +82,39 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
             });
 
             if (response.ok) {
-                onSuccess();
-                onClose();
+                const result = await response.json();
+                setCreatedOrder({
+                    id: result.id,
+                    expectedDeliveryDate: formatDateToDDMMYYYY(form.expectedDeliveryDate),
+                    expectedDeliveryTime: form.expectedDeliveryTime,
+                });
+            } else if (response.status === 422) {
+                const errorText = await response.text();
+                setFormError(errorText);
             } else {
-                const error = await response.json().catch(() => ({}));
-                console.error("Fout bij opslaan order:", response.status, error);
+                setFormError("Er is een fout opgetreden bij het aanmaken van de bestelling.");
             }
         } catch (err) {
             console.error("Netwerkfout:", err);
+            setFormError("Kan geen verbinding maken met de server.");
         }
     };
+
+    if (createdOrder) {
+        return (
+            <ShipmentModalWrapper
+                orderIds={[createdOrder.id]}
+                expectedDeliveryDate={createdOrder.expectedDeliveryDate}
+                expectedDeliveryTime={createdOrder.expectedDeliveryTime}
+                onClose={() => setCreatedOrder(null)}
+                onSuccess={() => {
+                    setCreatedOrder(null);
+                    onSuccess();
+                    onClose();
+                }}
+            />
+        );
+    }
 
     return (
         <div className="modal-overlay">
@@ -87,12 +122,20 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 <button onClick={onClose} className="close-button">&times;</button>
                 <h2>Bestelling Aanmaken</h2>
 
-                <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                <form
+                    className="form"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                    }}
+                >
                     <div className="form-group">
                         <label>Klant</label>
                         <select name="customerId" value={form.customerId} onChange={handleChange}>
-                            {klanten.map(k => (
-                                <option key={k.id} value={k.id}>{k.bedrijfsNaam}</option>
+                            {klanten.map((k) => (
+                                <option key={k.id} value={k.id}>
+                                    {k.bedrijfsNaam}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -100,8 +143,10 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Product</label>
                         <select name="productId" value={form.productId} onChange={handleChange}>
-                            {producten.map(p => (
-                                <option key={p.id} value={p.id}>{p.productName}</option>
+                            {producten.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                    {p.productName}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -109,6 +154,11 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Aantal</label>
                         <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
+                        {formError && (
+                            <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
+                                {formError}
+                            </div>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -126,7 +176,9 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                         <input type="time" name="expectedDeliveryTime" value={form.expectedDeliveryTime} onChange={handleChange} required />
                     </div>
 
-                    <button type="submit" className="submit-button">Aanmaken</button>
+                    <button type="submit" className="submit-button">
+                        Aanmaken
+                    </button>
                 </form>
             </div>
         </div>

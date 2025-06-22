@@ -1,5 +1,5 @@
 ### Get all vehicles
-GET http://localhost:5000/api/vehicles
+GET http://localhost:5000/api/vehicle
 
 ### Get vehicle by ID
 GET http://localhost:5000/api/vehicles/1

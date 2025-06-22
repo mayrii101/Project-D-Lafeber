@@ -1,5 +1,5 @@
 ### Get all warehouses
-GET http://localhost:5000/api/warehouses
+GET http://localhost:5000/api/warehouse
 
 ### Get warehouse by ID
 GET http://localhost:5000/api/warehouses/1
