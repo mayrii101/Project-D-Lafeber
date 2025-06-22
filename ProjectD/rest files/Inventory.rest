@@ -3,7 +3,7 @@ GET http://localhost:5000/api/inventory
 Accept: application/json
 
 ### Get inventory by ID
-GET http://localhost:5000/api/inventory/1
+GET http://localhost:5000/api/inventory/1002
 Accept: application/json
 
 ### Create a new inventory item
@@ -11,8 +11,8 @@ POST http://localhost:5000/api/inventory
 Content-Type: application/json
 
 {
-  "warehouseId": 1,
-  "productId": 2,
+  "warehouseId": 2,
+  "productId": 1002,
   "quantityOnHand": 100
 }
 
