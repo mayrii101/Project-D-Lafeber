@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectD.Models;
+using System.Net;
 namespace ProjectD.Services
 {
     public interface IOrderService
@@ -63,7 +64,7 @@ namespace ProjectD.Services
 
                 if (totalAvailable < productLine.Quantity)
                 {
-                    throw new InvalidOperationException($"Not enough inventory for product {productLine.ProductId}");
+                    throw new HttpRequestException($"Niet genoeg voorraad voor product {productLine.ProductId}", null, HttpStatusCode.UnprocessableEntity);
                 }
             }
 
@@ -125,11 +126,10 @@ namespace ProjectD.Services
                 })
                 .ToListAsync();
 
-            // Attach to the same dto
-            dto.Message = "Order placed successfully.";
+
             dto.ProductStocks = productStocks;
             dto.Id = order.Id;  // set the newly created order ID
-            dto.Message = "Order placed successfully.";
+            dto.Message = "Bestelling geplaatst!.";
             dto.ProductStocks = productStocks;
 
             return dto;
