@@ -99,11 +99,18 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(OrderCreateDto dto)
         {
-            var createdOrderDto = await _orderService.CreateOrderAsync(dto);
-
-            return CreatedAtAction(nameof(GetOrderById), new { id = createdOrderDto.Id }, createdOrderDto);
+            try
+            {
+                var createdOrderDto = await _orderService.CreateOrderAsync(dto);
+                return CreatedAtAction(nameof(GetOrderById), new { id = createdOrderDto.Id }, createdOrderDto);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(422, ex.Message); // ✅ Send 422 with your clean message
+            }
         }
 
         [HttpPut("{id}")]

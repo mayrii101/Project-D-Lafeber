@@ -64,7 +64,8 @@ namespace ProjectD.Services
 
                 if (totalAvailable < productLine.Quantity)
                 {
-                    throw new HttpRequestException($"Niet genoeg voorraad voor product {productLine.ProductId}", null, HttpStatusCode.UnprocessableEntity);
+                    // Instead of throwing HttpRequestException, return a signal
+                    throw new InvalidOperationException($"Niet genoeg voorraad voor product {productLine.ProductId}");
                 }
             }
 

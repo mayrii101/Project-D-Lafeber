@@ -79,7 +79,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 const result = await response.json();
                 onSuccess();
                 onClose();
-            } else if (response.status === 422) {
+            } else if (response.status === 500) {
                 // Show backend error message (like "Niet genoeg voorraad...")
                 const errorText = await response.text();
                 setFormError(errorText);

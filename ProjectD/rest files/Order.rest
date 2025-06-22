@@ -19,8 +19,8 @@ Content-Type: application/json
   "status": "Pending",
   "productLines": [
     {
-      "productId": 1007,
-      "quantity": 6
+      "productId": 1002,
+      "quantity": 1000
     }
   ]
 }
