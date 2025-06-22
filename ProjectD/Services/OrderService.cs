@@ -54,6 +54,20 @@ namespace ProjectD.Services
             var orderDateTime = ParseDateTime(dto.OrderDate, dto.OrderTime);
             var expectedDeliveryDateTime = ParseDateTime(dto.ExpectedDeliveryDate, dto.ExpectedDeliveryTime);
 
+            // Step 1: Inventory check
+            foreach (var productLine in dto.ProductLines)
+            {
+                int totalAvailable = await _context.Inventories
+                    .Where(i => i.ProductId == productLine.ProductId && !i.IsDeleted)
+                    .SumAsync(i => (int?)i.QuantityOnHand) ?? 0;
+
+                if (totalAvailable < productLine.Quantity)
+                {
+                    throw new InvalidOperationException($"Not enough inventory for product {productLine.ProductId}");
+                }
+            }
+
+            // Step 2: Create order
             var order = new Order
             {
                 CustomerId = dto.CustomerId,
@@ -69,12 +83,39 @@ namespace ProjectD.Services
             };
 
             _context.Orders.Add(order);
+
+            // Step 3: Deduct inventory
+            foreach (var productLine in dto.ProductLines)
+            {
+                int quantityToDeduct = productLine.Quantity;
+
+                var inventories = await _context.Inventories
+                    .Where(i => i.ProductId == productLine.ProductId && !i.IsDeleted && i.QuantityOnHand > 0)
+                    .OrderBy(i => i.LastUpdated)
+                    .ToListAsync();
+
+                foreach (var inventory in inventories)
+                {
+                    if (quantityToDeduct <= 0) break;
+
+                    int deduct = Math.Min(quantityToDeduct, inventory.QuantityOnHand);
+                    inventory.QuantityOnHand -= deduct;
+                    inventory.LastUpdated = DateTime.UtcNow;
+
+                    quantityToDeduct -= deduct;
+
+                    // Force EF to track it (just in case)
+                    _context.Entry(inventory).State = EntityState.Modified;
+                }
+            }
+
+            // Step 4: Commit changes
             await _context.SaveChangesAsync();
 
-            // Reload order with related products
+            // Step 5: Return full order
             var createdOrder = await _context.Orders
                 .Include(o => o.ProductLines)
-                    .ThenInclude(ol => ol.Product)
+                .ThenInclude(ol => ol.Product)
                 .FirstOrDefaultAsync(o => o.Id == order.Id);
 
             return createdOrder!;

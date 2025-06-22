@@ -19,7 +19,7 @@ Content-Type: application/json
   "status": "Pending",
   "productLines": [
     {
-      "productId": 1,
+      "productId": 1007,
       "quantity": 6
     }
   ]
@@ -37,7 +37,7 @@ Content-Type: application/json
   "status": "Processing",
   "productLines": [
     {
-      "productId": 2,
+      "productId": 1007,
       "quantity": 5
     }
   ]
