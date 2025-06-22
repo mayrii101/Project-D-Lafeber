@@ -182,12 +182,19 @@ namespace ProjectD.Services
             return existingShipment;
         }
 
-        public async Task<bool> SoftDeleteShipmentAsync(int id)
+        public async Task<bool> SoftDeleteShipmentAsync(int shipmentId)
         {
-            var shipment = await _context.Shipments.FindAsync(id);
+            var shipment = await _context.Shipments.Include(s => s.Vehicle).FirstOrDefaultAsync(s => s.Id == shipmentId);
             if (shipment == null || shipment.IsDeleted) return false;
 
             shipment.IsDeleted = true;
+
+            if (shipment.Vehicle != null)
+            {
+                shipment.Vehicle.Status = VehicleStatus.Available;
+                _context.Vehicles.Update(shipment.Vehicle);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }
