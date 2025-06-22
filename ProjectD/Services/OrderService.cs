@@ -128,6 +128,9 @@ namespace ProjectD.Services
             // Attach to the same dto
             dto.Message = "Order placed successfully.";
             dto.ProductStocks = productStocks;
+            dto.Id = order.Id;  // set the newly created order ID
+            dto.Message = "Order placed successfully.";
+            dto.ProductStocks = productStocks;
 
             return dto;
         }

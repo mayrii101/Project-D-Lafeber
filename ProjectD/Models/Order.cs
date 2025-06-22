@@ -37,6 +37,7 @@ namespace ProjectD.Models
 
     public class OrderCreateDto
     {
+        public int Id { get; set; }
         public int CustomerId { get; set; }
 
         public string OrderDate { get; set; } = "";

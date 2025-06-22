@@ -70,6 +70,17 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
             });
 
             if (response.ok) {
+                const result = await response.json();
+
+                alert(
+                    `${result.message}\n` +
+                    result.productStocks
+                        .map((ps: { productId: number; remainingStock: number }) =>
+                            `Product ${ps.productId} hoeveelheid nog beschikbaar: ${ps.remainingStock}`
+                        )
+                        .join("\n")
+                );
+
                 onSuccess();
                 onClose();
             } else {
