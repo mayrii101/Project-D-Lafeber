@@ -19,6 +19,11 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         expectedDeliveryTime: "",
     });
 
+    // New state for popup visibility and data
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
+    const [popupStocks, setPopupStocks] = useState<{ productId: number; remainingStock: number }[]>([]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
@@ -72,17 +77,11 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
             if (response.ok) {
                 const result = await response.json();
 
-                alert(
-                    `${result.message}\n` +
-                    result.productStocks
-                        .map((ps: { productId: number; remainingStock: number }) =>
-                            `Product ${ps.productId} hoeveelheid nog beschikbaar: ${ps.remainingStock}`
-                        )
-                        .join("\n")
-                );
+                // Show popup with message and stock info
+                setPopupMessage(result.message);
+                setPopupStocks(result.productStocks);
+                setPopupVisible(true);
 
-                onSuccess();
-                onClose();
             } else {
                 const error = await response.json().catch(() => ({}));
                 console.error("Fout bij opslaan order:", response.status, error);
@@ -92,6 +91,12 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         }
     };
 
+    const closePopup = () => {
+        setPopupVisible(false);
+        onSuccess();
+        onClose();
+    };
+
     return (
         <div className="modal-overlay">
             <div className="modal modal-updates klant-form">
@@ -99,6 +104,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 <h2>Bestelling Aanmaken</h2>
 
                 <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                    {/* Your existing form inputs here */}
                     <div className="form-group">
                         <label>Klant</label>
                         <select name="customerId" value={form.customerId} onChange={handleChange}>
@@ -140,6 +146,23 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <button type="submit" className="submit-button">Aanmaken</button>
                 </form>
             </div>
+
+            {/* Popup */}
+            {popupVisible && (
+                <div className="popup-overlay">
+                    <div className="cardDefault popup-card">
+                        <button className="close-button" onClick={closePopup}>&times;</button>
+                        <h3>{popupMessage}</h3>
+                        <ul>
+                            {popupStocks.map(ps => (
+                                <li key={ps.productId}>
+                                    Product {ps.productId} hoeveelheid nog beschikbaar: {ps.remainingStock}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
