@@ -24,21 +24,30 @@ const ShipmentModalWrapper: React.FC<Props> = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [vehicleRes, driverRes, orderRes] = await Promise.all([
+                const [vehicleRes, driverRes] = await Promise.all([
                     fetch("http://localhost:5000/api/vehicle"),
                     fetch("http://localhost:5000/api/employee"),
-                    fetch(`http://localhost:5000/api/order/totalWeight?orderIds=${orderIds.join(",")}`),
                 ]);
 
-                const [vehicleData, driverData, weightData] = await Promise.all([
+                const [vehicleData, driverData] = await Promise.all([
                     vehicleRes.json(),
                     driverRes.json(),
-                    orderRes.json(),
                 ]);
 
                 setVehicles(vehicleData.filter((v: any) => !v.isDeleted));
                 setDrivers(driverData.filter((e: any) => !e.isDeleted && e.role.toLowerCase() === "driver"));
-                setOrderWeight(weightData.totalWeight ?? 0);
+
+                // Fetch total weight by calling each order API
+                const weights = await Promise.all(
+                    orderIds.map(async (id) => {
+                        const res = await fetch(`http://localhost:5000/api/order/${id}`);
+                        const data = await res.json();
+                        return data.totalWeight ?? 0;
+                    })
+                );
+
+                const total = weights.reduce((acc, w) => acc + w, 0);
+                setOrderWeight(total);
             } catch (error) {
                 console.error("Fout bij ophalen voertuigen, chauffeurs of gewicht:", error);
             } finally {

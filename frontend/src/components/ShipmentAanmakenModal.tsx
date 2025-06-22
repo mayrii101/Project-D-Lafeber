@@ -6,9 +6,9 @@ interface Props {
     orderIds: number[];
     expectedDeliveryDate: string;
     expectedDeliveryTime: string;
-    orderWeight: number;
     vehicles: { id: number; licensePlate: string; capacityKg: number }[];
     drivers: { id: number; name: string }[];
+    orderWeight: number;
 }
 
 const ShipmentAanmakenModal: React.FC<Props> = ({
@@ -30,27 +30,19 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
     const [formError, setFormError] = useState("");
 
-    // Get filtered vehicles that can handle the order weight
     const filteredVehicles = vehicles.filter((v) => v.capacityKg >= orderWeight);
 
     useEffect(() => {
         const now = new Date();
         const pad = (num: number) => num.toString().padStart(2, "0");
 
-        const day = pad(now.getDate());
-        const month = pad(now.getMonth() + 1);
-        const year = now.getFullYear();
-        const hours = pad(now.getHours());
-        const minutes = pad(now.getMinutes());
-
         setForm((prev) => ({
             ...prev,
-            departureDate: `${day}-${month}-${year}`,
-            departureTime: `${hours}:${minutes}`,
+            departureDate: `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()}`,
+            departureTime: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
         }));
     }, []);
 
-    // Update default vehicle if list or weight changes
     useEffect(() => {
         if (filteredVehicles.length > 0) {
             setForm((prev) => ({ ...prev, vehicleId: filteredVehicles[0].id }));
@@ -149,7 +141,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </select>
                     </div>
 
-                    {/* Hidden departure fields */}
+                    {/* depraturedate ne departuretime van aangemaakte order */}
                     <input type="hidden" name="departureDate" value={form.departureDate} readOnly />
                     <input type="hidden" name="departureTime" value={form.departureTime} readOnly />
 
