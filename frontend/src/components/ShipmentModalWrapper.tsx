@@ -1,4 +1,3 @@
-// ShipmentModalWrapper.tsx
 import React, { useEffect, useState } from "react";
 import ShipmentAanmakenModal from "./ShipmentAanmakenModal";
 
@@ -10,30 +9,54 @@ interface Props {
     onSuccess: () => void;
 }
 
-const ShipmentModalWrapper: React.FC<Props> = ({ orderIds, expectedDeliveryDate, expectedDeliveryTime, onClose, onSuccess }) => {
-    const [vehicles, setVehicles] = useState<{ id: number; licensePlate: string }[]>([]);
+const ShipmentModalWrapper: React.FC<Props> = ({
+    orderIds,
+    expectedDeliveryDate,
+    expectedDeliveryTime,
+    onClose,
+    onSuccess,
+}) => {
+    const [vehicles, setVehicles] = useState<{ id: number; licensePlate: string; capacityKg: number }[]>([]);
     const [drivers, setDrivers] = useState<{ id: number; name: string }[]>([]);
+    const [orderWeight, setOrderWeight] = useState<number>(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const vehicleRes = await fetch("http://localhost:5000/api/vehicle");
-                const driverRes = await fetch("http://localhost:5000/api/employee");
+                const [vehicleRes, driverRes] = await Promise.all([
+                    fetch("http://localhost:5000/api/vehicle"),
+                    fetch("http://localhost:5000/api/employee"),
+                ]);
 
-                const vehiclesData = await vehicleRes.json();
-                const driversData = await driverRes.json();
+                const [vehicleData, driverData] = await Promise.all([
+                    vehicleRes.json(),
+                    driverRes.json(),
+                ]);
 
-                setVehicles(vehiclesData.filter((v: any) => !v.isDeleted));
-                setDrivers(driversData.filter((e: any) => !e.isDeleted && e.role.toLowerCase() === "driver"));
-                setLoading(false);
+                setVehicles(vehicleData.filter((v: any) => !v.isDeleted));
+                setDrivers(driverData.filter((e: any) => !e.isDeleted && e.role.toLowerCase() === "driver"));
+
+                // Fetch total weight by calling each order API
+                const weights = await Promise.all(
+                    orderIds.map(async (id) => {
+                        const res = await fetch(`http://localhost:5000/api/order/${id}`);
+                        const data = await res.json();
+                        return data.totalWeight ?? 0;
+                    })
+                );
+
+                const total = weights.reduce((acc, w) => acc + w, 0);
+                setOrderWeight(total);
             } catch (error) {
-                console.error("Fout bij ophalen voertuigen of chauffeurs:", error);
+                console.error("Fout bij ophalen voertuigen, chauffeurs of gewicht:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchData();
-    }, []);
+    }, [orderIds]);
 
     if (loading) return <div>Laden...</div>;
 
@@ -46,6 +69,7 @@ const ShipmentModalWrapper: React.FC<Props> = ({ orderIds, expectedDeliveryDate,
             onSuccess={onSuccess}
             vehicles={vehicles}
             drivers={drivers}
+            orderWeight={orderWeight}
         />
     );
 };

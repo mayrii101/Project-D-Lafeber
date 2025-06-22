@@ -20,8 +20,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         productId: producten[0]?.id || 0,
         quantity: 1,
         deliveryAddress: "",
-        orderDate: "",
-        orderTime: "",
         expectedDeliveryDate: "",
         expectedDeliveryTime: "",
     });
@@ -55,7 +53,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
 
     const handleSubmit = async () => {
         setFormError("");
-
         const now = CurrentDatetime();
 
         const body = {
@@ -154,11 +151,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Aantal</label>
                         <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
-                        {formError && (
-                            <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
-                                {formError}
-                            </div>
-                        )}
                     </div>
 
                     <div className="form-group">
@@ -175,6 +167,12 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                         <label>Verwachte Levertijd</label>
                         <input type="time" name="expectedDeliveryTime" value={form.expectedDeliveryTime} onChange={handleChange} required />
                     </div>
+
+                    {formError && (
+                        <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
+                            {formError}
+                        </div>
+                    )}
 
                     <button type="submit" className="submit-button">
                         Aanmaken

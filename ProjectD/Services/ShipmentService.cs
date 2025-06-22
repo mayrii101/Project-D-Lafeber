@@ -76,6 +76,33 @@ namespace ProjectD.Services
 
         public async Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto)
         {
+            // Fetch vehicle to get max capacity
+            var vehicle = await _context.Vehicles
+                .FirstOrDefaultAsync(v => v.Id == dto.VehicleId && !v.IsDeleted);
+
+            if (vehicle == null)
+            {
+                throw new InvalidOperationException("Voertuig niet gevonden."); // Vehicle not found
+            }
+
+            // Fetch all orders in dto.OrderIds including their ProductLines for weight
+            var orders = await _context.Orders
+                .Where(o => dto.OrderIds.Contains(o.Id) && !o.IsDeleted)
+                .Include(o => o.ProductLines)
+                    .ThenInclude(pl => pl.Product)
+                .ToListAsync();
+
+            // Calculate total weight of all orders combined
+            int totalWeight = orders.Sum(o => o.TotalWeight);
+
+            if (totalWeight > vehicle.CapacityKg)
+            {
+                // Throw readable error to be caught by controller or middleware
+                throw new InvalidOperationException(
+                    $"Het totale gewicht van de bestelling ({totalWeight} kg) overschrijdt de maximale capaciteit van het voertuig ({vehicle.CapacityKg} kg). Kies een voertuig met een hogere capaciteit."
+                );
+            }
+
             var departureDateTime = ParseDateTime(dto.DepartureDate, dto.DepartureTime);
             DateTime? expectedDeliveryDateTime = null;
 
