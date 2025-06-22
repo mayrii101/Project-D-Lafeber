@@ -66,6 +66,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             expectedDeliveryTime,
             departureDate: form.departureDate,
             departureTime: form.departureTime,
+            status: "OutForDelivery",
         };
 
         try {
@@ -74,7 +75,6 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
             });
-
             if (response.ok) {
                 onSuccess();
                 onClose();
@@ -88,6 +88,8 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             console.error("Netwerkfout:", err);
             setFormError("Kan geen verbinding maken met de server.");
         }
+
+
     };
 
     return (
