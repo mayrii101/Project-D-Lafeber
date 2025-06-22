@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import ShipmentAanmakenModal from "./ShipmentAanmakenModal";
 
 interface Props {
-    orderId: number;
+    orderIds: number[];
     expectedDeliveryDate: string;
     expectedDeliveryTime: string;
     onClose: () => void;
     onSuccess: () => void;
 }
 
-const ShipmentModalWrapper: React.FC<Props> = ({ orderId, expectedDeliveryDate, expectedDeliveryTime, onClose, onSuccess }) => {
+const ShipmentModalWrapper: React.FC<Props> = ({ orderIds, expectedDeliveryDate, expectedDeliveryTime, onClose, onSuccess }) => {
     const [vehicles, setVehicles] = useState<{ id: number; licensePlate: string }[]>([]);
     const [drivers, setDrivers] = useState<{ id: number; name: string }[]>([]);
     const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ const ShipmentModalWrapper: React.FC<Props> = ({ orderId, expectedDeliveryDate, 
 
     return (
         <ShipmentAanmakenModal
-            orderId={orderId}
+            orderIds={orderIds}
             expectedDeliveryDate={expectedDeliveryDate}
             expectedDeliveryTime={expectedDeliveryTime}
             onClose={onClose}

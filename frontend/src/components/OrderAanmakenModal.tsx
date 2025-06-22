@@ -103,7 +103,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
     if (createdOrder) {
         return (
             <ShipmentModalWrapper
-                orderId={createdOrder.id}
+                orderIds={[createdOrder.id]}
                 expectedDeliveryDate={createdOrder.expectedDeliveryDate}
                 expectedDeliveryTime={createdOrder.expectedDeliveryTime}
                 onClose={() => setCreatedOrder(null)}

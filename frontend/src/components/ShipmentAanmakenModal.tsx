@@ -1,17 +1,24 @@
-// ShipmentAanmakenModal.tsx
 import React, { useState } from "react";
 
 interface Props {
     onClose: () => void;
     onSuccess: () => void;
-    orderId: number;
+    orderIds: number[]; // ✅ Now correctly typed as an array
     expectedDeliveryDate: string;
     expectedDeliveryTime: string;
     vehicles: { id: number; licensePlate: string }[];
     drivers: { id: number; name: string }[];
 }
 
-const ShipmentAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, orderId, expectedDeliveryDate, expectedDeliveryTime, vehicles, drivers }) => {
+const ShipmentAanmakenModal: React.FC<Props> = ({
+    onClose,
+    onSuccess,
+    orderIds,
+    expectedDeliveryDate,
+    expectedDeliveryTime,
+    vehicles,
+    drivers,
+}) => {
     const [form, setForm] = useState({
         vehicleId: vehicles[0]?.id || 0,
         driverId: drivers[0]?.id || 0,
@@ -27,7 +34,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, orderId, e
 
     const handleSubmit = async () => {
         const body = {
-            orderId,
+            orderIds, // ✅ This is now an array
             vehicleId: Number(form.vehicleId),
             driverId: Number(form.driverId),
             expectedDeliveryDate,
@@ -62,12 +69,20 @@ const ShipmentAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, orderId, e
                 <button onClick={onClose} className="close-button">&times;</button>
                 <h2>Verzending Aanmaken</h2>
 
-                <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                <form
+                    className="form"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                    }}
+                >
                     <div className="form-group">
                         <label>Voertuig</label>
                         <select name="vehicleId" value={form.vehicleId} onChange={handleChange} required>
-                            {vehicles.map(v => (
-                                <option key={v.id} value={v.id}>{v.licensePlate}</option>
+                            {vehicles.map((v) => (
+                                <option key={v.id} value={v.id}>
+                                    {v.licensePlate}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -75,8 +90,10 @@ const ShipmentAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, orderId, e
                     <div className="form-group">
                         <label>Chauffeur</label>
                         <select name="driverId" value={form.driverId} onChange={handleChange} required>
-                            {drivers.map(d => (
-                                <option key={d.id} value={d.id}>{d.name}</option>
+                            {drivers.map((d) => (
+                                <option key={d.id} value={d.id}>
+                                    {d.name}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -87,7 +104,9 @@ const ShipmentAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, orderId, e
                         </div>
                     )}
 
-                    <button type="submit" className="submit-button">Verzending Aanmaken</button>
+                    <button type="submit" className="submit-button">
+                        Verzending Aanmaken
+                    </button>
                 </form>
             </div>
         </div>
