@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProjectD.Models;
 using ProjectD.Services;
+using System.Globalization;
 using Xunit;
 
 namespace AzureSqlConnectionDemo.Tests.Services
@@ -23,12 +24,26 @@ namespace AzureSqlConnectionDemo.Tests.Services
             _context = new ApplicationDbContext(options);
             _service = new OrderService(_context);
 
+            // Seed customer and product
             var customer = new Customer { Id = 1, BedrijfsNaam = "Test Customer", IsDeleted = false };
             var product = new Product { Id = 1, ProductName = "Test Product", WeightKg = 10 };
-            var orderLine = new OrderLine { ProductId = 1, Product = product, Quantity = 2 };
-
             _context.Customers.Add(customer);
             _context.Products.Add(product);
+
+            // Seed inventory with enough stock for ProductId = 1
+            var inventory = new Inventory
+            {
+                Id = 1,
+                ProductId = 1,
+                WarehouseId = 1,
+                QuantityOnHand = 10,   // Sufficient stock
+                LastUpdated = DateTime.UtcNow,
+                IsDeleted = false
+            };
+            _context.Inventories.Add(inventory);
+
+            // Seed existing orders
+            var orderLine = new OrderLine { ProductId = 1, Product = product, Quantity = 2 };
 
             _context.Orders.AddRange(
                 new Order
@@ -56,6 +71,7 @@ namespace AzureSqlConnectionDemo.Tests.Services
                     IsDeleted = true
                 }
             );
+
             _context.SaveChanges();
         }
 
@@ -86,8 +102,9 @@ namespace AzureSqlConnectionDemo.Tests.Services
         }
 
         [Fact]
-        public async Task CreateOrderAsync_ShouldAddOrder()
+        public async Task CreateOrderAsync_ShouldAddOrder_WhenStockIsSufficient()
         {
+            // Arrange
             var newOrderDto = new OrderCreateDto
             {
                 CustomerId = 1,
@@ -98,21 +115,26 @@ namespace AzureSqlConnectionDemo.Tests.Services
                 ExpectedDeliveryTime = "14:00:00",
                 Status = OrderStatus.Processing,
                 ProductLines = new List<OrderLineCreateDto>
-                {
-                    new OrderLineCreateDto { ProductId = 1, Quantity = 2 }
-                }
+        {
+            new OrderLineCreateDto { ProductId = 1, Quantity = 2 }
+        }
             };
+
 
             var result = await _service.CreateOrderAsync(newOrderDto);
             var orders = await _context.Orders.Include(o => o.ProductLines).ToListAsync();
+
+            var parsedOrderDate = DateTime.ParseExact(result.OrderDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            var parsedExpectedDate = DateTime.ParseExact(result.ExpectedDeliveryDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
 
             Assert.Equal(3, orders.Count);
             Assert.Equal("New Address", result.DeliveryAddress);
             Assert.Single(result.ProductLines);
             Assert.Equal(1, result.ProductLines.First().ProductId);
             Assert.Equal(2, result.ProductLines.First().Quantity);
-            Assert.Equal(DateTime.Today, result.OrderDate.Date);
-            Assert.Equal(DateTime.Today.AddDays(3), result.ExpectedDeliveryDate.Date);
+            Assert.Equal(DateTime.Today, parsedOrderDate.Date);
+            Assert.Equal(DateTime.Today.AddDays(3), parsedExpectedDate.Date);
+            Assert.Equal("Bestelling geplaatst!.", result.Message);
         }
 
         [Fact]
