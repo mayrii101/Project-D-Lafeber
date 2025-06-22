@@ -150,7 +150,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
             {/* Popup */}
             {popupVisible && (
                 <div className="popup-overlay">
-                    <div className="cardDefault popup-card">
+                    <div className="popup-card">
                         <button className="close-button" onClick={closePopup}>&times;</button>
                         <h3>{popupMessage}</h3>
                         <ul>
