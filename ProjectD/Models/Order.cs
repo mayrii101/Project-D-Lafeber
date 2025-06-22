@@ -39,8 +39,8 @@ namespace ProjectD.Models
     {
         public int CustomerId { get; set; }
 
-        public string OrderDate { get; set; } = "";     // e.g. "28-04-2025"
-        public string OrderTime { get; set; } = "";     // e.g. "14:30"
+        public string OrderDate { get; set; } = "";
+        public string OrderTime { get; set; } = "";
 
         public string DeliveryAddress { get; set; } = "";
 
