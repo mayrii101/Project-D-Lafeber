@@ -50,11 +50,20 @@ namespace ProjectD.Models
         public OrderStatus Status { get; set; }
 
         public List<OrderLineCreateDto> ProductLines { get; set; } = new();
+        public string? Message { get; set; } = null;
+
+        public List<ProductStockDto> ProductStocks { get; set; } = new();
     }
 
     public class OrderLineCreateDto
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
+    }
+
+    public class ProductStockDto
+    {
+        public int ProductId { get; set; }
+        public int RemainingStock { get; set; }
     }
 }

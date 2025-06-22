@@ -6,7 +6,7 @@ namespace ProjectD.Services
     {
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order?> GetOrderByIdAsync(int id);
-        Task<Order> CreateOrderAsync(OrderCreateDto dto);
+        Task<OrderCreateDto> CreateOrderAsync(OrderCreateDto dto);
         Task<Order?> UpdateOrderAsync(int id, Order order);
         Task<bool> SoftDeleteOrderAsync(int id);
     }
@@ -49,7 +49,7 @@ namespace ProjectD.Services
             var timePart = TimeSpan.Parse(time);
             return datePart.Date + timePart;
         }
-        public async Task<Order> CreateOrderAsync(OrderCreateDto dto)
+        public async Task<OrderCreateDto> CreateOrderAsync(OrderCreateDto dto)
         {
             var orderDateTime = ParseDateTime(dto.OrderDate, dto.OrderTime);
             var expectedDeliveryDateTime = ParseDateTime(dto.ExpectedDeliveryDate, dto.ExpectedDeliveryTime);
@@ -113,12 +113,23 @@ namespace ProjectD.Services
             await _context.SaveChangesAsync();
 
             // Step 5: Return full order
-            var createdOrder = await _context.Orders
-                .Include(o => o.ProductLines)
-                .ThenInclude(ol => ol.Product)
-                .FirstOrDefaultAsync(o => o.Id == order.Id);
+            var productIds = dto.ProductLines.Select(p => p.ProductId).ToList();
 
-            return createdOrder!;
+            var productStocks = await _context.Inventories
+                .Where(i => productIds.Contains(i.ProductId) && !i.IsDeleted)
+                .GroupBy(i => i.ProductId)
+                .Select(g => new ProductStockDto
+                {
+                    ProductId = g.Key,
+                    RemainingStock = g.Sum(i => i.QuantityOnHand)
+                })
+                .ToListAsync();
+
+            // Attach to the same dto
+            dto.Message = "Order placed successfully.";
+            dto.ProductStocks = productStocks;
+
+            return dto;
         }
 
         public async Task<Order?> UpdateOrderAsync(int id, Order order)
