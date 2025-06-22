@@ -132,7 +132,7 @@
 }
 
 /* Add icon */
-dfhew08ghre8ghr8gr .addIcon {
+.addIcon {
   position: absolute;
   top: 4px;
   /* shift it up to center over the top border */
