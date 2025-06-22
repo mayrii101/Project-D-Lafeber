@@ -66,6 +66,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             expectedDeliveryTime,
             departureDate: form.departureDate,
             departureTime: form.departureTime,
+            status: "Preparing", 
         };
 
         try {
@@ -74,8 +75,24 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
             });
+            if(response.ok) { 
+                const createdShipment = await response.json();
+                
+                // Haal volledige shipment op
+                const getRes = await fetch(`http://localhost:5000/api/shipment/${createdShipment.id}`);
+                const fullShipment = await getRes.json();
 
-            if (response.ok) {
+                // Status aanpassen
+                fullShipment.status = "OutForDelivery";
+
+                // Verstuur met PUT
+                await fetch(`http://localhost:5000/api/shipments/${createdShipment.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(fullShipment),
+                });
+
+            //if (response.ok) {
                 onSuccess();
                 onClose();
             } else if (response.status === 422) {
@@ -88,6 +105,8 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             console.error("Netwerkfout:", err);
             setFormError("Kan geen verbinding maken met de server.");
         }
+        
+        
     };
 
     return (
