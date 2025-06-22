@@ -24,25 +24,22 @@ namespace AzureSqlConnectionDemo.Tests.Services
             _context = new ApplicationDbContext(options);
             _service = new OrderService(_context);
 
-            // Seed customer and product
             var customer = new Customer { Id = 1, BedrijfsNaam = "Test Customer", IsDeleted = false };
             var product = new Product { Id = 1, ProductName = "Test Product", WeightKg = 10 };
             _context.Customers.Add(customer);
             _context.Products.Add(product);
 
-            // Seed inventory with enough stock for ProductId = 1
             var inventory = new Inventory
             {
                 Id = 1,
                 ProductId = 1,
                 WarehouseId = 1,
-                QuantityOnHand = 10,   // Sufficient stock
+                QuantityOnHand = 10,
                 LastUpdated = DateTime.UtcNow,
                 IsDeleted = false
             };
             _context.Inventories.Add(inventory);
 
-            // Seed existing orders
             var orderLine = new OrderLine { ProductId = 1, Product = product, Quantity = 2 };
 
             _context.Orders.AddRange(

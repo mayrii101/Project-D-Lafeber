@@ -99,7 +99,6 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(OrderCreateDto dto)
         {
             try
@@ -109,7 +108,7 @@ namespace AzureSqlConnectionDemo.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return StatusCode(422, ex.Message); // ✅ Send 422 with your clean message
+                return StatusCode(422, ex.Message);
             }
         }
 
