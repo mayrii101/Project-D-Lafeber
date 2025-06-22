@@ -76,28 +76,29 @@ namespace ProjectD.Services
 
         public async Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto)
         {
-            // Fetch vehicle to get max capacity
             var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(v => v.Id == dto.VehicleId && !v.IsDeleted);
 
             if (vehicle == null)
             {
-                throw new InvalidOperationException("Voertuig niet gevonden."); // Vehicle not found
+                throw new InvalidOperationException("Voertuig niet gevonden.");
             }
 
-            // Fetch all orders in dto.OrderIds including their ProductLines for weight
+            if (vehicle.Status != VehicleStatus.Available)
+            {
+                throw new InvalidOperationException("Dit voertuig is momenteel niet beschikbaar voor verzending.");
+            }
+
             var orders = await _context.Orders
                 .Where(o => dto.OrderIds.Contains(o.Id) && !o.IsDeleted)
                 .Include(o => o.ProductLines)
                     .ThenInclude(pl => pl.Product)
                 .ToListAsync();
 
-            // Calculate total weight of all orders combined
             int totalWeight = orders.Sum(o => o.TotalWeight);
 
             if (totalWeight > vehicle.CapacityKg)
             {
-                // Throw readable error to be caught by controller or middleware
                 throw new InvalidOperationException(
                     $"Het totale gewicht van de bestelling ({totalWeight} kg) overschrijdt de maximale capaciteit van het voertuig ({vehicle.CapacityKg} kg). Kies een voertuig met een hogere capaciteit."
                 );
@@ -122,6 +123,13 @@ namespace ProjectD.Services
                     .Select(orderId => new ShipmentOrder { OrderId = orderId })
                     .ToList()
             };
+
+            foreach (var order in orders)
+            {
+                order.Status = OrderStatus.Shipped;
+            }
+
+            vehicle.Status = VehicleStatus.InUse;
 
             _context.Shipments.Add(shipment);
             await _context.SaveChangesAsync();
@@ -174,12 +182,19 @@ namespace ProjectD.Services
             return existingShipment;
         }
 
-        public async Task<bool> SoftDeleteShipmentAsync(int id)
+        public async Task<bool> SoftDeleteShipmentAsync(int shipmentId)
         {
-            var shipment = await _context.Shipments.FindAsync(id);
+            var shipment = await _context.Shipments.Include(s => s.Vehicle).FirstOrDefaultAsync(s => s.Id == shipmentId);
             if (shipment == null || shipment.IsDeleted) return false;
 
             shipment.IsDeleted = true;
+
+            if (shipment.Vehicle != null)
+            {
+                shipment.Vehicle.Status = VehicleStatus.Available;
+                _context.Vehicles.Update(shipment.Vehicle);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }

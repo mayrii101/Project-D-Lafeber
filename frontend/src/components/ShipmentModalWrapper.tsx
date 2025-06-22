@@ -16,7 +16,7 @@ const ShipmentModalWrapper: React.FC<Props> = ({
     onClose,
     onSuccess,
 }) => {
-    const [vehicles, setVehicles] = useState<{ id: number; licensePlate: string; capacityKg: number }[]>([]);
+    const [vehicles, setVehicles] = useState<{ id: number; licensePlate: string; capacityKg: number; status: string }[]>([]);
     const [drivers, setDrivers] = useState<{ id: number; name: string }[]>([]);
     const [orderWeight, setOrderWeight] = useState<number>(0);
     const [loading, setLoading] = useState(true);
@@ -34,10 +34,10 @@ const ShipmentModalWrapper: React.FC<Props> = ({
                     driverRes.json(),
                 ]);
 
-                setVehicles(vehicleData.filter((v: any) => !v.isDeleted));
+                setVehicles(vehicleData.filter((v: any) => !v.isDeleted && v.status === "Available"));
+
                 setDrivers(driverData.filter((e: any) => !e.isDeleted && e.role.toLowerCase() === "driver"));
 
-                // Fetch total weight by calling each order API
                 const weights = await Promise.all(
                     orderIds.map(async (id) => {
                         const res = await fetch(`http://localhost:5000/api/order/${id}`);
