@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Props {
     onClose: () => void;
     onSuccess: () => void;
-    orderIds: number[]; // ✅ Now correctly typed as an array
+    orderIds: number[];
     expectedDeliveryDate: string;
     expectedDeliveryTime: string;
     vehicles: { id: number; licensePlate: string }[];
@@ -22,9 +22,30 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
     const [form, setForm] = useState({
         vehicleId: vehicles[0]?.id || 0,
         driverId: drivers[0]?.id || 0,
+        departureDate: "",
+        departureTime: "",
     });
 
     const [formError, setFormError] = useState("");
+
+    useEffect(() => {
+        const now = new Date();
+
+        const pad = (num: number) => num.toString().padStart(2, "0");
+
+        const day = pad(now.getDate());
+        const month = pad(now.getMonth() + 1);
+        const year = now.getFullYear();
+
+        const hours = pad(now.getHours());
+        const minutes = pad(now.getMinutes());
+
+        setForm((prev) => ({
+            ...prev,
+            departureDate: `${day}-${month}-${year}`,
+            departureTime: `${hours}:${minutes}`,
+        }));
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -34,11 +55,13 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
     const handleSubmit = async () => {
         const body = {
-            orderIds, // ✅ This is now an array
+            orderIds,
             vehicleId: Number(form.vehicleId),
             driverId: Number(form.driverId),
             expectedDeliveryDate,
             expectedDeliveryTime,
+            departureDate: form.departureDate,
+            departureTime: form.departureTime,
         };
 
         try {
@@ -78,7 +101,12 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 >
                     <div className="form-group">
                         <label>Voertuig</label>
-                        <select name="vehicleId" value={form.vehicleId} onChange={handleChange} required>
+                        <select
+                            name="vehicleId"
+                            value={form.vehicleId}
+                            onChange={handleChange}
+                            required
+                        >
                             {vehicles.map((v) => (
                                 <option key={v.id} value={v.id}>
                                     {v.licensePlate}
@@ -89,7 +117,12 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
                     <div className="form-group">
                         <label>Chauffeur</label>
-                        <select name="driverId" value={form.driverId} onChange={handleChange} required>
+                        <select
+                            name="driverId"
+                            value={form.driverId}
+                            onChange={handleChange}
+                            required
+                        >
                             {drivers.map((d) => (
                                 <option key={d.id} value={d.id}>
                                     {d.name}
@@ -97,6 +130,10 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                             ))}
                         </select>
                     </div>
+
+                    {/* departure date and time van gemaakte order */}
+                    <input type="hidden" name="departureDate" value={form.departureDate} readOnly />
+                    <input type="hidden" name="departureTime" value={form.departureTime} readOnly />
 
                     {formError && (
                         <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
