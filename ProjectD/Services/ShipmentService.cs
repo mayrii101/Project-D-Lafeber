@@ -97,7 +97,6 @@ namespace ProjectD.Services
 
             if (totalWeight > vehicle.CapacityKg)
             {
-                // Throw readable error to be caught by controller or middleware
                 throw new InvalidOperationException(
                     $"Het totale gewicht van de bestelling ({totalWeight} kg) overschrijdt de maximale capaciteit van het voertuig ({vehicle.CapacityKg} kg). Kies een voertuig met een hogere capaciteit."
                 );
@@ -122,6 +121,13 @@ namespace ProjectD.Services
                     .Select(orderId => new ShipmentOrder { OrderId = orderId })
                     .ToList()
             };
+
+            foreach (var order in orders)
+            {
+                order.Status = OrderStatus.Shipped;
+            }
+
+            vehicle.Status = VehicleStatus.InUse;
 
             _context.Shipments.Add(shipment);
             await _context.SaveChangesAsync();
