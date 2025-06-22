@@ -81,12 +81,12 @@ namespace ProjectD.Services
 
             if (vehicle == null)
             {
-                throw new InvalidOperationException("Voertuig niet gevonden."); // Vehicle not found
+                throw new InvalidOperationException("Voertuig niet gevonden.");
             }
 
             if (vehicle.Status != VehicleStatus.Available)
             {
-                throw new InvalidOperationException("Dit voertuig is momenteel niet beschikbaar voor verzending."); // Vehicle not available
+                throw new InvalidOperationException("Dit voertuig is momenteel niet beschikbaar voor verzending.");
             }
 
             var orders = await _context.Orders
