@@ -76,7 +76,6 @@ namespace ProjectD.Services
 
         public async Task<ShipmentDto> CreateShipmentAsync(ShipmentCreateDto dto)
         {
-            // Fetch vehicle to get max capacity
             var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(v => v.Id == dto.VehicleId && !v.IsDeleted);
 
@@ -85,14 +84,17 @@ namespace ProjectD.Services
                 throw new InvalidOperationException("Voertuig niet gevonden."); // Vehicle not found
             }
 
-            // Fetch all orders in dto.OrderIds including their ProductLines for weight
+            if (vehicle.Status != VehicleStatus.Available)
+            {
+                throw new InvalidOperationException("Dit voertuig is momenteel niet beschikbaar voor verzending."); // Vehicle not available
+            }
+
             var orders = await _context.Orders
                 .Where(o => dto.OrderIds.Contains(o.Id) && !o.IsDeleted)
                 .Include(o => o.ProductLines)
                     .ThenInclude(pl => pl.Product)
                 .ToListAsync();
 
-            // Calculate total weight of all orders combined
             int totalWeight = orders.Sum(o => o.TotalWeight);
 
             if (totalWeight > vehicle.CapacityKg)
