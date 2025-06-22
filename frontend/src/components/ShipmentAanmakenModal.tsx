@@ -22,7 +22,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
     orderWeight,
 }) => {
     const [form, setForm] = useState({
-        vehicleId: vehicles[0]?.id || 0,
+        vehicleId: 0,
         driverId: drivers[0]?.id || 0,
         departureDate: "",
         departureTime: "",
@@ -30,9 +30,11 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
     const [formError, setFormError] = useState("");
 
+    // Get filtered vehicles that can handle the order weight
+    const filteredVehicles = vehicles.filter((v) => v.capacityKg >= orderWeight);
+
     useEffect(() => {
         const now = new Date();
-
         const pad = (num: number) => num.toString().padStart(2, "0");
 
         const day = pad(now.getDate());
@@ -47,6 +49,15 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             departureTime: `${hours}:${minutes}`,
         }));
     }, []);
+
+    // Update default vehicle if list or weight changes
+    useEffect(() => {
+        if (filteredVehicles.length > 0) {
+            setForm((prev) => ({ ...prev, vehicleId: filteredVehicles[0].id }));
+        } else {
+            setForm((prev) => ({ ...prev, vehicleId: 0 }));
+        }
+    }, [filteredVehicles]);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -102,20 +113,24 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 >
                     <div className="form-group">
                         <label>Voertuig</label>
-                        <select
-                            name="vehicleId"
-                            value={form.vehicleId}
-                            onChange={handleChange}
-                            required
-                        >
-                            {vehicles
-                                .filter((v) => v.capacityKg >= orderWeight)
-                                .map((v) => (
+                        {filteredVehicles.length > 0 ? (
+                            <select
+                                name="vehicleId"
+                                value={form.vehicleId}
+                                onChange={handleChange}
+                                required
+                            >
+                                {filteredVehicles.map((v) => (
                                     <option key={v.id} value={v.id}>
                                         {v.licensePlate}
                                     </option>
                                 ))}
-                        </select>
+                            </select>
+                        ) : (
+                            <div style={{ color: "red", marginTop: "5px" }}>
+                                Geen voertuigen beschikbaar met voldoende capaciteit voor {orderWeight} kg.
+                            </div>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -134,7 +149,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </select>
                     </div>
 
-                    {/* departure fields hidden */}
+                    {/* Hidden departure fields */}
                     <input type="hidden" name="departureDate" value={form.departureDate} readOnly />
                     <input type="hidden" name="departureTime" value={form.departureTime} readOnly />
 
@@ -144,7 +159,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </div>
                     )}
 
-                    <button type="submit" className="submit-button">
+                    <button type="submit" className="submit-button" disabled={filteredVehicles.length === 0}>
                         Verzending Aanmaken
                     </button>
                 </form>
