@@ -15,6 +15,10 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         expectedDeliveryTime: string;
     }>(null);
 
+
+    // erbij toegevoegd 
+    const [orderStatus, setOrderStatus] = useState<"Shipped" | "OutForDelivery" | null>(null);
+
     const [form, setForm] = useState({
         customerId: klanten[0]?.id || 0,
         productId: producten[0]?.id || 0,
@@ -105,6 +109,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 expectedDeliveryTime={createdOrder.expectedDeliveryTime}
                 onClose={() => setCreatedOrder(null)}
                 onSuccess={() => {
+                    setOrderStatus("OutForDelivery"); // status order aanpassen
                     setCreatedOrder(null);
                     onSuccess();
                     onClose();
