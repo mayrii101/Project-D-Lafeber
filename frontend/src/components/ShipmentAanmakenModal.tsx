@@ -6,7 +6,8 @@ interface Props {
     orderIds: number[];
     expectedDeliveryDate: string;
     expectedDeliveryTime: string;
-    vehicles: { id: number; licensePlate: string }[];
+    orderWeight: number;
+    vehicles: { id: number; licensePlate: string; capacityKg: number }[];
     drivers: { id: number; name: string }[];
 }
 
@@ -18,6 +19,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
     expectedDeliveryTime,
     vehicles,
     drivers,
+    orderWeight,
 }) => {
     const [form, setForm] = useState({
         vehicleId: vehicles[0]?.id || 0,
@@ -36,7 +38,6 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
         const day = pad(now.getDate());
         const month = pad(now.getMonth() + 1);
         const year = now.getFullYear();
-
         const hours = pad(now.getHours());
         const minutes = pad(now.getMinutes());
 
@@ -107,11 +108,13 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                             onChange={handleChange}
                             required
                         >
-                            {vehicles.map((v) => (
-                                <option key={v.id} value={v.id}>
-                                    {v.licensePlate}
-                                </option>
-                            ))}
+                            {vehicles
+                                .filter((v) => v.capacityKg >= orderWeight)
+                                .map((v) => (
+                                    <option key={v.id} value={v.id}>
+                                        {v.licensePlate}
+                                    </option>
+                                ))}
                         </select>
                     </div>
 
@@ -131,7 +134,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </select>
                     </div>
 
-                    {/* departure date and time van gemaakte order */}
+                    {/* departure fields hidden */}
                     <input type="hidden" name="departureDate" value={form.departureDate} readOnly />
                     <input type="hidden" name="departureTime" value={form.departureTime} readOnly />
 
