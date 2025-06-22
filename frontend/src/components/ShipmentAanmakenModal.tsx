@@ -66,7 +66,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             expectedDeliveryTime,
             departureDate: form.departureDate,
             departureTime: form.departureTime,
-            status: "Preparing", 
+            status: "OutForDelivery", 
         };
 
         try {
