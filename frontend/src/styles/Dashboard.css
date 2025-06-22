@@ -11,7 +11,7 @@
   padding: 0;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
-  color: #ffffff;
+  color: #1f2937;
   background-repeat: no-repeat;
 }
 
@@ -54,14 +54,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg,
-      #feaa6eea 0%,
-      /* top right */
-      #000034ea 30%,
-      /* middle */
-      #481360f0 100%
-      /* bottom right */
-    );
+  background: rgba(41, 37, 46, 0.404);
   /* Your custom overlay color */
   display: flex;
   align-items: flex-start;
@@ -139,7 +132,7 @@
 }
 
 /* Add icon */
-.addIcon {
+dfhew08ghre8ghr8gr .addIcon {
   position: absolute;
   top: 4px;
   /* shift it up to center over the top border */
@@ -187,7 +180,7 @@
 .cardDefault {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #f69569, #d96cd5);
+  background: linear-gradient(135deg, #4578e6, #9054f7);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -211,7 +204,7 @@
   width: 100%;
   height: 40px;
   /* same as old border-top */
-  background: linear-gradient(135deg, #b66c4a, #9d4b9b);
+  background: linear-gradient(135deg, #3760b9, #5e36a2);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;
