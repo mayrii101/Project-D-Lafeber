@@ -19,14 +19,13 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         expectedDeliveryTime: "",
     });
 
-    // New state for popup visibility and data
-    const [popupVisible, setPopupVisible] = useState(false);
-    const [popupMessage, setPopupMessage] = useState("");
-    const [popupStocks, setPopupStocks] = useState<{ productId: number; remainingStock: number }[]>([]);
+    // New state for form error message
+    const [formError, setFormError] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
+        if (formError) setFormError(""); // Clear error when user changes input
     };
 
     const formatDateToDDMMYYYY = (dateStr: string) => {
@@ -49,6 +48,8 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
     };
 
     const handleSubmit = async () => {
+        setFormError(""); // reset previous error
+
         const now = CurrentDatetime();
 
         const body = {
@@ -76,25 +77,19 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
 
             if (response.ok) {
                 const result = await response.json();
-
-                // Show popup with message and stock info
-                setPopupMessage(result.message);
-                setPopupStocks(result.productStocks);
-                setPopupVisible(true);
-
+                onSuccess();
+                onClose();
+            } else if (response.status === 422) {
+                // Show backend error message (like "Niet genoeg voorraad...")
+                const errorText = await response.text();
+                setFormError(errorText);
             } else {
-                const error = await response.json().catch(() => ({}));
-                console.error("Fout bij opslaan order:", response.status, error);
+                setFormError("Er is een fout opgetreden bij het aanmaken van de bestelling.");
             }
         } catch (err) {
             console.error("Netwerkfout:", err);
+            setFormError("Kan geen verbinding maken met de server.");
         }
-    };
-
-    const closePopup = () => {
-        setPopupVisible(false);
-        onSuccess();
-        onClose();
     };
 
     return (
@@ -104,7 +99,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 <h2>Bestelling Aanmaken</h2>
 
                 <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                    {/* Your existing form inputs here */}
                     <div className="form-group">
                         <label>Klant</label>
                         <select name="customerId" value={form.customerId} onChange={handleChange}>
@@ -121,6 +115,12 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                                 <option key={p.id} value={p.id}>{p.productName}</option>
                             ))}
                         </select>
+                        {/* Show error message here if any */}
+                        {formError && (
+                            <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
+                                {formError}
+                            </div>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -146,23 +146,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <button type="submit" className="submit-button">Aanmaken</button>
                 </form>
             </div>
-
-            {/* Popup */}
-            {popupVisible && (
-                <div className="popup-overlay">
-                    <div className="popup-card">
-                        <button className="close-button" onClick={closePopup}>&times;</button>
-                        <h3>{popupMessage}</h3>
-                        <ul>
-                            {popupStocks.map(ps => (
-                                <li key={ps.productId}>
-                                    Product {ps.productId} hoeveelheid nog beschikbaar: {ps.remainingStock}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
