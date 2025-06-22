@@ -906,3 +906,70 @@ h3 {
   font-weight: bold;
   font-size: 14px;
 }
+
+/* Popup overlay covers screen with some transparency */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Popup card uses your .cardDefault plus fixes for popup */
+.popup-card {
+  position: relative;
+  width: 300px;
+  height: auto;
+  padding: 2rem;
+  color: white;
+  font-weight: 300;
+  user-select: none;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+/* Use your existing .cardDefault styles */
+.cardDefault {
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f69569, #d96cd5);
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.25s ease, background 0.3s ease;
+}
+
+/* Your close button style */
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 35px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 0 6px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Make list nicer */
+.popup-card ul {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+  font-weight: 400;
+  list-style: disc;
+}
