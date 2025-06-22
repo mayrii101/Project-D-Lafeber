@@ -23,7 +23,6 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [popupStocks, setPopupStocks] = useState<{ productId: number; remainingStock: number }[]>([]);
-    const [productError, setProductError] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -77,13 +76,12 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
 
             if (response.ok) {
                 const result = await response.json();
-                setProductError(null);
+
+                // Show popup with message and stock info
                 setPopupMessage(result.message);
                 setPopupStocks(result.productStocks);
                 setPopupVisible(true);
-            } else if (response.status === 422) {
-                const error = await response.json();
-                setProductError(error.error || "Niet genoeg voorraad.");
+
             } else {
                 const error = await response.json().catch(() => ({}));
                 console.error("Fout bij opslaan order:", response.status, error);
