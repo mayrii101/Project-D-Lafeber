@@ -79,8 +79,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 const result = await response.json();
                 onSuccess();
                 onClose();
-            } else if (response.status === 500) {
-                // Show backend error message (like "Niet genoeg voorraad...")
+            } else if (response.status === 422) {
                 const errorText = await response.text();
                 setFormError(errorText);
             } else {
@@ -115,17 +114,22 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                                 <option key={p.id} value={p.id}>{p.productName}</option>
                             ))}
                         </select>
-                        {/* Show error message here if any */}
+                    </div>
+
+                    <div className="form-group">
+                        <label>Aantal</label>
+                        <input
+                            type="number"
+                            name="quantity"
+                            value={form.quantity}
+                            onChange={handleChange}
+                            required
+                        />
                         {formError && (
                             <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
                                 {formError}
                             </div>
                         )}
-                    </div>
-
-                    <div className="form-group">
-                        <label>Aantal</label>
-                        <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
                     </div>
 
                     <div className="form-group">

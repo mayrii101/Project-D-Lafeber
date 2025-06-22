@@ -56,6 +56,7 @@ namespace ProjectD.Services
             var expectedDeliveryDateTime = ParseDateTime(dto.ExpectedDeliveryDate, dto.ExpectedDeliveryTime);
 
             // Step 1: Inventory check
+            // Step 1: Inventory check
             foreach (var productLine in dto.ProductLines)
             {
                 int totalAvailable = await _context.Inventories
@@ -64,8 +65,15 @@ namespace ProjectD.Services
 
                 if (totalAvailable < productLine.Quantity)
                 {
-                    // Instead of throwing HttpRequestException, return a signal
-                    throw new InvalidOperationException($"Niet genoeg voorraad voor product {productLine.ProductId}");
+                    // Get product name
+                    var product = await _context.Products
+                        .Where(p => p.Id == productLine.ProductId)
+                        .Select(p => p.ProductName)
+                        .FirstOrDefaultAsync();
+
+                    string productName = product ?? $"ID {productLine.ProductId}";
+
+                    throw new InvalidOperationException($"Niet genoeg voorraad voor product \"{productName}\"");
                 }
             }
 
