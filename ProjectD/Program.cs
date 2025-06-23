@@ -87,7 +87,7 @@ using (var scope = app.Services.CreateScope())
         context.Database.OpenConnection();
         Console.WriteLine("Connection successful!");
         //UNCOMMENT om seeddata te runnen voor lege DB
-        // SeedData.Initialize(services, context); 
+        //SeedData.Initialize(services, context); 
 
     }
     catch (Exception ex)
