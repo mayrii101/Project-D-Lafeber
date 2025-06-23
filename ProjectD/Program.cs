@@ -65,7 +65,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IShipmentService, ShipmentService>();
 builder.Services.AddScoped<IInventoryTransactionService, InventoryTransactionService>();
 builder.Services.AddScoped<IStickyNoteService, StickyNoteService>();
-
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 var app = builder.Build();
 

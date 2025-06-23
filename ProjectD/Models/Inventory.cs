@@ -11,13 +11,13 @@ namespace ProjectD.Models
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; } = default!;
+        public Product? Product { get; set; }
 
         [Required]
         public int WarehouseId { get; set; }
 
         [ForeignKey("WarehouseId")]
-        public Warehouse Warehouse { get; set; } = default!;
+        public Warehouse? Warehouse { get; set; }
 
         public int QuantityOnHand { get; set; }
 
