@@ -6,8 +6,9 @@ interface Props {
     orderIds: number[];
     expectedDeliveryDate: string;
     expectedDeliveryTime: string;
-    vehicles: { id: number; licensePlate: string }[];
+    vehicles: { id: number; licensePlate: string; capacityKg: number }[];
     drivers: { id: number; name: string }[];
+    orderWeight: number;
 }
 
 const ShipmentAanmakenModal: React.FC<Props> = ({
@@ -18,9 +19,10 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
     expectedDeliveryTime,
     vehicles,
     drivers,
+    orderWeight,
 }) => {
     const [form, setForm] = useState({
-        vehicleId: vehicles[0]?.id || 0,
+        vehicleId: 0,
         driverId: drivers[0]?.id || 0,
         departureDate: "",
         departureTime: "",
@@ -28,24 +30,26 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
     const [formError, setFormError] = useState("");
 
+    const filteredVehicles = vehicles.filter((v) => v.capacityKg >= orderWeight);
+
     useEffect(() => {
         const now = new Date();
-
         const pad = (num: number) => num.toString().padStart(2, "0");
-
-        const day = pad(now.getDate());
-        const month = pad(now.getMonth() + 1);
-        const year = now.getFullYear();
-
-        const hours = pad(now.getHours());
-        const minutes = pad(now.getMinutes());
 
         setForm((prev) => ({
             ...prev,
-            departureDate: `${day}-${month}-${year}`,
-            departureTime: `${hours}:${minutes}`,
+            departureDate: `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()}`,
+            departureTime: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
         }));
     }, []);
+
+    useEffect(() => {
+        if (filteredVehicles.length > 0) {
+            setForm((prev) => ({ ...prev, vehicleId: filteredVehicles[0].id }));
+        } else {
+            setForm((prev) => ({ ...prev, vehicleId: 0 }));
+        }
+    }, [filteredVehicles]);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -62,6 +66,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             expectedDeliveryTime,
             departureDate: form.departureDate,
             departureTime: form.departureTime,
+            status: "OutForDelivery",
         };
 
         try {
@@ -70,7 +75,6 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
             });
-
             if (response.ok) {
                 onSuccess();
                 onClose();
@@ -84,6 +88,8 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             console.error("Netwerkfout:", err);
             setFormError("Kan geen verbinding maken met de server.");
         }
+
+
     };
 
     return (
@@ -101,18 +107,24 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 >
                     <div className="form-group">
                         <label>Voertuig</label>
-                        <select
-                            name="vehicleId"
-                            value={form.vehicleId}
-                            onChange={handleChange}
-                            required
-                        >
-                            {vehicles.map((v) => (
-                                <option key={v.id} value={v.id}>
-                                    {v.licensePlate}
-                                </option>
-                            ))}
-                        </select>
+                        {filteredVehicles.length > 0 ? (
+                            <select
+                                name="vehicleId"
+                                value={form.vehicleId}
+                                onChange={handleChange}
+                                required
+                            >
+                                {filteredVehicles.map((v) => (
+                                    <option key={v.id} value={v.id}>
+                                        {v.licensePlate}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <div style={{ color: "red", marginTop: "5px" }}>
+                                Geen voertuigen beschikbaar met voldoende capaciteit voor {orderWeight} kg.
+                            </div>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -131,7 +143,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </select>
                     </div>
 
-                    {/* departure date and time van gemaakte order */}
+                    {/* depraturedate ne departuretime van aangemaakte order */}
                     <input type="hidden" name="departureDate" value={form.departureDate} readOnly />
                     <input type="hidden" name="departureTime" value={form.departureTime} readOnly />
 
@@ -141,7 +153,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </div>
                     )}
 
-                    <button type="submit" className="submit-button">
+                    <button type="submit" className="submit-button" disabled={filteredVehicles.length === 0}>
                         Verzending Aanmaken
                     </button>
                 </form>

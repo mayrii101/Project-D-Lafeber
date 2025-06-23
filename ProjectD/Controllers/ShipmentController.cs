@@ -33,8 +33,15 @@ namespace AzureSqlConnectionDemo.Controllers
         [HttpPost]
         public async Task<ActionResult<ShipmentDto>> CreateShipment(ShipmentCreateDto dto)
         {
-            var createdShipment = await _shipmentService.CreateShipmentAsync(dto);
-            return CreatedAtAction(nameof(GetShipment), new { id = createdShipment.Id }, createdShipment);
+            try
+            {
+                var createdShipment = await _shipmentService.CreateShipmentAsync(dto);
+                return CreatedAtAction(nameof(GetShipment), new { id = createdShipment.Id }, createdShipment);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(422, ex.Message);
+            }
         }
 
         [HttpPut("{id}")]

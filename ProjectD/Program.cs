@@ -36,6 +36,7 @@ builder.Services.AddControllers()
     });
 
 //Database
+/*
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("Server=localhost,1433;" +
                          "Database=LF-Database;" +
@@ -44,6 +45,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                          "TrustServerCertificate=True;" +
                          "Encrypt=False;" +
                          "Connection Timeout=30;"));
+*/
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer("Server=localhost\\SQLEXPRESS;" +
+                         "Database=LF-Database;" +
+                         "Trusted_Connection=True;" +
+                         "TrustServerCertificate=True;" +
+                         "Encrypt=False;" +
+                         "Connection Timeout=30;"));
+
 
 builder.Services.AddScoped<XmlToSqlImporter>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -77,7 +87,7 @@ using (var scope = app.Services.CreateScope())
         context.Database.OpenConnection();
         Console.WriteLine("Connection successful!");
         //UNCOMMENT om seeddata te runnen voor lege DB
-        // SeedData.Initialize(services, context); 
+        //SeedData.Initialize(services, context); 
 
     }
     catch (Exception ex)
