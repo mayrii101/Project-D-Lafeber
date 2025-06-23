@@ -9,11 +9,11 @@ global.fetch = jest.fn(() =>
 ) as jest.Mock;
 
 const klanten = [{ id: 1, bedrijfsNaam: "Klant A" }];
-const producten = [{ id: 10, productName: "Product X" }];
+const producten = [{ id: 101, productName: "Product X" }];
 
 describe("OrderAanmakenModal", () => {
-  const mockOnSuccess = jest.fn();
   const mockOnClose = jest.fn();
+  const mockOnSuccess = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -27,12 +27,11 @@ describe("OrderAanmakenModal", () => {
     );
   });
 
-  it("shows validation errors when required fields are empty or invalid", async () => {
-    // Clear required fields
+  it("laat validatiefouten zien als vereiste velden ongeldig zijn", async () => {
     fireEvent.change(screen.getByLabelText(/aantal/i), { target: { value: "0" } });
     fireEvent.change(screen.getByLabelText(/verzendadres/i), { target: { value: "" } });
     fireEvent.change(screen.getByLabelText(/verwachte leverdatum/i), {
-      target: { value: "2000-01-01" }, // past date
+      target: { value: "2000-01-01" }, // Verleden
     });
 
     fireEvent.click(screen.getByRole("button", { name: /aanmaken/i }));
@@ -42,16 +41,16 @@ describe("OrderAanmakenModal", () => {
     expect(screen.getByText(/verwachte leverdatum mag niet in het verleden liggen/i)).toBeInTheDocument();
   });
 
-  it("submits successfully when form is valid", async () => {
+  it("stuurt correcte data bij geldige invoer", async () => {
     const today = new Date().toISOString().split("T")[0];
 
-    fireEvent.change(screen.getByLabelText(/aantal/i), { target: { value: "3" } });
-    fireEvent.change(screen.getByLabelText(/verzendadres/i), { target: { value: "Straatweg 5" } });
+    fireEvent.change(screen.getByLabelText(/aantal/i), { target: { value: "5" } });
+    fireEvent.change(screen.getByLabelText(/verzendadres/i), { target: { value: "Teststraat 123" } });
     fireEvent.change(screen.getByLabelText(/verwachte leverdatum/i), {
       target: { value: today },
     });
     fireEvent.change(screen.getByLabelText(/verwachte levertijd/i), {
-      target: { value: "12:00" },
+      target: { value: "14:30" },
     });
 
     fireEvent.click(screen.getByRole("button", { name: /aanmaken/i }));
@@ -62,6 +61,7 @@ describe("OrderAanmakenModal", () => {
         expect.objectContaining({
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: expect.stringContaining("Teststraat 123"),
         })
       );
       expect(mockOnSuccess).toHaveBeenCalled();
@@ -69,18 +69,18 @@ describe("OrderAanmakenModal", () => {
     });
   });
 
-  it("does not call onSuccess or onClose if backend fails", async () => {
+  it("roept onSuccess niet aan als de API faalt", async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false });
 
     const today = new Date().toISOString().split("T")[0];
 
     fireEvent.change(screen.getByLabelText(/aantal/i), { target: { value: "2" } });
-    fireEvent.change(screen.getByLabelText(/verzendadres/i), { target: { value: "Bakerstraat 7" } });
+    fireEvent.change(screen.getByLabelText(/verzendadres/i), { target: { value: "Straatweg 5" } });
     fireEvent.change(screen.getByLabelText(/verwachte leverdatum/i), {
       target: { value: today },
     });
     fireEvent.change(screen.getByLabelText(/verwachte levertijd/i), {
-      target: { value: "10:30" },
+      target: { value: "10:00" },
     });
 
     fireEvent.click(screen.getByRole("button", { name: /aanmaken/i }));
