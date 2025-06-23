@@ -77,19 +77,20 @@ namespace ProjectD.Tests
         }
 
         [Fact]
-        public void Customer_WithoutEmail_IsValid()
+        public void Customer_WithoutEmail_IsInvalid()
         {
             var customer = new Customer
             {
                 BedrijfsNaam = "NoEmail B.V.",
                 ContactPersoon = "Emma Zondermail",
-                Email = "" // Empty string is valid — not [Required]
+                Email = "" // still invalid
             };
 
             var results = ValidateModel(customer);
 
-            Assert.Empty(results); // Because [EmailAddress] allows empty if not required
+            Assert.Contains(results, r => r.MemberNames.Contains(nameof(Customer.Email)));
         }
+
 
         [Fact]
         public void Customer_WithoutOptionalFields_IsValid()

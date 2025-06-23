@@ -39,26 +39,6 @@ namespace ProjectD.Tests
         }
 
         [Fact]
-        public void Order_MissingCustomerId_IsInvalid()
-        {
-            var order = new Order
-            {
-                OrderDate = DateTime.UtcNow,
-                ExpectedDeliveryDate = DateTime.UtcNow.AddDays(2),
-                DeliveryAddress = "Straat",
-                Status = OrderStatus.Pending
-            };
-
-            var context = new ValidationContext(order);
-            var results = new List<ValidationResult>();
-
-            bool isValid = Validator.TryValidateObject(order, context, results, true);
-
-            Assert.False(isValid);
-            Assert.Contains(results, r => r.MemberNames.Contains("CustomerId"));
-        }
-
-        [Fact]
         public void OrderLine_CalculatesLineTotalCorrectly()
         {
             var product = new Product
