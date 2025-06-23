@@ -36,6 +36,7 @@ builder.Services.AddControllers()
     });
 
 //Database
+//MAC VERSIE
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("Server=localhost,1433;" +
                          "Database=LF-Database;" +
@@ -44,6 +45,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                          "TrustServerCertificate=True;" +
                          "Encrypt=False;" +
                          "Connection Timeout=30;"));
+//WINDOWS VERSIE
+/*builder.Services.AddDbContext<ApplicationDbContext>(options =>
+     options.UseSqlServer("Server=localhost\\SQLEXPRESS;" +
+                          "Database=LF-Database;" +
+                          "Trusted_Connection=True;" +
+                          "TrustServerCertificate=True;" +
+                          "Encrypt=False;" +
+                          "Connection Timeout=30;")); */
 
 builder.Services.AddScoped<XmlToSqlImporter>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
