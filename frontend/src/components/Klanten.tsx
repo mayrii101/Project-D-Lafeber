@@ -50,15 +50,17 @@ const Klanten: React.FC<KlantenProps> = ({
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
-          <button onClick={onClose} className="close-button">&times;</button>
-          <h2>
-            {selectedCustomer
-              ? `Klant: ${selectedCustomer.bedrijfsNaam}`
-              : `Klanten (${filtered.length})`}
-          </h2>
-          <div className="modal-header-buttons">
-            {selectedCustomer && <button onClick={onBack}>←</button>}
+          <div className="modal-header-left">
+            {selectedCustomer && (
+              <button onClick={onBack} className="back-button">← Terug</button>
+            )}
+            <h2>
+              {selectedCustomer
+                ? `Klant: ${selectedCustomer.bedrijfsNaam}`
+                : `Klanten (${filtered.length})`}
+            </h2>
           </div>
+          <button onClick={onClose} className="close-button">&times;</button>
         </div>
 
         <div className="modal-content">

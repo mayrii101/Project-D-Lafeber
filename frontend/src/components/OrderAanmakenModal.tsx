@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ShipmentModalWrapper from "./ShipmentModalWrapper";
+import "../styles/Error.css";
 
 interface Props {
     onClose: () => void;
@@ -9,27 +9,53 @@ interface Props {
 }
 
 const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, producten }) => {
-    const [createdOrder, setCreatedOrder] = useState<null | {
-        id: number;
-        expectedDeliveryDate: string;
-        expectedDeliveryTime: string;
-    }>(null);
-
     const [form, setForm] = useState({
-        customerId: klanten[0]?.id || 0,
-        productId: producten[0]?.id || 0,
-        quantity: 1,
+        customerId: klanten[0]?.id.toString() || "",
+        productId: producten[0]?.id.toString() || "",
+        quantity: "1",
         deliveryAddress: "",
         expectedDeliveryDate: "",
         expectedDeliveryTime: "",
     });
 
-    const [formError, setFormError] = useState("");
+    const [errors, setErrors] = useState({
+        customerId: "",
+        productId: "",
+        quantity: "",
+        deliveryAddress: "",
+        expectedDeliveryDate: "",
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
-        if (formError) setFormError("");
+        setForm({ ...form, [name]: value });
+        setErrors({ ...errors, [name]: "" });
+    };
+
+    const validate = () => {
+        const newErrors = { ...errors };
+        let isValid = true;
+
+        const qty = parseInt(form.quantity);
+        if (!qty || isNaN(qty) || qty < 1) {
+            newErrors.quantity = "Aantal moet een geheel getal van 1 of meer zijn.";
+            isValid = false;
+        }
+
+        if (!form.deliveryAddress.trim()) {
+            newErrors.deliveryAddress = "Verzendadres mag niet leeg zijn.";
+            isValid = false;
+        }
+
+        const today = new Date(new Date().toDateString());
+        const expected = new Date(form.expectedDeliveryDate);
+        if (!form.expectedDeliveryDate || expected < today) {
+            newErrors.expectedDeliveryDate = "Verwachte leverdatum mag niet in het verleden liggen.";
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
     };
 
     const formatDateToDDMMYYYY = (dateStr: string) => {
@@ -37,14 +63,13 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         return `${day}-${month}-${year}`;
     };
 
-    const CurrentDatetime = () => {
+    const getCurrentDateTime = () => {
         const now = new Date();
         const day = String(now.getDate()).padStart(2, "0");
         const month = String(now.getMonth() + 1).padStart(2, "0");
         const year = now.getFullYear();
         const hours = String(now.getHours()).padStart(2, "0");
         const minutes = String(now.getMinutes()).padStart(2, "0");
-
         return {
             date: `${day}-${month}-${year}`,
             time: `${hours}:${minutes}`,
@@ -52,11 +77,12 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
     };
 
     const handleSubmit = async () => {
-        setFormError("");
-        const now = CurrentDatetime();
+        if (!validate()) return;
+
+        const now = getCurrentDateTime();
 
         const body = {
-            customerId: Number(form.customerId),
+            customerId: parseInt(form.customerId),
             orderDate: now.date,
             orderTime: now.time,
             deliveryAddress: form.deliveryAddress,
@@ -65,8 +91,8 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
             status: "Pending",
             productLines: [
                 {
-                    productId: Number(form.productId),
-                    quantity: Number(form.quantity),
+                    productId: parseInt(form.productId),
+                    quantity: parseInt(form.quantity),
                 },
             ],
         };
@@ -79,39 +105,15 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
             });
 
             if (response.ok) {
-                const result = await response.json();
-                setCreatedOrder({
-                    id: result.id,
-                    expectedDeliveryDate: formatDateToDDMMYYYY(form.expectedDeliveryDate),
-                    expectedDeliveryTime: form.expectedDeliveryTime,
-                });
-            } else if (response.status === 422) {
-                const errorText = await response.text();
-                setFormError(errorText);
+                onSuccess();
+                onClose();
             } else {
-                setFormError("Er is een fout opgetreden bij het aanmaken van de bestelling.");
+                console.error("Fout bij opslaan bestelling.");
             }
         } catch (err) {
             console.error("Netwerkfout:", err);
-            setFormError("Kan geen verbinding maken met de server.");
         }
     };
-
-    if (createdOrder) {
-        return (
-            <ShipmentModalWrapper
-                orderIds={[createdOrder.id]}
-                expectedDeliveryDate={createdOrder.expectedDeliveryDate}
-                expectedDeliveryTime={createdOrder.expectedDeliveryTime}
-                onClose={() => setCreatedOrder(null)}
-                onSuccess={() => {
-                    setCreatedOrder(null);
-                    onSuccess();
-                    onClose();
-                }}
-            />
-        );
-    }
 
     return (
         <div className="modal-overlay">
@@ -127,52 +129,85 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     }}
                 >
                     <div className="form-group">
-                        <label>Klant</label>
-                        <select name="customerId" value={form.customerId} onChange={handleChange}>
+                        <label htmlFor="customerId">Klant</label>
+                        <select
+                            id="customerId"
+                            name="customerId"
+                            value={form.customerId}
+                            onChange={handleChange}
+                        >
                             {klanten.map((k) => (
                                 <option key={k.id} value={k.id}>
                                     {k.bedrijfsNaam}
                                 </option>
                             ))}
                         </select>
+                        {errors.customerId && <p className="error">{errors.customerId}</p>}
                     </div>
 
                     <div className="form-group">
-                        <label>Product</label>
-                        <select name="productId" value={form.productId} onChange={handleChange}>
+                        <label htmlFor="productId">Product</label>
+                        <select
+                            id="productId"
+                            name="productId"
+                            value={form.productId}
+                            onChange={handleChange}
+                        >
                             {producten.map((p) => (
                                 <option key={p.id} value={p.id}>
                                     {p.productName}
                                 </option>
                             ))}
                         </select>
+                        {errors.productId && <p className="error">{errors.productId}</p>}
                     </div>
 
                     <div className="form-group">
-                        <label>Aantal</label>
-                        <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
+                        <label htmlFor="quantity">Aantal</label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            value={form.quantity}
+                            onChange={handleChange}
+                        />
+                        {errors.quantity && <p className="error">{errors.quantity}</p>}
                     </div>
 
                     <div className="form-group">
-                        <label>Verzendadres</label>
-                        <input type="text" name="deliveryAddress" value={form.deliveryAddress} onChange={handleChange} required />
+                        <label htmlFor="deliveryAddress">Verzendadres</label>
+                        <input
+                            type="text"
+                            id="deliveryAddress"
+                            name="deliveryAddress"
+                            value={form.deliveryAddress}
+                            onChange={handleChange}
+                        />
+                        {errors.deliveryAddress && <p className="error">{errors.deliveryAddress}</p>}
                     </div>
 
                     <div className="form-group">
-                        <label>Verwachte Leverdatum</label>
-                        <input type="date" name="expectedDeliveryDate" value={form.expectedDeliveryDate} onChange={handleChange} required />
+                        <label htmlFor="expectedDeliveryDate">Verwachte Leverdatum</label>
+                        <input
+                            type="date"
+                            id="expectedDeliveryDate"
+                            name="expectedDeliveryDate"
+                            value={form.expectedDeliveryDate}
+                            onChange={handleChange}
+                        />
+                        {errors.expectedDeliveryDate && <p className="error">{errors.expectedDeliveryDate}</p>}
                     </div>
 
                     <div className="form-group">
-                        <label>Verwachte Levertijd</label>
-                        <input type="time" name="expectedDeliveryTime" value={form.expectedDeliveryTime} onChange={handleChange} required />
+                        <label htmlFor="expectedDeliveryTime">Verwachte Levertijd</label>
+                        <input
+                            type="time"
+                            id="expectedDeliveryTime"
+                            name="expectedDeliveryTime"
+                            value={form.expectedDeliveryTime}
+                            onChange={handleChange}
+                        />
                     </div>
-
-                    {formError && (
-                        <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
-                            {formError}
-                        </div>
-                    )}
 
                     <button type="submit" className="submit-button">
                         Aanmaken
