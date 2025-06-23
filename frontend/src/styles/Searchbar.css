@@ -1,16 +1,14 @@
 .search-container input {
-    /* Voorbeeld, pas aan naar je SearchBar structuur */
-    padding: 10px 15px;
-    border-radius: var(--card-border-radius);
-    border: 1px solid var(--border-color);
-    font-size: 0.95rem;
-    min-width: 220px;
-    /* Minimale breedte */
-    transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 10px 15px;
+  border-radius: 6px;              /* previuosly was: var(--card-border-radius) */
+  border: 1px solid #ccc;          /*previuosly was: var(--border-color) */
+  font-size: 0.95rem;
+  min-width: 220px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .search-container input:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.25);
+  outline: none;
+  border-color: #007bff;           /* previuosly was: var(--primary-blue) */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* previuosly was --primary-color-rgb */
 }

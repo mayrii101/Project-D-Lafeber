@@ -11,17 +11,18 @@ interface StatusData {
 
 interface OrderStatusChartProps {
     data: StatusData[];
+    title?: string;
 }
 
 const gradientColors = [
-    ["#3a4dbf", "#9a7eff"],
-    ["#43cea2", "#185a9d"],
-    ["#2ecc71", "#27ae60"],
-    ["#f7971e", "#ffd200"],
-    ["#ff6a00", "#ee0979"],
+    ["#a830df", "#ffd65f"],  // Purple to brighter yellow
+    ["#ffd65f", "#00bfae"],  // Brighter yellow to greenish blue (teal)
+    ["#00bfae", "#00bfae"],  // Solid greenish blue (no transition)
+    ["#00bfae", "#01004f"],  // Greenish blue to very dark blue
+    ["#01004f", "#a830df"],  // Dark blue back to purple
 ];
 
-const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
+const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data, title = "Order Status Overview" }) => {
     const chartRef = useRef<any>(null);
     const [backgroundColors, setBackgroundColors] = useState<string[]>([]);
 
@@ -62,7 +63,7 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
                 data: data.map((d) => d.value),
                 backgroundColor: backgroundColors.length === data.length ? backgroundColors : undefined,
                 borderColor: "#fff",
-                borderWidth: 1,
+                borderWidth: 0,
             },
         ],
     };
@@ -74,7 +75,7 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
             legend: {
                 position: "bottom" as const,
                 labels: {
-                    color: "#000",
+                    color: "#fff",
                     font: {
                         weight: "bold" as const,
                     },
@@ -87,7 +88,19 @@ const OrderStatusChart: React.FC<OrderStatusChartProps> = ({ data }) => {
     };
 
     return (
-        <div style={{ width: 350, height: 350, marginLeft: 80, marginTop: 80 }}>
+        <div style={{ width: 350, height: 350, marginLeft: 80, marginTop: 60 }}>
+            <h3
+                style={{
+                    color: "#fff",
+                    textAlign: "center",
+                    marginBottom: 20,
+                    fontWeight: "900",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "24px",
+                }}
+            >
+                {title}
+            </h3>
             <Pie ref={chartRef} data={chartData} options={options} />
         </div>
     );

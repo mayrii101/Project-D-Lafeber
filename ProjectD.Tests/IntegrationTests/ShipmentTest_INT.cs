@@ -33,15 +33,35 @@ namespace ProjectD.Tests.Integration
 
         private async Task SeedData()
         {
-            _context.Vehicles.Add(new Vehicle
-            {
-                Id = 1,
-                LicensePlate = "ABC123",
-                CapacityKg = 2000,
-                Type = VehicleType.FlatbedTrailer,
-                Status = VehicleStatus.Available,
-                IsDeleted = false
-            });
+            _context.Vehicles.AddRange(
+                new Vehicle
+                {
+                    Id = 1,
+                    LicensePlate = "ABC123",
+                    CapacityKg = 2000,
+                    Type = VehicleType.FlatbedTrailer,
+                    Status = VehicleStatus.Available,
+                    IsDeleted = false
+                },
+                new Vehicle
+                {
+                    Id = 2,
+                    LicensePlate = "DEF456",
+                    CapacityKg = 1500,
+                    Type = VehicleType.LowbedTrailer,
+                    Status = VehicleStatus.Available,
+                    IsDeleted = false
+                },
+                new Vehicle
+                {
+                    Id = 3,
+                    LicensePlate = "GHI789",
+                    CapacityKg = 3000,
+                    Type = VehicleType.LowbedTrailer,
+                    Status = VehicleStatus.Available,
+                    IsDeleted = false
+                }
+            );
 
             _context.Employees.Add(new Employee
             {
@@ -100,7 +120,7 @@ namespace ProjectD.Tests.Integration
             // Arrange - Create shipment first
             var createDto = new ShipmentCreateDto
             {
-                VehicleId = 1,
+                VehicleId = 2, // Use vehicle 2 here to avoid reuse of vehicle 1
                 DriverId = 1,
                 Status = ShipmentStatus.Preparing,
                 DepartureDate = "16-06-2025",
@@ -124,7 +144,7 @@ namespace ProjectD.Tests.Integration
         {
             var createDto = new ShipmentCreateDto
             {
-                VehicleId = 1,
+                VehicleId = 3,  // Use vehicle 3 here
                 DriverId = 1,
                 Status = ShipmentStatus.Preparing,
                 DepartureDate = "16-06-2025",
@@ -151,7 +171,7 @@ namespace ProjectD.Tests.Integration
         {
             var createDto1 = new ShipmentCreateDto
             {
-                VehicleId = 1,
+                VehicleId = 2,   // Vehicle 2
                 DriverId = 1,
                 Status = ShipmentStatus.Preparing,
                 DepartureDate = "16-06-2025",
@@ -162,7 +182,7 @@ namespace ProjectD.Tests.Integration
             };
             var createDto2 = new ShipmentCreateDto
             {
-                VehicleId = 1,
+                VehicleId = 1,   // Vehicle 1
                 DriverId = 1,
                 Status = ShipmentStatus.OutForDelivery,
                 DepartureDate = "18-06-2025",

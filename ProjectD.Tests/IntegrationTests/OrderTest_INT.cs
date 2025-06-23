@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class OrderIntegrationTests
 {
@@ -59,6 +60,17 @@ public class OrderIntegrationTests
         return product;
     }
 
+    private async Task AddInventory(ApplicationDbContext context, int productId, int quantity)
+    {
+        context.Inventories.Add(new Inventory
+        {
+            ProductId = productId,
+            QuantityOnHand = quantity,
+            LastUpdated = DateTime.UtcNow
+        });
+        await context.SaveChangesAsync();
+    }
+
     private static string ToDateString(DateTime dt) => dt.ToString("dd-MM-yyyy");
     private static string ToTimeString(DateTime dt) => dt.ToString("HH:mm");
 
@@ -70,6 +82,7 @@ public class OrderIntegrationTests
 
         var customer = await CreateTestCustomer(context);
         var product = await CreateTestProduct(context);
+        await AddInventory(context, product.Id, 10); // Ensure stock
 
         var orderDto = new OrderCreateDto
         {
@@ -86,16 +99,16 @@ public class OrderIntegrationTests
             }
         };
 
-        var createResult = await controller.CreateOrder(orderDto);
-        var created = (createResult.Result as CreatedAtActionResult)?.Value as Order;
+        var createResult = await controller.CreateOrderAsync(orderDto);
+        var createdDto = (createResult as CreatedAtActionResult)?.Value as OrderCreateDto;
 
-        Assert.NotNull(created);
-        Assert.Equal(customer.Id, created.CustomerId);
+        Assert.NotNull(createdDto);
+        Assert.Equal(customer.Id, createdDto.CustomerId);
+        Assert.NotNull(createdDto.ProductStocks);
+        Assert.Contains(createdDto.ProductStocks, ps => ps.ProductId == product.Id);
 
-        var getResult = await controller.GetOrderById(created.Id);
-        var fetched = (getResult as OkObjectResult)?.Value;
-
-        Assert.NotNull(fetched);
+        var getResult = await controller.GetOrderById(createdDto.Id);
+        Assert.IsType<OkObjectResult>(getResult);
     }
 
     [Fact]
@@ -106,6 +119,7 @@ public class OrderIntegrationTests
 
         var customer = await CreateTestCustomer(context);
         var product = await CreateTestProduct(context);
+        await AddInventory(context, product.Id, 5);
 
         var orderDto = new OrderCreateDto
         {
@@ -122,12 +136,13 @@ public class OrderIntegrationTests
             }
         };
 
-        var createResult = await controller.CreateOrder(orderDto);
-        var created = (createResult.Result as CreatedAtActionResult)?.Value as Order;
+        var createResult = await controller.CreateOrderAsync(orderDto);
+        var createdDto = (createResult as CreatedAtActionResult)?.Value as OrderCreateDto;
 
-        created.DeliveryAddress = "Updated Address";
+        var orderToUpdate = context.Orders.Include(o => o.ProductLines).First(o => o.Id == createdDto.Id);
+        orderToUpdate.DeliveryAddress = "Updated Address";
 
-        var updateResult = await controller.UpdateOrder(created.Id, created);
+        var updateResult = await controller.UpdateOrder(orderToUpdate.Id, orderToUpdate);
         var updated = (updateResult.Result as OkObjectResult)?.Value as Order;
 
         Assert.NotNull(updated);
@@ -142,6 +157,7 @@ public class OrderIntegrationTests
 
         var customer = await CreateTestCustomer(context);
         var product = await CreateTestProduct(context);
+        await AddInventory(context, product.Id, 5);
 
         var orderDto = new OrderCreateDto
         {
@@ -158,13 +174,13 @@ public class OrderIntegrationTests
             }
         };
 
-        var createResult = await controller.CreateOrder(orderDto);
-        var created = (createResult.Result as CreatedAtActionResult)?.Value as Order;
+        var createResult = await controller.CreateOrderAsync(orderDto);
+        var createdDto = (createResult as CreatedAtActionResult)?.Value as OrderCreateDto;
 
-        var deleteResult = await controller.SoftDeleteOrder(created.Id);
+        var deleteResult = await controller.SoftDeleteOrder(createdDto.Id);
         Assert.IsType<NoContentResult>(deleteResult);
 
-        var getResult = await controller.GetOrderById(created.Id);
+        var getResult = await controller.GetOrderById(createdDto.Id);
         Assert.IsType<NotFoundResult>(getResult);
     }
 
@@ -176,6 +192,7 @@ public class OrderIntegrationTests
 
         var customer = await CreateTestCustomer(context);
         var product = await CreateTestProduct(context);
+        await AddInventory(context, product.Id, 10);
 
         var activeOrderDto = new OrderCreateDto
         {
@@ -191,7 +208,8 @@ public class OrderIntegrationTests
                 new OrderLineCreateDto { ProductId = product.Id, Quantity = 1 }
             }
         };
-        await controller.CreateOrder(activeOrderDto);
+
+        await controller.CreateOrderAsync(activeOrderDto);
 
         var deletedOrderDto = new OrderCreateDto
         {
@@ -208,10 +226,10 @@ public class OrderIntegrationTests
             }
         };
 
-        var createdResult = await controller.CreateOrder(deletedOrderDto);
-        var createdOrder = (createdResult.Result as CreatedAtActionResult)?.Value as Order;
+        var deletedCreateResult = await controller.CreateOrderAsync(deletedOrderDto);
+        var deletedCreatedDto = (deletedCreateResult as CreatedAtActionResult)?.Value as OrderCreateDto;
 
-        await controller.SoftDeleteOrder(createdOrder.Id);
+        await controller.SoftDeleteOrder(deletedCreatedDto.Id);
 
         var getAllResult = await controller.GetAllOrders();
         var orders = (getAllResult as OkObjectResult)?.Value as IEnumerable<object>;
