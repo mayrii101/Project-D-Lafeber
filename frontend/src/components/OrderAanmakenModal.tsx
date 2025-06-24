@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ShipmentModalWrapper from "./ShipmentModalWrapper";
-import "../styles/Error.css";
 
 interface Props {
     onClose: () => void;
@@ -26,17 +25,11 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
     });
 
     const [formError, setFormError] = useState("");
-    const [errors, setErrors] = useState({
-        quantity: "",
-        deliveryAddress: "",
-        expectedDeliveryDate: "",
-    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
-        setFormError("");
-        setErrors((prev) => ({ ...prev, [name]: "" }));
+        if (formError) setFormError("");
     };
 
     const formatDateToDDMMYYYY = (dateStr: string) => {
@@ -58,36 +51,8 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
         };
     };
 
-    const validate = () => {
-        let valid = true;
-        const newErrors = { quantity: "", deliveryAddress: "", expectedDeliveryDate: "" };
-
-        if (!form.deliveryAddress.trim()) {
-            newErrors.deliveryAddress = "Verzendadres mag niet leeg zijn.";
-            valid = false;
-        }
-
-        const quantity = Number(form.quantity);
-        if (!Number.isInteger(quantity) || quantity <= 0) {
-            newErrors.quantity = "Aantal moet een geheel getal groter dan 0 zijn.";
-            valid = false;
-        }
-
-        const today = new Date().setHours(0, 0, 0, 0);
-        const deliveryDate = new Date(form.expectedDeliveryDate).setHours(0, 0, 0, 0);
-
-        if (!form.expectedDeliveryDate || deliveryDate < today) {
-            newErrors.expectedDeliveryDate = "Verwachte leverdatum mag niet in het verleden liggen.";
-            valid = false;
-        }
-
-        setErrors(newErrors);
-        return valid;
-    };
-
     const handleSubmit = async () => {
-        if (!validate()) return;
-
+        setFormError("");
         const now = CurrentDatetime();
 
         const body = {
@@ -186,19 +151,16 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     <div className="form-group">
                         <label>Aantal</label>
                         <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
-                        {errors.quantity && <p className="error">{errors.quantity}</p>}
                     </div>
 
                     <div className="form-group">
                         <label>Verzendadres</label>
                         <input type="text" name="deliveryAddress" value={form.deliveryAddress} onChange={handleChange} required />
-                        {errors.deliveryAddress && <p className="error">{errors.deliveryAddress}</p>}
                     </div>
 
                     <div className="form-group">
                         <label>Verwachte Leverdatum</label>
                         <input type="date" name="expectedDeliveryDate" value={form.expectedDeliveryDate} onChange={handleChange} required />
-                        {errors.expectedDeliveryDate && <p className="error">{errors.expectedDeliveryDate}</p>}
                     </div>
 
                     <div className="form-group">
@@ -207,7 +169,7 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                     </div>
 
                     {formError && (
-                        <div className="error-message">
+                        <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
                             {formError}
                         </div>
                     )}
