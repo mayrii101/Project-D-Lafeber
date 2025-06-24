@@ -170,7 +170,6 @@ coverage/
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.iml
 
 # Yarn/NPM lock files
