@@ -54,7 +54,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(41, 37, 46, 0.404);
+  background: linear-gradient(135deg, #02256af0, #1c0f48ee);
   /* Your custom overlay color */
   display: flex;
   align-items: flex-start;
@@ -141,7 +141,7 @@
   font-weight: bold;
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, #9d4b9b, #531f53);
+  background: linear-gradient(135deg, #0c1d41, #13034a);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -180,7 +180,7 @@
 .cardDefault {
   position: relative;
   border-radius: 12px;
-  background: linear-gradient(135deg, #4578e6, #9054f7);
+  background: linear-gradient(135deg, #1d046e, #183a82);
   height: 210px;
   width: 180px;
   padding: 1.5rem;
@@ -204,7 +204,7 @@
   width: 100%;
   height: 40px;
   /* same as old border-top */
-  background: linear-gradient(135deg, #3760b9, #5e36a2);
+  background: linear-gradient(135deg, #13034a, #0c1d41);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   pointer-events: none;

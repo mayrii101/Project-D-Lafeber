@@ -108,7 +108,7 @@ const OrdersLast6MonthsChart: React.FC<OrdersLast6MonthsChartProps> = ({
             {
                 label: "Bestellingen",
                 data: dataPoints.map((d) => d.orders),
-                backgroundColor: "#00bfae",
+                backgroundColor: "#4dabf7",
             },
         ],
     };
