@@ -27,4 +27,4 @@ jobs:
         run: dotnet build Project-D-Lafeber.sln --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --no-build --verbosity normal
+        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --verbosity normal
