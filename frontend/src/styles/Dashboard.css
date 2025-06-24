@@ -37,7 +37,6 @@
   background-position: center;
   filter: blur(6px);
   transform: scale(1.05);
-  /* prevents edge clipping from blur */
   z-index: 0;
 }
 
@@ -52,7 +51,6 @@
   align-items: flex-start;
   padding: 2rem;
   z-index: 0;
-  /* behind controls */
 }
 
 .heroControls {
