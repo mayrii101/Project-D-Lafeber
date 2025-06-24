@@ -9,6 +9,9 @@ import KlantAanmakenModal from "./KlantAanmakenModal";
 import ProductAanmakenModal from "./ProductAanmakenModal";
 import OrderAanmakenModal from "./OrderAanmakenModal";
 import Notitie from "./Notitie";
+import OrderStatusChart from "./OrderStatusChart";
+import OrdersLast6MonthsChart from "./OrdersBarChart";
+
 
 interface Order {
   id: number;
@@ -62,6 +65,17 @@ interface Customer {
   adres: string;
   isDeleted: boolean;
 }
+const getOrderStatusCounts = (orders: Order[]) => {
+  const counts: Record<string, number> = {};
+  orders.forEach(order => {
+    const status = order.status;
+    counts[status] = (counts[status] || 0) + 1;
+  });
+  return Object.entries(counts).map(([status, count]) => ({
+    name: status,
+    value: count
+  }));
+};
 
 const Dashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -73,6 +87,7 @@ const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [productSearchTerm, setProductSearchTerm] = useState("");
+
 
   const [customerSearchName, setCustomerSearchName] = useState("");
   const [customerSearchCompany, setCustomerSearchCompany] = useState("");
@@ -91,6 +106,8 @@ const Dashboard: React.FC = () => {
   const [showKlantForm, setShowKlantForm] = useState(false);
   const [showProductForm, setShowProductForm] = useState(false);
   const [showOrderForm, setShowOrderForm] = useState(false);
+
+
 
   const closeModel = () => {
     setShowBestellingen(false);
@@ -142,14 +159,23 @@ const Dashboard: React.FC = () => {
   }, [searchTerm, orders, selectedStatus]);
 
   return (
-    <div className="container">
-      <header className="hero" style={{ backgroundImage: `url('/warehouseee.jpg')` }}>
-        <div className="overlay">
-          <div className="logoWrapper">
-            <div className="logoText">Lafeber Insights</div>
-          </div>
+    <div
+      className="container"
+      style={{
+        backgroundImage: `url('/background6.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+      }}
+    >
+      <div className="hero" style={{ backgroundImage: `url('/hero.jpg')` }}>
+        <div className="overlay" />
+        <div className="heroControls">
+          {/* Your buttons or content */}
         </div>
-      </header>
+      </div>
+
 
       <main className="main">
         <div className="navGrid">
@@ -175,9 +201,19 @@ const Dashboard: React.FC = () => {
             <div className="cardTitleDefault">XML uploaden</div>
             <div className="text-sm text-muted-foreground italic">Alleen voor technisch personeel</div>
             <div className="linkSecondary">→ Bekijken</div>
-            <div className="addIcon">＋</div>
+            <div className="addIcon updates">＋</div>
           </Card>
         </div>
+        {/* Chart section */}
+        <div className="chart-container">
+          <div>
+            <OrderStatusChart data={getOrderStatusCounts(filteredOrders)} />
+          </div>
+          <div>
+            <OrdersLast6MonthsChart orders={orders} products={products} />
+          </div>
+        </div>
+
       </main>
 
       {/* Sticky Note Component */}
