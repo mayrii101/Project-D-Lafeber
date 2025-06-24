@@ -17,6 +17,7 @@ artifacts/
 .vs/
 *.user
 *.suo
+*.sln           # <-- Added back
 *.sln.docstates
 
 # VSCode
@@ -184,4 +185,3 @@ package-lock.json
 
 # Vagrant
 .vagrant/
-
