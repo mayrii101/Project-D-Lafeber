@@ -162,7 +162,7 @@ const Dashboard: React.FC = () => {
     <div
       className="container"
       style={{
-        backgroundImage: `url('/background6.jpg')`,
+        backgroundImage: `url('/image.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

@@ -17,8 +17,8 @@ interface OrderStatusChartProps {
 const gradientColors = [
     ["#a830df", "#ffd65f"],  // Purple to brighter yellow
     ["#ffd65f", "#00bfae"],  // Brighter yellow to greenish blue (teal)
-    ["#00bfae", "#00bfae"],  // Solid greenish blue (no transition)
-    ["#00bfae", "#01004f"],  // Greenish blue to very dark blue
+    ["#8e44ad", "#3498db"],  // Solid greenish blue (no transition)
+    ["#4dabf7", "#00bfae"],  // Greenish blue to very dark blue
     ["#01004f", "#a830df"],  // Dark blue back to purple
 ];
 
