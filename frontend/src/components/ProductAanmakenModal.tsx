@@ -42,7 +42,10 @@ const ProductAanmakenModal: React.FC<Props> = ({ onClose, onSuccess }) => {
             isValid = false;
         }
 
-        if (form.sku && !/^[a-zA-Z0-9\-]+$/.test(form.sku)) {
+        if (!form.sku.trim()) {
+            newErrors.sku = "SKU mag niet leeg zijn.";
+            isValid = false;
+        } else if (!/^[a-zA-Z0-9\-]+$/.test(form.sku)) {
             newErrors.sku = "SKU mag alleen letters en cijfers bevatten.";
             isValid = false;
         }
@@ -50,6 +53,14 @@ const ProductAanmakenModal: React.FC<Props> = ({ onClose, onSuccess }) => {
         const weight = parseFloat(form.weightKg);
         if (!form.weightKg || isNaN(weight) || weight <= 0 || !Number.isInteger(weight)) {
             newErrors.weightKg = "Gewicht moet een positief geheel getal zijn.";
+            isValid = false;
+        }
+
+        if (!form.material.trim()) {
+            newErrors.material = "Materiaal mag niet leeg zijn.";
+            isValid = false;
+        } else if (!/^[a-zA-ZÀ-ÿ\s\-]+$/.test(form.material)) {
+            newErrors.material = "Materiaal mag alleen letters, spaties of koppeltekens bevatten.";
             isValid = false;
         }
 
