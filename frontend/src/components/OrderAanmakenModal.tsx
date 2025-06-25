@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ShipmentModalWrapper from "./ShipmentModalWrapper";
+import "../styles/Error.css";
 
 interface Props {
     onClose: () => void;
@@ -25,11 +26,17 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
     });
 
     const [formError, setFormError] = useState("");
+    const [errors, setErrors] = useState({
+        quantity: "",
+        deliveryAddress: "",
+        expectedDeliveryDate: "",
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
-        if (formError) setFormError("");
+        setFormError("");
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
     const formatDateToDDMMYYYY = (dateStr: string) => {
@@ -39,20 +46,42 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
 
     const CurrentDatetime = () => {
         const now = new Date();
-        const day = String(now.getDate()).padStart(2, "0");
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const year = now.getFullYear();
-        const hours = String(now.getHours()).padStart(2, "0");
-        const minutes = String(now.getMinutes()).padStart(2, "0");
-
+        const pad = (num: number) => num.toString().padStart(2, "0");
         return {
-            date: `${day}-${month}-${year}`,
-            time: `${hours}:${minutes}`,
+            date: `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()}`,
+            time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
         };
     };
 
+    const validate = () => {
+        let valid = true;
+        const newErrors = { quantity: "", deliveryAddress: "", expectedDeliveryDate: "" };
+
+        if (!form.deliveryAddress.trim()) {
+            newErrors.deliveryAddress = "Verzendadres mag niet leeg zijn.";
+            valid = false;
+        }
+
+        const quantity = Number(form.quantity);
+        if (!Number.isInteger(quantity) || quantity <= 0) {
+            newErrors.quantity = "Aantal moet een geheel getal groter dan 0 zijn.";
+            valid = false;
+        }
+
+        const today = new Date().setHours(0, 0, 0, 0);
+        const deliveryDate = new Date(form.expectedDeliveryDate).setHours(0, 0, 0, 0);
+        if (!form.expectedDeliveryDate || deliveryDate < today) {
+            newErrors.expectedDeliveryDate = "Verwachte leverdatum mag niet in het verleden liggen.";
+            valid = false;
+        }
+
+        setErrors(newErrors);
+        return valid;
+    };
+
     const handleSubmit = async () => {
-        setFormError("");
+        if (!validate()) return;
+
         const now = CurrentDatetime();
 
         const body = {
@@ -119,20 +148,15 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                 <button onClick={onClose} className="close-button">&times;</button>
                 <h2>Bestelling Aanmaken</h2>
 
-                <form
-                    className="form"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                    }}
-                >
+                <form className="form" onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}>
                     <div className="form-group">
                         <label>Klant</label>
                         <select name="customerId" value={form.customerId} onChange={handleChange}>
                             {klanten.map((k) => (
-                                <option key={k.id} value={k.id}>
-                                    {k.bedrijfsNaam}
-                                </option>
+                                <option key={k.id} value={k.id}>{k.bedrijfsNaam}</option>
                             ))}
                         </select>
                     </div>
@@ -141,42 +165,37 @@ const OrderAanmakenModal: React.FC<Props> = ({ onClose, onSuccess, klanten, prod
                         <label>Product</label>
                         <select name="productId" value={form.productId} onChange={handleChange}>
                             {producten.map((p) => (
-                                <option key={p.id} value={p.id}>
-                                    {p.productName}
-                                </option>
+                                <option key={p.id} value={p.id}>{p.productName}</option>
                             ))}
                         </select>
                     </div>
 
                     <div className="form-group">
                         <label>Aantal</label>
-                        <input type="number" name="quantity" value={form.quantity} onChange={handleChange} required />
+                        <input type="number" name="quantity" value={form.quantity} onChange={handleChange} />
+                        {errors.quantity && <p className="error">{errors.quantity}</p>}
                     </div>
 
                     <div className="form-group">
                         <label>Verzendadres</label>
-                        <input type="text" name="deliveryAddress" value={form.deliveryAddress} onChange={handleChange} required />
+                        <input type="text" name="deliveryAddress" value={form.deliveryAddress} onChange={handleChange} />
+                        {errors.deliveryAddress && <p className="error">{errors.deliveryAddress}</p>}
                     </div>
 
                     <div className="form-group">
                         <label>Verwachte Leverdatum</label>
-                        <input type="date" name="expectedDeliveryDate" value={form.expectedDeliveryDate} onChange={handleChange} required />
+                        <input type="date" name="expectedDeliveryDate" value={form.expectedDeliveryDate} onChange={handleChange} />
+                        {errors.expectedDeliveryDate && <p className="error">{errors.expectedDeliveryDate}</p>}
                     </div>
 
                     <div className="form-group">
                         <label>Verwachte Levertijd</label>
-                        <input type="time" name="expectedDeliveryTime" value={form.expectedDeliveryTime} onChange={handleChange} required />
+                        <input type="time" name="expectedDeliveryTime" value={form.expectedDeliveryTime} onChange={handleChange} />
                     </div>
 
-                    {formError && (
-                        <div className="error-message" style={{ color: "red", marginTop: "5px" }}>
-                            {formError}
-                        </div>
-                    )}
+                    {formError && <div className="error-message">{formError}</div>}
 
-                    <button type="submit" className="submit-button">
-                        Aanmaken
-                    </button>
+                    <button type="submit" className="submit-button">Aanmaken</button>
                 </form>
             </div>
         </div>
