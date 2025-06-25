@@ -1,0 +1,137 @@
+<Products>
+  <Product>
+    <ProductName>Dark Oak Houten Balk</ProductName>
+    <SKU>SD9209</SKU>
+    <WeightKg>300</WeightKg>
+    <Material>Hout</Material>
+    <BatchNumber>123</BatchNumber>
+    <Price>430.89</Price>
+    <Category>Balken</Category>
+  </Product>
+  <Product>
+    <ProductName>Aluminium Steunplaat</ProductName>
+    <SKU>AL3420</SKU>
+    <WeightKg>25</WeightKg>
+    <Material>Aluminium</Material>
+    <BatchNumber>234</BatchNumber>
+    <Price>85.50</Price>
+    <Category>Platen</Category>
+  </Product>
+  <Product>
+    <ProductName>Staal I-balk M12</ProductName>
+    <SKU>ST1123</SKU>
+    <WeightKg>450</WeightKg>
+    <Material>Staal</Material>
+    <BatchNumber>567</BatchNumber>
+    <Price>799.99</Price>
+    <Category>Balken</Category>
+  </Product>
+  <Product>
+    <ProductName>Houten Plank Eiken</ProductName>
+    <SKU>HP8832</SKU>
+    <WeightKg>45</WeightKg>
+    <Material>Hout</Material>
+    <BatchNumber>312</BatchNumber>
+    <Price>120.75</Price>
+    <Category>Planken</Category>
+  </Product>
+  <Product>
+    <ProductName>Koperen Buizenset 1/2"</ProductName>
+    <SKU>KP5511</SKU>
+    <WeightKg>12</WeightKg>
+    <Material>Koper</Material>
+    <BatchNumber>842</BatchNumber>
+    <Price>64.40</Price>
+    <Category>Buizen</Category>
+  </Product>
+  <Product>
+    <ProductName>Staalplaat Gegalvaniseerd</ProductName>
+    <SKU>SP7789</SKU>
+    <WeightKg>38</WeightKg>
+    <Material>Staal</Material>
+    <BatchNumber>784</BatchNumber>
+    <Price>105.60</Price>
+    <Category>Platen</Category>
+  </Product>
+  <Product>
+    <ProductName>Betonnen Balk C20/25</ProductName>
+    <SKU>BT2040</SKU>
+    <WeightKg>600</WeightKg>
+    <Material>Beton</Material>
+    <BatchNumber>998</BatchNumber>
+    <Price>950.00</Price>
+    <Category>Balken</Category>
+  </Product>
+  <Product>
+    <ProductName>PVC Leidingstuk 3m</ProductName>
+    <SKU>PV1144</SKU>
+    <WeightKg>5</WeightKg>
+    <Material>PVC</Material>
+    <BatchNumber>456</BatchNumber>
+    <Price>23.90</Price>
+    <Category>Leidingen</Category>
+  </Product>
+  <Product>
+    <ProductName>Multiplexplaat Waterbestendig</ProductName>
+    <SKU>MP3344</SKU>
+    <WeightKg>30</WeightKg>
+    <Material>Hout</Material>
+    <BatchNumber>675</BatchNumber>
+    <Price>76.25</Price>
+    <Category>Platen</Category>
+  </Product>
+  <Product>
+    <ProductName>Aluminium Steunplaat</ProductName>
+    <SKU>AL3420</SKU>
+    <WeightKg>25</WeightKg>
+    <Material>Aluminium</Material>
+    <BatchNumber>234</BatchNumber>
+    <Price>85.50</Price>
+    <Category>Platen</Category>
+  </Product>
+  <Product>
+    <ProductName>Staal I-balk M12</ProductName>
+    <SKU>ST1123</SKU>
+    <WeightKg>450</WeightKg>
+    <Material>Staal</Material>
+    <BatchNumber>567</BatchNumber>
+    <Price>799.99</Price>
+    <Category>Balken</Category>
+  </Product>
+  <Product>
+    <ProductName>Koperen Buizenset 1/2"</ProductName>
+    <SKU>KP5511</SKU>
+    <WeightKg>12</WeightKg>
+    <Material>Koper</Material>
+    <BatchNumber>842</BatchNumber>
+    <Price>64.40</Price>
+    <Category>Buizen</Category>
+  </Product>
+  <Product>
+    <ProductName>Staalplaat Gegalvaniseerd</ProductName>
+    <SKU>SP7789</SKU>
+    <WeightKg>38</WeightKg>
+    <Material>Staal</Material>
+    <BatchNumber>784</BatchNumber>
+    <Price>105.60</Price>
+    <Category>Platen</Category>
+  </Product>
+  <Product>
+    <ProductName>Multiplexplaat Waterbestendig</ProductName>
+    <SKU>MP3344</SKU>
+    <WeightKg>30</WeightKg>
+    <Material>Hout</Material>
+    <BatchNumber>675</BatchNumber>
+    <Price>76.25</Price>
+    <Category>Platen</Category>
+  </Product>
+    <Product>
+    <ProductName>Multiplexplaat NIET Waterbestendig</ProductName>
+    <SKU>MP3344</SKU>
+    <WeightKg>30</WeightKg>
+    <Material>Hout</Material>
+    <BatchNumber>675</BatchNumber>
+    <Price>76.25</Price>
+    <Category>Platen</Category>
+  </Product>
+</Products>

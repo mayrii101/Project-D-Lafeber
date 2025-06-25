@@ -1,18 +1,82 @@
 <Customers>
   <Customer>
-    <BedrijfsNaam>Testbedrijf1</BedrijfsNaam>
-    <ContactPersoon>testpersoon1</ContactPersoon>
-    <Email>tests@example.com</Email>
+    <BedrijfsNaam>Van Dijk Bouw</BedrijfsNaam>
+    <ContactPersoon>Lars van Dijk</ContactPersoon>
+    <Email>lars@vandijkbouw.nl</Email>
     <TelefoonNummer>+31 20 123 4567</TelefoonNummer>
     <Adres>Keizersgracht 123, Amsterdam</Adres>
     <IsDeleted>false</IsDeleted>
   </Customer>
   <Customer>
-    <BedrijfsNaam>Testbedrijf2</BedrijfsNaam>
-    <ContactPersoon>testpersoon2</ContactPersoon>
-    <Email>test@innovatech.nl</Email>
+    <BedrijfsNaam>InnovaTech BV</BedrijfsNaam>
+    <ContactPersoon>Sanne Jansen</ContactPersoon>
+    <Email>s.jansen@innovatech.nl</Email>
     <TelefoonNummer>+31 10 987 6543</TelefoonNummer>
     <Adres>Marktstraat 45, Rotterdam</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>Hout en Meer</BedrijfsNaam>
+    <ContactPersoon>Mark de Boer</ContactPersoon>
+    <Email>mark@houtmeer.nl</Email>
+    <TelefoonNummer>+31 50 111 2233</TelefoonNummer>
+    <Adres>Brinklaan 12, Groningen</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>Metaalwerken Noord</BedrijfsNaam>
+    <ContactPersoon>Anouk Peters</ContactPersoon>
+    <Email>anouk@metaalnoord.nl</Email>
+    <TelefoonNummer>+31 38 555 7799</TelefoonNummer>
+    <Adres>Industrieweg 20, Zwolle</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>BetonDesign</BedrijfsNaam>
+    <ContactPersoon>Tom van Leeuwen</ContactPersoon>
+    <Email>tom.vl@betondesign.nl</Email>
+    <TelefoonNummer>+31 30 222 3344</TelefoonNummer>
+    <Adres>Nieuwegracht 7, Utrecht</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>SolarFuture</BedrijfsNaam>
+    <ContactPersoon>Eva de Groot</ContactPersoon>
+    <Email>eva@solarfuture.nl</Email>
+    <TelefoonNummer>+31 43 876 5432</TelefoonNummer>
+    <Adres>Oranjeplein 101, Maastricht</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>EcoWonen</BedrijfsNaam>
+    <ContactPersoon>Jeroen Smits</ContactPersoon>
+    <Email>jeroen@ecowonen.nl</Email>
+    <TelefoonNummer>+31 24 987 6543</TelefoonNummer>
+    <Adres>Kerkstraat 89, Nijmegen</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>Techniek Totaal</BedrijfsNaam>
+    <ContactPersoon>Marije Bakker</ContactPersoon>
+    <Email>marije@techniektotaal.nl</Email>
+    <TelefoonNummer>+31 13 456 7890</TelefoonNummer>
+    <Adres>Spoorlaan 55, Tilburg</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>Flex Constructie</BedrijfsNaam>
+    <ContactPersoon>Nick Vermeer</ContactPersoon>
+    <Email>nick@flexconstruct.nl</Email>
+    <TelefoonNummer>+31 26 654 3210</TelefoonNummer>
+    <Adres>Arnhemseweg 200, Arnhem</Adres>
+    <IsDeleted>false</IsDeleted>
+  </Customer>
+  <Customer>
+    <BedrijfsNaam>Delta Installaties</BedrijfsNaam>
+    <ContactPersoon>Kim Veldhuis</ContactPersoon>
+    <Email>kim@delta-installaties.nl</Email>
+    <TelefoonNummer>+31 58 321 6549</TelefoonNummer>
+    <Adres>Willemskade 3, Leeuwarden</Adres>
     <IsDeleted>false</IsDeleted>
   </Customer>
 </Customers>
