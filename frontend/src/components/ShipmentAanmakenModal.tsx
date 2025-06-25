@@ -34,7 +34,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
     useEffect(() => {
         const now = new Date();
-        const pad = (num: number) => num.toString().padStart(2, "0");
+        const pad = (n: number) => n.toString().padStart(2, "0");
 
         setForm((prev) => ({
             ...prev,
@@ -75,6 +75,7 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
             });
+
             if (response.ok) {
                 onSuccess();
                 onClose();
@@ -88,8 +89,6 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
             console.error("Netwerkfout:", err);
             setFormError("Kan geen verbinding maken met de server.");
         }
-
-
     };
 
     return (
@@ -98,22 +97,14 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                 <button onClick={onClose} className="close-button">&times;</button>
                 <h2>Verzending Aanmaken</h2>
 
-                <form
-                    className="form"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                    }}
-                >
+                <form className="form" onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}>
                     <div className="form-group">
                         <label>Voertuig</label>
                         {filteredVehicles.length > 0 ? (
-                            <select
-                                name="vehicleId"
-                                value={form.vehicleId}
-                                onChange={handleChange}
-                                required
-                            >
+                            <select name="vehicleId" value={form.vehicleId} onChange={handleChange}>
                                 {filteredVehicles.map((v) => (
                                     <option key={v.id} value={v.id}>
                                         {v.licensePlate}
@@ -129,21 +120,14 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
 
                     <div className="form-group">
                         <label>Chauffeur</label>
-                        <select
-                            name="driverId"
-                            value={form.driverId}
-                            onChange={handleChange}
-                            required
-                        >
+                        <select name="driverId" value={form.driverId} onChange={handleChange}>
                             {drivers.map((d) => (
-                                <option key={d.id} value={d.id}>
-                                    {d.name}
-                                </option>
+                                <option key={d.id} value={d.id}>{d.name}</option>
                             ))}
                         </select>
                     </div>
 
-                    {/* depraturedate ne departuretime van aangemaakte order */}
+                    {/* Hidden departure info */}
                     <input type="hidden" name="departureDate" value={form.departureDate} readOnly />
                     <input type="hidden" name="departureTime" value={form.departureTime} readOnly />
 
@@ -153,7 +137,11 @@ const ShipmentAanmakenModal: React.FC<Props> = ({
                         </div>
                     )}
 
-                    <button type="submit" className="submit-button" disabled={filteredVehicles.length === 0}>
+                    <button
+                        type="submit"
+                        className="submit-button"
+                        disabled={filteredVehicles.length === 0}
+                    >
                         Verzending Aanmaken
                     </button>
                 </form>
