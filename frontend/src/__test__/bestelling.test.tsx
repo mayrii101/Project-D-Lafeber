@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import Bestellingen from "../components/Bestellingen"; // 👈 Adjust path if needed
+import Bestellingen from "../components/Bestellingen";
 import "@testing-library/jest-dom";
 
 describe("Bestellingen form validation", () => {
