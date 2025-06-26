@@ -31,7 +31,7 @@ namespace AzureSqlConnectionDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Vehicle>> CreateVehicle(Vehicle vehicle)
+        public async Task<ActionResult<Vehicle>> CreateVehicle([FromBody] Vehicle vehicle)
         {
             var createdVehicle = await _vehicleService.CreateVehicleAsync(vehicle);
             return CreatedAtAction(nameof(GetVehicle), new { id = createdVehicle.Id }, createdVehicle);

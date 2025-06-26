@@ -20,7 +20,8 @@ namespace ProjectD.Models
     {
         FlatbedTrailer,
         LowbedTrailer,
-        Kipper
+        Kipper,
+        SuperTruck
     }
 
     public enum VehicleStatus
