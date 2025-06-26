@@ -1,0 +1,35 @@
+### Get all products
+GET http://localhost:5000/api/product
+
+### Get product by ID
+GET http://localhost:5000/api/products/1
+
+### Create a new product
+POST http://localhost:5000/api/product
+Content-Type: application/json
+
+{
+  "productName": "Dark Oak Houten Balk",
+  "sku":"SD9209",
+  "weightKg": 300,
+  "material": "Hout",
+  "batchNumber": 123,
+  "price": 430.89,
+  "category": "Balken"
+}
+
+### Update a product
+PUT http://localhost:5000/api/products/1
+Content-Type: application/json
+
+{
+  "productName": "Updated Widget",
+  "weightKg": 2.8,
+  "material": "Aluminum",
+  "batchNumber": "B124",
+  "price": 109.99,
+  "category": "Tools"
+}
+
+### Soft delete a product
+DELETE http://localhost:5000/api/products/1

@@ -1,0 +1,26 @@
+### Get all warehouses
+GET http://localhost:5000/api/warehouse
+
+### Get warehouse by ID
+GET http://localhost:5000/api/warehouses/1
+
+### Create a new warehouse
+POST http://localhost:5000/api/warehouses
+Content-Type: application/json
+
+{
+  "name": "Main Warehouse",
+  "location": "New York"
+}
+
+### Update a warehouse
+PUT http://localhost:5000/api/warehouses/1
+Content-Type: application/json
+
+{
+  "name": "Secondary Warehouse",
+  "location": "Los Angeles"
+}
+
+### Soft delete a warehouse
+DELETE http://localhost:5000/api/warehouses/1

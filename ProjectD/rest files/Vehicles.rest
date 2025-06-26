@@ -1,0 +1,26 @@
+### Get all vehicles
+GET http://localhost:5000/api/vehicle
+
+### Get vehicle by ID
+GET http://localhost:5000/api/vehicles/1
+
+### Create a new vehicle
+POST http://localhost:5000/api/vehicles
+Content-Type: application/json
+
+{
+  "type": "Truck",
+  "status": "Available"
+}
+
+### Update a vehicle
+PUT http://localhost:5000/api/vehicles/1
+Content-Type: application/json
+
+{
+  "type": "Van",
+  "status": "Under Maintenance"
+}
+
+### Soft delete a vehicle
+DELETE http://localhost:5000/api/vehicles/1

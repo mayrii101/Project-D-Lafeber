@@ -1,0 +1,46 @@
+### Get all shipments
+GET http://localhost:5000/api/shipment
+
+### Get shipment by ID
+GET http://localhost:5000/api/shipment/1009
+
+### Create a new shipment
+POST http://localhost:5000/api/shipment
+Content-Type: application/json
+
+{
+  "vehicleId": 1,
+  "driverId": 1,
+  "status": "Delivered",
+  "departureDate": "30-04-2025",
+  "departureTime": "14:30",
+  "expectedDeliveryDate": "02-05-2025",
+  "expectedDeliveryTime": "09:00",
+  "orderIds": [2046]
+}
+
+### Update a shipment
+PUT http://localhost:5000/api/shipments/1
+Content-Type: application/json
+
+{
+  "vehicleId": 2,
+  "driverId": 2,
+  "status": "In Transit",
+  "departureDate": "2025-05-01T00:00:00",
+  "expectedDeliveryDate": "2025-05-03T00:00:00",
+  "actualDeliveryDate": null,
+  "orders": []
+}
+
+### Soft delete a shipment
+DELETE http://localhost:5000/api/shipment/1009
+
+### Create shipment order (assign order to shipment)
+POST http://localhost:5000/api/shipments/create-shipment-order
+Content-Type: application/json
+
+{
+  "shipmentId": 1,
+  "orderId": 1
+}

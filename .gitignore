@@ -1,32 +1,187 @@
-# Prerequisites
-*.d
+#####################
+# .NET Build Output #
+#######################
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+**/bin/
+**/obj/
+**/out/
+**/build/
+**/dist/
+artifacts/
 
-# Precompiled Headers
-*.gch
-*.pch
+##########################
+# IDE & Editor Settings  #
+##########################
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln           # <-- Added back
+*.sln.docstates
 
-# Fortran module files
-*.mod
-*.smod
+# VSCode
+.vscode/
+.history/
+*.code-workspace
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# Rider / JetBrains
+.idea/
+*.sln.iml
 
-# Executables
-*.exe
-*.out
-*.app
+# MonoDevelop
+*.userprefs
+
+##############################
+# ASP.NET / .NET App Config  #
+##############################
+
+# Local app settings
+appsettings.*.json
+!appsettings.json
+secrets.json
+local.settings.json
+
+# EF & Build logs
+*.log
+*.tlog
+*.tmp
+*.bak
+*.old
+*.cache
+*.dbmdl
+
+# Microsoft Fakes
+FakesAssemblies/
+
+###########################
+# Azure Specific Settings #
+###########################
+
+# Azure Function local settings
+local.settings.json
+appsettings.Development.local.json
+appsettings.local.json
+
+# Azure CLI
+.azure/
+.azureaccessTokens.json
+.azure/azureProfile.json
+AzureStorageEmulatorDb*
+
+# Azure publish artifacts
+*.azurePubxml
+*.publishsettings
+*.pubxml
+*.publishproj
+PublishScripts/
+ASALocalRun/
+BundleArtifacts/
+AppPackages/
+*.appx
+*.appxbundle
+*.appxupload
+
+# Azure SQL
+AzureSqlConnection*
+
+####################
+# Node.js Frontend #
+####################
+
+node_modules/
+frontend/node_modules/
+frontend/.env
+frontend/.vite/
+
+# Log files
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Test / Coverage
+coverage/
+coverage*.json
+coverage*.xml
+coverage*.info
+lcov-report/
+
+####################
+# Database Files   #
+####################
+
+*.mdf
+*.ldf
+*.ndf
+*.sqlite
+*.db
+*.db3
+*.mdb
+
+#########################
+# OS & Miscellaneous    #
+#########################
+
+.DS_Store
+Thumbs.db
+*.swp
+~$*
+*~
+
+
+# Node dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+logs/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Coverage directory
+coverage/
+
+# Cache directories
+.cache/
+
+# OS artifacts
+.DS_Store
+*.tmp
+**/temp/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.iml
+
+# Yarn/NPM lock files
+yarn.lock
+package-lock.json
+.npm
+.yarn-integrity
+
+# Editor swap & backup files
+*~
+*.swp
+
+# Vagrant
+.vagrant/

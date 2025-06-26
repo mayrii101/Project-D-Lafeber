@@ -1,0 +1,30 @@
+# .github/workflows/ci.yml
+name: .NET Build and Test
+
+on:
+  push:
+    branches: [ Development ]
+  pull_request:
+    branches: [ Development ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'  
+
+      - name: Restore NuGet packages
+        run: dotnet restore Project-D-Lafeber.sln
+
+      - name: Build Solution
+        run: dotnet build Project-D-Lafeber.sln --configuration Release --no-restore
+
+      - name: Run Unit Tests
+        run: dotnet test ProjectD.Tests/ProjectD.Tests.csproj --verbosity normal
